@@ -1,4 +1,13 @@
 version: '3.7'
+x-generic: &generic
+    networks:
+      - micado_net
+    logging:
+      options:
+        max-size: '12m'
+        max-file: '5'
+      driver: json-file
+
 services:
 # FRONTEND
   fail2ban:
@@ -34,8 +43,8 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - $PWD/fail2ban_logs:/var/log
       - ./traefik/traefik-acme/acme.json:/acme.json
-    networks:
-      - micado_net
+    <<: *generic
+
 
   nginx:
     image: nginx:1.17.9
@@ -111,8 +120,7 @@ services:
 #      - "traefik.http.routers.countly_frontend.entrypoints=web"
 #      - "traefik.http.routers.countly_frontend.service=countly_frontend_service"
 #      - "traefik.http.services.countly_frontend_service.loadbalancer.server.port=6001"
-    networks:
-      - micado_net
+    <<: *generic
     depends_on:
       - countly_api
 
@@ -122,8 +130,8 @@ services:
     image: micadoproject/migrant_app_site # change tag and redeploy stack
     volumes:
       - data_site_migrant:/var/www/html
-    networks:
-      - micado_net
+    <<: *generic
+
 
   data_pa:
     command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
@@ -131,8 +139,8 @@ services:
     image: micadoproject/pa_app_site # change tag and redeploy stack
     volumes:
       - data_site_pa:/var/www/html
-    networks:
-      - micado_net
+    <<: *generic
+
 
   data_ngo:
     command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
@@ -140,8 +148,8 @@ services:
     image: micadoproject/ngo_app_site # change tag and redeploy stack
     volumes:
       - data_site_ngo:/var/www/html
-    networks:
-      - micado_net
+    <<: *generic
+
 
 # DATABASE STUFF
 
@@ -159,8 +167,8 @@ services:
         target: /docker-entrypoint-initdb.d
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
-    networks:
-      - micado_net
+    <<: *generic
+
 
   data_api:
     image: postgrest/postgrest:v6.0.2
@@ -174,8 +182,8 @@ services:
       - micado_db
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
-    networks:
-      - micado_net
+    <<: *generic
+
 
   db_admin:
     image: dpage/pgadmin4:4.18
@@ -190,8 +198,8 @@ services:
       - "traefik.http.routers.db_admin.entrypoints=web"
     depends_on:
       - micado_db
-    networks:
-      - micado_net
+    <<: *generic
+
 
 # API GATEWAY
   api_gateway:
@@ -268,6 +276,7 @@ services:
 #      - chatbot
 #      - data_virtualization
 #      - data_api
+    <<: *generic
     networks:
       micado_net:
         aliases:
@@ -284,12 +293,7 @@ services:
     env_file:
       - prod.env
     environment:
-      JAVA_OPTS: "-Dserver.hostname=\"0.0.0.0\" -Dorg.wso2.ignoreHostnameVerification=true -Dorg.opensaml.httpclient.https.disableHostnameVerification=true -Dhttpclient.hostnameVerifier=\"AllowAll\""
-      WSO2_API_ADMIN_USER: ${WSO2_API_ADMIN_USER}
-#      WSO2_API_ADMIN_PWD: ${WSO2_API_ADMIN_PWD}
-      GATEWAY_HOSTNAME: ${GATEWAY_HOSTNAME}
-      API_HOSTNAME: ${API_HOSTNAME}
-      IDENTITY_HOSTNAME: ${IDENTITY_HOSTNAME}
+      JAVA_OPTSlog definitionHOSTNAME: ${IDENTITY_HOSTNAME}
       WSO2_API_USER: ${WSO2_API_USER}
 #      WSO2_API_PWD: ${WSO2_API_PWD}
       POSTGRES_DB: ${POSTGRES_DB}
@@ -331,20 +335,20 @@ services:
       - identity_server_vol:/home/wso2carbon/wso2is-km-5.9.0/repository/deployment/server
     depends_on:
       - micado_db
+    <<: *generic
     networks:
       micado_net:
         aliases:
          - identity.micadoproject.eu
+
   backend:
     image: micadoproject/backend
     environment:
       HOST: backend
 #    ports:
 #      - "3001:3000"
-    networks:
-      micado_net:
-        aliases:
-         - backend
+    <<: *generic
+
 
 # DASHBOARD
   dashboard:
@@ -375,8 +379,8 @@ services:
         source: metabase_data
         # target is the path in the container
         target: /metabase-data
-    networks:
-      - micado_net
+    <<: *generic
+
 
   upload_service:
     image: tusproject/tusd:v1.0.2
@@ -419,10 +423,7 @@ services:
       - run
       - --cors
       - "*"
-      - -p
-      - "5005"
-      - --enable-api
-      - --auth-token
+      - -plog definitionken
       - "thisismysecret"
     volumes:
       - type: volume
@@ -431,8 +432,8 @@ services:
         target: /app
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
-    networks:
-      - micado_net
+    <<: *generic
+
 
   action_server:
     image: rasa/rasa-sdk:latest
@@ -443,15 +444,15 @@ services:
         target: /app/actions
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
-    networks:
-      - micado_net
+    <<: *generic
+
 
   duckling_server:
     image: rasa/duckling:latest
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
-    networks:
-      - micado_net
+    <<: *generic
+
 
 
   mongodb:
@@ -467,8 +468,8 @@ services:
       - "com.centurylinklabs.watchtower.enable=false"
     volumes:
       - mongo_data:/data/db
-    networks:
-      - micado_net
+    <<: *generic
+
 
   mongo-express:
     image: mongo-express
@@ -497,8 +498,7 @@ services:
       - COUNTLY_CONFIG_FRONTEND_MONGODB_DB=countly
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
-    networks:
-      - micado_net
+    <<: *generic
     depends_on:
       - mongodb
 
@@ -515,8 +515,7 @@ services:
 #      - COUNTLY_CONFIG_FRONTEND_MONGODB_USERNAME=${MONGODB_USERNAME}
 #      - COUNTLY_CONFIG_FRONTEND_MONGODB_PASSWORD=${MONGODB_PASSWORD}
       - COUNTLY_CONFIG_FRONTEND_MONGODB_DB=countly
-    networks:
-      - micado_net
+    <<: *generic
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
     depends_on:
@@ -554,7 +553,6 @@ services:
       WEBLATE_ADMIN_NAME: ${WEBLATE_ADMIN_NAME}
       WEBLATE_ADMIN_EMAIL: ${WEBLATE_ADMIN_EMAIL}
       WEBLATE_SITE_TITLE: ${WEBLATE_SITE_TITLE}
-      WEBLATE_SERVER_EMAIL: ${WEBLATE_SERVER_EMAIL}
       WEBLATE_REGISTRATION_OPEN: ${WEBLATE_REGISTRATION_OPEN}
       POSTGRES_PASSWORD: ${WEBLATE_POSTGRES_PASSWORD}
       POSTGRES_USER: ${WEBLATE_POSTGRES_USER}
@@ -576,8 +574,8 @@ services:
       - "traefik.http.routers.weblate2.tls.certresolver=myresolver"
       - "traefik.http.routers.weblate2.service=weblate2"
       - "traefik.http.services.weblate2.loadbalancer.server.port=8080"
-    networks:
-      - micado_net
+    <<: *generic
+
 
   cache:
     image: redis:4-alpine
@@ -587,13 +585,12 @@ services:
       - redis_data:/data
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
-    networks:
-      - micado_net
+    <<: *generic
+
 
   git:
     image: gitea/gitea:1.12.2
-    networks:
-      - micado_net
+    <<: *generic
     env_file:
       - prod.env
     environment:
@@ -623,8 +620,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /root/.docker/config.json:/config.json
     command: --interval 300 --debug
-    networks:
-      - micado_net
+    <<: *generic
+
 
 volumes:
   postgres_data:
