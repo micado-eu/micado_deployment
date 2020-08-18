@@ -1,0 +1,11 @@
+/root/micado_deployment/fail2ban_logs/*.log {
+  size 10M
+  rotate 5
+  missingok
+  notifempty
+  dateext
+  dateformat .%Y-%m-%d
+  postrotate
+    docker kill --signal="USR1" micado_deployment_balancer_1
+  endscript
+}
