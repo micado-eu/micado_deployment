@@ -423,7 +423,10 @@ services:
       - run
       - --cors
       - "*"
-      - -plog definitionken
+      - -p
+      - "5005"
+      - --enable-api
+      - --auth-token
       - "thisismysecret"
     volumes:
       - type: volume
