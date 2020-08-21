@@ -415,7 +415,7 @@ services:
       - micado_net
 
   chatbot:
-    image: rasa/rasa:latest-full
+    image: rasa/rasa:1.10.10-full
  #   volumes:
  #     - /home/gioppo/Development/dockerfiles/micado_new/rasa:/app
     command:
@@ -436,7 +436,7 @@ services:
 
 
   action_server:
-    image: rasa/rasa-sdk:latest
+    image: rasa/rasa-sdk:1.10.2
     volumes:
       - type: volume
         source: chatbot_actions
@@ -448,7 +448,7 @@ services:
 
 
   duckling_server:
-    image: rasa/duckling:latest
+    image: rasa/duckling:0.1.6.3
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
     <<: *generic
