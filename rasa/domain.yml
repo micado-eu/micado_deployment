@@ -1,11 +1,8 @@
 intents:
-  - request_restaurant:
-      use_entities: []
   - chitchat:
       use_entities: []
   - request_document:
       use_entities: []
-  - inform
   - affirm
   - deny
   - stop
@@ -14,28 +11,9 @@ intents:
   - bot_challenge
 
 entities:
-  - cuisine
-  - number
-  - feedback
-  - seating
   - document
 
 slots:
-  cuisine:
-    type: unfeaturized
-    auto_fill: false
-  num_people:
-    type: unfeaturized
-    auto_fill: false
-  outdoor_seating:
-    type: unfeaturized
-    auto_fill: false
-  preferences:
-    type: unfeaturized
-    auto_fill: false
-  feedback:
-    type: unfeaturized
-    auto_fill: false
   document:
     type: unfeaturized
     auto_fill: false
@@ -51,12 +29,6 @@ slots:
 
 
 responses:
-  utter_ask_cuisine:
-    - text: "what cuisine?"
-  utter_ask_num_people:
-    - text: "how many people?"
-  utter_ask_outdoor_seating:
-    - text: "do you want to seat outside?"
   utter_ask_preferences:
     - text: "please provide additional preferences"
   utter_ask_feedback:
@@ -65,13 +37,6 @@ responses:
     - text: "All done!"
   utter_ask_document:
     - text: "what document do you need?"
-  utter_slots_values:
-    - text: "I am going to run a restaurant search using the following parameters:\n
-             - cuisine: {cuisine}\n
-             - num_people: {num_people}\n
-             - outdoor_seating: {outdoor_seating}\n
-             - preferences: {preferences}\n
-             - feedback: {feedback}"
   utter_slots_values_document:
     - text: "you need to follow the process for the document:\n
              - document: {document}"
@@ -104,21 +69,14 @@ responses:
             placeholder:
               type: plain_text
               text: Select a date
-#        data:
-#          text: "Hey! How are you?"
-#          something: "wrong"
-#          btn: true
-#          btn_label: "test"
-#          btn_link: "/processes"
   utter_iamabot:
     - text: "I am a bot, powered by Rasa."
   utter_restart:
     - text: "restarted"
 
 forms:
-  - restaurant_form
   - document_form
 
 session_config:
-  session_expiration_time: 60  # value in minutes
-  carry_over_slots_to_new_session: true
+  session_expiration_time: 5  # value in minutes
+  carry_over_slots_to_new_session: false
