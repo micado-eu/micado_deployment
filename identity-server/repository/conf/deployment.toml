@@ -120,6 +120,10 @@ allow_self_registration = true
 enable_email_verification = false
 lock_on_creation=false
 
+[oauth.oidc.id_token]
+add_tenant_domain_to_realm = "true"
+add_userstore_domain_to_realm = "true"
+
 [default_cache_timeout]
 force_local_cache = true
 
