@@ -122,13 +122,16 @@ ALTER TABLE IF EXISTS ONLY micadoapp.document_pictures DROP CONSTRAINT IF EXISTS
 ALTER TABLE IF EXISTS ONLY micadoapp.comments_translation DROP CONSTRAINT IF EXISTS comments_translation_pkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.comments DROP CONSTRAINT IF EXISTS comments_pkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.charts DROP CONSTRAINT IF EXISTS charts_pkey;
+ALTER TABLE IF EXISTS micadoapp.user_types_translation_prod ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.user_types_translation ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.user_types ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS micadoapp.topic_translation_prod ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.topic_translation ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.topic ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.ratings ALTER COLUMN content_id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.process_users ALTER COLUMN id_user_types DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.process_users ALTER COLUMN id_process DROP DEFAULT;
+ALTER TABLE IF EXISTS micadoapp.process_translation_prod ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.process_translation ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.process_topic ALTER COLUMN id_topic DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.process_topic ALTER COLUMN id_process DROP DEFAULT;
@@ -144,9 +147,11 @@ ALTER TABLE IF EXISTS micadoapp.individual_intervention_plan_interventions ALTER
 ALTER TABLE IF EXISTS micadoapp.individual_intervention_plan ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.glossary ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.features_flags ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS micadoapp.event_translation_prod ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.event_topic ALTER COLUMN id_topic DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.event_topic ALTER COLUMN id_event DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.event_tags ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS micadoapp.event_category_translation_prod ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.event_category ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.event ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.document_type_picture ALTER COLUMN id DROP DEFAULT;
@@ -154,17 +159,24 @@ ALTER TABLE IF EXISTS micadoapp.document_type ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.document ALTER COLUMN document_type DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.document ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.comments ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE IF EXISTS micadoapp.comment_translation_prod ALTER COLUMN id DROP DEFAULT;
+DROP SEQUENCE IF EXISTS micadoapp.user_types_translation_prod_id_seq;
+DROP TABLE IF EXISTS micadoapp.user_types_translation_prod;
 DROP SEQUENCE IF EXISTS micadoapp.user_types_translation_id_seq;
 DROP TABLE IF EXISTS micadoapp.user_types_translation;
 DROP SEQUENCE IF EXISTS micadoapp.user_types_id_seq;
 DROP TABLE IF EXISTS micadoapp.user_types;
+DROP SEQUENCE IF EXISTS micadoapp.user_type_translation_prod_id_seq;
 DROP SEQUENCE IF EXISTS micadoapp.topic_translation_prod_id_seq;
+DROP TABLE IF EXISTS micadoapp.topic_translation_prod;
 DROP SEQUENCE IF EXISTS micadoapp.topic_translation_id_seq;
 DROP VIEW IF EXISTS micadoapp.topic_translated;
 DROP TABLE IF EXISTS micadoapp.topic_translation;
 DROP SEQUENCE IF EXISTS micadoapp.topic_id_seq;
 DROP TABLE IF EXISTS micadoapp.topic;
+DROP TABLE IF EXISTS micadoapp.step_translation_prod;
 DROP TABLE IF EXISTS micadoapp.step_translation;
+DROP TABLE IF EXISTS micadoapp.step_link_translation_prod;
 DROP TABLE IF EXISTS micadoapp.step_link_translation;
 DROP TABLE IF EXISTS micadoapp.step_link;
 DROP TABLE IF EXISTS micadoapp.step_document;
@@ -175,6 +187,8 @@ DROP TABLE IF EXISTS micadoapp.ratings;
 DROP SEQUENCE IF EXISTS micadoapp.process_users_id_user_types_seq;
 DROP SEQUENCE IF EXISTS micadoapp.process_users_id_process_seq;
 DROP TABLE IF EXISTS micadoapp.process_users;
+DROP SEQUENCE IF EXISTS micadoapp.process_translation_prod_id_seq;
+DROP TABLE IF EXISTS micadoapp.process_translation_prod;
 DROP SEQUENCE IF EXISTS micadoapp.process_translation_id_seq;
 DROP VIEW IF EXISTS micadoapp.process_translated;
 DROP TABLE IF EXISTS micadoapp.process_translation;
@@ -184,13 +198,14 @@ DROP TABLE IF EXISTS micadoapp.process_topic;
 DROP SEQUENCE IF EXISTS micadoapp.process_id_seq;
 DROP TABLE IF EXISTS micadoapp.process_comments;
 DROP TABLE IF EXISTS micadoapp.process;
-DROP TABLE IF EXISTS micadoapp.pippo;
+DROP TABLE IF EXISTS micadoapp.picture_hotspot_translation_prod;
 DROP VIEW IF EXISTS micadoapp.picture_hotspot_translated;
 DROP TABLE IF EXISTS micadoapp.picture_hotspot_translation;
 DROP SEQUENCE IF EXISTS micadoapp.picture_hotspot_id_seq;
 DROP TABLE IF EXISTS micadoapp.picture_hotspot;
 DROP TABLE IF EXISTS micadoapp.migrant_app_config;
 DROP TABLE IF EXISTS micadoapp.languages;
+DROP TABLE IF EXISTS micadoapp.intervention_types_translation_prod;
 DROP TABLE IF EXISTS micadoapp.intervention_types_translation;
 DROP SEQUENCE IF EXISTS micadoapp.intervention_types_id_seq;
 DROP TABLE IF EXISTS micadoapp.intervention_types;
@@ -198,6 +213,7 @@ DROP TABLE IF EXISTS micadoapp.intervention_type_validator;
 DROP SEQUENCE IF EXISTS micadoapp.intervention_processes_process_id_seq;
 DROP SEQUENCE IF EXISTS micadoapp.intervention_processes_intervention_type_seq;
 DROP TABLE IF EXISTS micadoapp.intervention_processes;
+DROP TABLE IF EXISTS micadoapp.intervention_category_translation_prod;
 DROP TABLE IF EXISTS micadoapp.intervention_category_translation;
 DROP SEQUENCE IF EXISTS micadoapp.intervention_category_id_seq;
 DROP TABLE IF EXISTS micadoapp.intervention_category;
@@ -207,12 +223,16 @@ DROP SEQUENCE IF EXISTS micadoapp.individual_intervention_plan_intervention_inte
 DROP TABLE IF EXISTS micadoapp.individual_intervention_plan_interventions;
 DROP SEQUENCE IF EXISTS micadoapp.individual_intervention_plan_id_seq;
 DROP TABLE IF EXISTS micadoapp.individual_intervention_plan;
+DROP TABLE IF EXISTS micadoapp.glossary_translation_prod;
 DROP TABLE IF EXISTS micadoapp.glossary_translation;
 DROP SEQUENCE IF EXISTS micadoapp.glossary_id_seq;
 DROP TABLE IF EXISTS micadoapp.glossary;
+DROP TABLE IF EXISTS micadoapp.features_flags_translation_prod;
 DROP VIEW IF EXISTS micadoapp.features_flags_translated;
 DROP TABLE IF EXISTS micadoapp.features_flags_translation;
 DROP SEQUENCE IF EXISTS micadoapp.features_flags_id_seq;
+DROP SEQUENCE IF EXISTS micadoapp.event_translation_prod_id_seq;
+DROP TABLE IF EXISTS micadoapp.event_translation_prod;
 DROP TABLE IF EXISTS micadoapp.event_translation;
 DROP SEQUENCE IF EXISTS micadoapp.event_topic_id_topic_seq;
 DROP SEQUENCE IF EXISTS micadoapp.event_topic_id_event_seq;
@@ -222,11 +242,14 @@ DROP SEQUENCE IF EXISTS micadoapp.event_tags_id_seq1;
 DROP SEQUENCE IF EXISTS micadoapp.event_tags_id_seq;
 DROP TABLE IF EXISTS micadoapp.event_tags;
 DROP SEQUENCE IF EXISTS micadoapp.event_id_seq;
+DROP SEQUENCE IF EXISTS micadoapp.event_category_translation_prod_id_seq;
+DROP TABLE IF EXISTS micadoapp.event_category_translation_prod;
 DROP TABLE IF EXISTS micadoapp.event_category_translation;
 DROP SEQUENCE IF EXISTS micadoapp.event_category_id_seq;
 DROP TABLE IF EXISTS micadoapp.event_category;
 DROP TABLE IF EXISTS micadoapp.event;
 DROP TABLE IF EXISTS micadoapp.document_type_validator;
+DROP TABLE IF EXISTS micadoapp.document_type_translation_prod;
 DROP VIEW IF EXISTS micadoapp.document_type_translated;
 DROP TABLE IF EXISTS micadoapp.document_type_translation;
 DROP SEQUENCE IF EXISTS micadoapp.document_type_picture_id_seq;
@@ -241,6 +264,8 @@ DROP TABLE IF EXISTS micadoapp.document;
 DROP TABLE IF EXISTS micadoapp.comments_translation;
 DROP SEQUENCE IF EXISTS micadoapp.comments_id_seq;
 DROP TABLE IF EXISTS micadoapp.comments;
+DROP SEQUENCE IF EXISTS micadoapp.comment_translation_prod_id_seq;
+DROP TABLE IF EXISTS micadoapp.comment_translation_prod;
 DROP TABLE IF EXISTS micadoapp.charts;
 DROP SEQUENCE IF EXISTS micadoapp.charts_id_seq;
 DROP VIEW IF EXISTS micadoapp.active_features;
@@ -306,6 +331,38 @@ CREATE TABLE micadoapp.charts (
     y character(255),
     board character(255)
 );
+
+
+--
+-- Name: comment_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
+--
+
+CREATE TABLE micadoapp.comment_translation_prod (
+    lang character varying(10) NOT NULL,
+    comment text,
+    translationdate date,
+    id smallint NOT NULL
+);
+
+
+--
+-- Name: comment_translation_prod_id_seq; Type: SEQUENCE; Schema: micadoapp; Owner: -
+--
+
+CREATE SEQUENCE micadoapp.comment_translation_prod_id_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: comment_translation_prod_id_seq; Type: SEQUENCE OWNED BY; Schema: micadoapp; Owner: -
+--
+
+ALTER SEQUENCE micadoapp.comment_translation_prod_id_seq OWNED BY micadoapp.comment_translation_prod.id;
 
 
 --
@@ -584,6 +641,19 @@ CREATE VIEW micadoapp.document_type_translated AS
 
 
 --
+-- Name: document_type_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
+--
+
+CREATE TABLE micadoapp.document_type_translation_prod (
+    id smallint NOT NULL,
+    lang character varying(10) NOT NULL,
+    document character varying(50),
+    description text,
+    translation_date timestamp without time zone
+);
+
+
+--
 -- Name: document_type_validator; Type: TABLE; Schema: micadoapp; Owner: -
 --
 
@@ -661,6 +731,38 @@ CREATE TABLE micadoapp.event_category_translation (
     event_category character varying(20),
     translation_date timestamp without time zone
 );
+
+
+--
+-- Name: event_category_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
+--
+
+CREATE TABLE micadoapp.event_category_translation_prod (
+    id smallint NOT NULL,
+    lang character varying(10),
+    event_category character varying(20),
+    translation_date timestamp without time zone
+);
+
+
+--
+-- Name: event_category_translation_prod_id_seq; Type: SEQUENCE; Schema: micadoapp; Owner: -
+--
+
+CREATE SEQUENCE micadoapp.event_category_translation_prod_id_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: event_category_translation_prod_id_seq; Type: SEQUENCE OWNED BY; Schema: micadoapp; Owner: -
+--
+
+ALTER SEQUENCE micadoapp.event_category_translation_prod_id_seq OWNED BY micadoapp.event_category_translation_prod.id;
 
 
 --
@@ -801,6 +903,39 @@ CREATE TABLE micadoapp.event_translation (
 
 
 --
+-- Name: event_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
+--
+
+CREATE TABLE micadoapp.event_translation_prod (
+    id smallint NOT NULL,
+    lang character varying(10),
+    event character varying(20),
+    description text,
+    translation_date timestamp without time zone
+);
+
+
+--
+-- Name: event_translation_prod_id_seq; Type: SEQUENCE; Schema: micadoapp; Owner: -
+--
+
+CREATE SEQUENCE micadoapp.event_translation_prod_id_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: event_translation_prod_id_seq; Type: SEQUENCE OWNED BY; Schema: micadoapp; Owner: -
+--
+
+ALTER SEQUENCE micadoapp.event_translation_prod_id_seq OWNED BY micadoapp.event_translation_prod.id;
+
+
+--
 -- Name: features_flags_id_seq; Type: SEQUENCE; Schema: micadoapp; Owner: -
 --
 
@@ -848,6 +983,18 @@ CREATE VIEW micadoapp.features_flags_translated AS
 
 
 --
+-- Name: features_flags_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
+--
+
+CREATE TABLE micadoapp.features_flags_translation_prod (
+    id smallint NOT NULL,
+    lang character varying(10) NOT NULL,
+    feature character varying(30),
+    translation_date timestamp without time zone
+);
+
+
+--
 -- Name: glossary; Type: TABLE; Schema: micadoapp; Owner: -
 --
 
@@ -883,6 +1030,19 @@ ALTER SEQUENCE micadoapp.glossary_id_seq OWNED BY micadoapp.glossary.id;
 --
 
 CREATE TABLE micadoapp.glossary_translation (
+    id smallint NOT NULL,
+    lang character varying(10) NOT NULL,
+    title character varying(25),
+    description text,
+    translation_date timestamp without time zone
+);
+
+
+--
+-- Name: glossary_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
+--
+
+CREATE TABLE micadoapp.glossary_translation_prod (
     id smallint NOT NULL,
     lang character varying(10) NOT NULL,
     title character varying(25),
@@ -1048,6 +1208,18 @@ CREATE TABLE micadoapp.intervention_category_translation (
 
 
 --
+-- Name: intervention_category_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
+--
+
+CREATE TABLE micadoapp.intervention_category_translation_prod (
+    id smallint NOT NULL,
+    lang character varying(10) NOT NULL,
+    title character varying(30),
+    translation_date timestamp without time zone
+);
+
+
+--
 -- Name: intervention_processes; Type: TABLE; Schema: micadoapp; Owner: -
 --
 
@@ -1153,6 +1325,19 @@ CREATE TABLE micadoapp.intervention_types_translation (
 
 
 --
+-- Name: intervention_types_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
+--
+
+CREATE TABLE micadoapp.intervention_types_translation_prod (
+    id smallint NOT NULL,
+    lang character varying(10) NOT NULL,
+    intervention_title character varying(20),
+    description text,
+    translation_date timestamp without time zone
+);
+
+
+--
 -- Name: languages; Type: TABLE; Schema: micadoapp; Owner: -
 --
 
@@ -1237,11 +1422,14 @@ CREATE VIEW micadoapp.picture_hotspot_translated AS
 
 
 --
--- Name: pippo; Type: TABLE; Schema: micadoapp; Owner: -
+-- Name: picture_hotspot_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
 --
 
-CREATE TABLE micadoapp.pippo (
-    id integer NOT NULL
+CREATE TABLE micadoapp.picture_hotspot_translation_prod (
+    pht_id smallint NOT NULL,
+    lang character varying(10) NOT NULL,
+    title character varying(20),
+    message text
 );
 
 
@@ -1389,6 +1577,39 @@ ALTER SEQUENCE micadoapp.process_translation_id_seq OWNED BY micadoapp.process_t
 
 
 --
+-- Name: process_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
+--
+
+CREATE TABLE micadoapp.process_translation_prod (
+    id smallint NOT NULL,
+    lang character varying(10) NOT NULL,
+    process character varying(30),
+    description text,
+    translation_date timestamp without time zone
+);
+
+
+--
+-- Name: process_translation_prod_id_seq; Type: SEQUENCE; Schema: micadoapp; Owner: -
+--
+
+CREATE SEQUENCE micadoapp.process_translation_prod_id_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: process_translation_prod_id_seq; Type: SEQUENCE OWNED BY; Schema: micadoapp; Owner: -
+--
+
+ALTER SEQUENCE micadoapp.process_translation_prod_id_seq OWNED BY micadoapp.process_translation_prod.id;
+
+
+--
 -- Name: process_users; Type: TABLE; Schema: micadoapp; Owner: -
 --
 
@@ -1532,10 +1753,34 @@ CREATE TABLE micadoapp.step_link_translation (
 
 
 --
+-- Name: step_link_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
+--
+
+CREATE TABLE micadoapp.step_link_translation_prod (
+    lang character varying(10) NOT NULL,
+    description character varying(25),
+    id uuid NOT NULL
+);
+
+
+--
 -- Name: step_translation; Type: TABLE; Schema: micadoapp; Owner: -
 --
 
 CREATE TABLE micadoapp.step_translation (
+    lang character varying(10) NOT NULL,
+    step character varying(25),
+    description text,
+    translation_date timestamp without time zone,
+    id uuid NOT NULL
+);
+
+
+--
+-- Name: step_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
+--
+
+CREATE TABLE micadoapp.step_translation_prod (
     lang character varying(10) NOT NULL,
     step character varying(25),
     description text,
@@ -1623,6 +1868,18 @@ ALTER SEQUENCE micadoapp.topic_translation_id_seq OWNED BY micadoapp.topic_trans
 
 
 --
+-- Name: topic_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
+--
+
+CREATE TABLE micadoapp.topic_translation_prod (
+    id smallint NOT NULL,
+    lang character varying(10) NOT NULL,
+    topic character varying(20),
+    translation_date timestamp without time zone
+);
+
+
+--
 -- Name: topic_translation_prod_id_seq; Type: SEQUENCE; Schema: micadoapp; Owner: -
 --
 
@@ -1631,6 +1888,25 @@ CREATE SEQUENCE micadoapp.topic_translation_prod_id_seq
     INCREMENT BY 1
     NO MINVALUE
     MAXVALUE 32767
+    CACHE 1;
+
+
+--
+-- Name: topic_translation_prod_id_seq; Type: SEQUENCE OWNED BY; Schema: micadoapp; Owner: -
+--
+
+ALTER SEQUENCE micadoapp.topic_translation_prod_id_seq OWNED BY micadoapp.topic_translation_prod.id;
+
+
+--
+-- Name: user_type_translation_prod_id_seq; Type: SEQUENCE; Schema: micadoapp; Owner: -
+--
+
+CREATE SEQUENCE micadoapp.user_type_translation_prod_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
@@ -1700,6 +1976,46 @@ ALTER SEQUENCE micadoapp.user_types_translation_id_seq OWNED BY micadoapp.user_t
 
 
 --
+-- Name: user_types_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
+--
+
+CREATE TABLE micadoapp.user_types_translation_prod (
+    id smallint NOT NULL,
+    lang character varying(10) NOT NULL,
+    user_type character varying(20),
+    description text,
+    translation_date timestamp without time zone
+);
+
+
+--
+-- Name: user_types_translation_prod_id_seq; Type: SEQUENCE; Schema: micadoapp; Owner: -
+--
+
+CREATE SEQUENCE micadoapp.user_types_translation_prod_id_seq
+    AS smallint
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: user_types_translation_prod_id_seq; Type: SEQUENCE OWNED BY; Schema: micadoapp; Owner: -
+--
+
+ALTER SEQUENCE micadoapp.user_types_translation_prod_id_seq OWNED BY micadoapp.user_types_translation_prod.id;
+
+
+--
+-- Name: comment_translation_prod id; Type: DEFAULT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.comment_translation_prod ALTER COLUMN id SET DEFAULT nextval('micadoapp.comment_translation_prod_id_seq'::regclass);
+
+
+--
 -- Name: comments id; Type: DEFAULT; Schema: micadoapp; Owner: -
 --
 
@@ -1749,6 +2065,13 @@ ALTER TABLE ONLY micadoapp.event_category ALTER COLUMN id SET DEFAULT nextval('m
 
 
 --
+-- Name: event_category_translation_prod id; Type: DEFAULT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.event_category_translation_prod ALTER COLUMN id SET DEFAULT nextval('micadoapp.event_category_translation_prod_id_seq'::regclass);
+
+
+--
 -- Name: event_tags id; Type: DEFAULT; Schema: micadoapp; Owner: -
 --
 
@@ -1767,6 +2090,13 @@ ALTER TABLE ONLY micadoapp.event_topic ALTER COLUMN id_event SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY micadoapp.event_topic ALTER COLUMN id_topic SET DEFAULT nextval('micadoapp.event_topic_id_topic_seq'::regclass);
+
+
+--
+-- Name: event_translation_prod id; Type: DEFAULT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.event_translation_prod ALTER COLUMN id SET DEFAULT nextval('micadoapp.event_translation_prod_id_seq'::regclass);
 
 
 --
@@ -1875,6 +2205,13 @@ ALTER TABLE ONLY micadoapp.process_translation ALTER COLUMN id SET DEFAULT nextv
 
 
 --
+-- Name: process_translation_prod id; Type: DEFAULT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.process_translation_prod ALTER COLUMN id SET DEFAULT nextval('micadoapp.process_translation_prod_id_seq'::regclass);
+
+
+--
 -- Name: process_users id_process; Type: DEFAULT; Schema: micadoapp; Owner: -
 --
 
@@ -1910,6 +2247,13 @@ ALTER TABLE ONLY micadoapp.topic_translation ALTER COLUMN id SET DEFAULT nextval
 
 
 --
+-- Name: topic_translation_prod id; Type: DEFAULT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.topic_translation_prod ALTER COLUMN id SET DEFAULT nextval('micadoapp.topic_translation_prod_id_seq'::regclass);
+
+
+--
 -- Name: user_types id; Type: DEFAULT; Schema: micadoapp; Owner: -
 --
 
@@ -1921,6 +2265,13 @@ ALTER TABLE ONLY micadoapp.user_types ALTER COLUMN id SET DEFAULT nextval('micad
 --
 
 ALTER TABLE ONLY micadoapp.user_types_translation ALTER COLUMN id SET DEFAULT nextval('micadoapp.user_types_translation_id_seq'::regclass);
+
+
+--
+-- Name: user_types_translation_prod id; Type: DEFAULT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.user_types_translation_prod ALTER COLUMN id SET DEFAULT nextval('micadoapp.user_types_translation_prod_id_seq'::regclass);
 
 
 --
@@ -1943,6 +2294,12 @@ INSERT INTO micadoapp.charts VALUES (10, 'Percentage of migrants - including par
 INSERT INTO micadoapp.charts VALUES (11, 'Participant in integration lessons Atlas                                                                                                                                                                                                                       ', '[{"month":"2019-05","number":2070},{"month":"2019-06","number":1971},{"month":"2019-07","number":1917},{"month":"2019-08","number":1951},{"month":"2019-09","number":1975},{"month":"2019-10","number":1985},{"month":"2019-11","number":1940},{"month":"2019-12","number":1952},{"month":"2020-01","number":1900},{"month":"2020-02","number":1812},{"month":"2020-03","number":1760},{"month":"2020-04","number":1752},{"month":"2020-05","number":1743}]', NULL, 'ATLAS                                                                                                                                                                                                                                                          ', NULL, 'BAR                                                                                                                                                                                                                                                            ', false, 'month                                                                                                                                                                                                                                                          ', 'number                                                                                                                                                                                                                                                         ', 'Antwerp                                                                                                                                                                                                                                                        ');
 INSERT INTO micadoapp.charts VALUES (13, 'percentage of unemployed EU nationals (18-64)                                                                                                                                                                                                                  ', '[{"year":2015,"percentage":11.1},{"year":2016,"percentage":10.7},{"year":2017,"percentage":10.1},{"year":2018,"percentage":9.2},{"year":2019,"percentage":8.4}]', NULL, 'employment                                                                                                                                                                                                                                                     ', NULL, 'BAR                                                                                                                                                                                                                                                            ', false, 'year                                                                                                                                                                                                                                                           ', 'percentage                                                                                                                                                                                                                                                     ', 'antwerp                                                                                                                                                                                                                                                        ');
 INSERT INTO micadoapp.charts VALUES (37, 'a new chart                                                                                                                                                                                                                                                    ', '[{"city":"Beijing","times":"20"},{"city":"Chongqing","times":"10"},{"city":"Tianjin","times":"2"},{"city":"Frankfurt","times":"2"}]', '', 'topic_test                                                                                                                                                                                                                                                     ', 'csv                                                                                                                                                                                                                                                            ', 'BAR                                                                                                                                                                                                                                                            ', false, 'city                                                                                                                                                                                                                                                           ', 'times                                                                                                                                                                                                                                                          ', 'hamburg                                                                                                                                                                                                                                                        ');
+
+
+--
+-- Data for Name: comment_translation_prod; Type: TABLE DATA; Schema: micadoapp; Owner: -
+--
+
 
 
 --
@@ -2022,6 +2379,12 @@ INSERT INTO micadoapp.document_type_translation VALUES (1, 'en', 'Residence perm
 
 
 --
+-- Data for Name: document_type_translation_prod; Type: TABLE DATA; Schema: micadoapp; Owner: -
+--
+
+
+
+--
 -- Data for Name: document_type_validator; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
@@ -2060,6 +2423,12 @@ INSERT INTO micadoapp.event_category_translation VALUES (13, 'en', 'integration'
 INSERT INTO micadoapp.event_category_translation VALUES (13, 'es', 'integración', NULL);
 INSERT INTO micadoapp.event_category_translation VALUES (13, 'it', '', NULL);
 INSERT INTO micadoapp.event_category_translation VALUES (13, 'nl', '', NULL);
+
+
+--
+-- Data for Name: event_category_translation_prod; Type: TABLE DATA; Schema: micadoapp; Owner: -
+--
+
 
 
 --
@@ -2112,6 +2481,12 @@ INSERT INTO micadoapp.event_translation VALUES (44, 'en', 'Family reunification'
 
 
 --
+-- Data for Name: event_translation_prod; Type: TABLE DATA; Schema: micadoapp; Owner: -
+--
+
+
+
+--
 -- Data for Name: features_flags; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
@@ -2126,6 +2501,12 @@ INSERT INTO micadoapp.features_flags VALUES (3, 'FEAT_ASSISTANT', true);
 
 INSERT INTO micadoapp.features_flags_translation VALUES (1, 'it', 'Portafoglio documenti', '2020-04-14 17:54:28.436');
 INSERT INTO micadoapp.features_flags_translation VALUES (1, 'en', 'Document wallet', '2020-04-14 17:54:28.436');
+
+
+--
+-- Data for Name: features_flags_translation_prod; Type: TABLE DATA; Schema: micadoapp; Owner: -
+--
+
 
 
 --
@@ -2147,6 +2528,12 @@ INSERT INTO micadoapp.glossary_translation VALUES (2, 'es', 'test', '{"type":"do
 INSERT INTO micadoapp.glossary_translation VALUES (35, 'en', 'Arbeitsamt', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Job center in German"}]}]}', '2020-08-03 17:36:46.107');
 INSERT INTO micadoapp.glossary_translation VALUES (2, 'en', 'Identity Card', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"An "},{"type":"text","marks":[{"type":"bold"}],"text":"identity document"},{"type":"text","text":" (also called a "},{"type":"text","marks":[{"type":"bold"}],"text":"piece of identification"},{"type":"text","text":" or "},{"type":"text","marks":[{"type":"bold"}],"text":"ID"},{"type":"text","text":", or colloquially as "},{"type":"text","marks":[{"type":"bold"}],"text":"papers"},{"type":"text","text":") is any document that may be used to prove a person''s identity. If issued in a small, standard credit card size form, it is usually called an "},{"type":"text","marks":[{"type":"bold"}],"text":"identity card"},{"type":"text","text":" ("},{"type":"text","marks":[{"type":"bold"}],"text":"IC"},{"type":"text","text":", "},{"type":"text","marks":[{"type":"bold"}],"text":"ID card"},{"type":"text","text":", "},{"type":"text","marks":[{"type":"bold"}],"text":"citizen card"},{"type":"text","text":"), or "},{"type":"text","marks":[{"type":"bold"}],"text":"passport card"},{"type":"text","text":". Some countries issue formal identity documents, as national identification cards which may be compulsory or non-compulsory, while others may require identity verification using regional identification or informal documents. When the identity document incorporates a person''s photograph, it may be called photo ID."}]}]}', '2020-09-03 10:06:55.97');
 INSERT INTO micadoapp.glossary_translation VALUES (1, 'en', 'Residence permit', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"A "},{"type":"text","marks":[{"type":"bold"}],"text":"residence permit"},{"type":"text","text":" (less commonly "},{"type":"text","marks":[{"type":"italic"}],"text":"residency permit"},{"type":"text","text":") is a document or card required in some regions, allowing a foreign national to reside in a country for a fixed or indefinite length of time. These may be permits for temporary residency, or permanent residency. The exact rules vary between regions. In some cases (e.g. the UK) a temporary residence permit is required to extend a stay past some threshold, and can be an intermediate step to applying for permanent residency. An "},{"type":"mention","attrs":{"id":2,"label":"Identity Card"}},{"type":"text","text":" is usually needed for acquiring a Residence permit"}]}]}', '2020-09-03 10:08:17.779');
+
+
+--
+-- Data for Name: glossary_translation_prod; Type: TABLE DATA; Schema: micadoapp; Owner: -
+--
+
 
 
 --
@@ -2214,6 +2601,12 @@ INSERT INTO micadoapp.intervention_category_translation VALUES (14, 'en', 'Skill
 
 
 --
+-- Data for Name: intervention_category_translation_prod; Type: TABLE DATA; Schema: micadoapp; Owner: -
+--
+
+
+
+--
 -- Data for Name: intervention_processes; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
@@ -2265,6 +2658,12 @@ INSERT INTO micadoapp.intervention_types_translation VALUES (9, 'en', 'Professio
 
 
 --
+-- Data for Name: intervention_types_translation_prod; Type: TABLE DATA; Schema: micadoapp; Owner: -
+--
+
+
+
+--
 -- Data for Name: languages; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
@@ -2295,7 +2694,7 @@ INSERT INTO micadoapp.migrant_app_config VALUES (1, '["FEAT_DOCUMENTS","FEAT_GLO
 
 
 --
--- Data for Name: pippo; Type: TABLE DATA; Schema: micadoapp; Owner: -
+-- Data for Name: picture_hotspot_translation_prod; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
 
@@ -2368,6 +2767,12 @@ INSERT INTO micadoapp.process_translation VALUES (46, 'es', '', '', NULL);
 INSERT INTO micadoapp.process_translation VALUES (46, 'en', 'Certify your education degree', '', NULL);
 INSERT INTO micadoapp.process_translation VALUES (46, 'de', '', '', NULL);
 INSERT INTO micadoapp.process_translation VALUES (46, 'it', '', '', NULL);
+
+
+--
+-- Data for Name: process_translation_prod; Type: TABLE DATA; Schema: micadoapp; Owner: -
+--
+
 
 
 --
@@ -2520,6 +2925,12 @@ INSERT INTO micadoapp.step_link_translation VALUES ('en', '', '9b9f97f8-0ebd-442
 
 
 --
+-- Data for Name: step_link_translation_prod; Type: TABLE DATA; Schema: micadoapp; Owner: -
+--
+
+
+
+--
 -- Data for Name: step_translation; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
@@ -2611,6 +3022,12 @@ INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, 'f624a0f6-251
 
 
 --
+-- Data for Name: step_translation_prod; Type: TABLE DATA; Schema: micadoapp; Owner: -
+--
+
+
+
+--
 -- Data for Name: topic; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
@@ -2653,6 +3070,12 @@ INSERT INTO micadoapp.topic_translation VALUES (7, 'it', '', NULL);
 
 
 --
+-- Data for Name: topic_translation_prod; Type: TABLE DATA; Schema: micadoapp; Owner: -
+--
+
+
+
+--
 -- Data for Name: user_types; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
@@ -2683,10 +3106,23 @@ INSERT INTO micadoapp.user_types_translation VALUES (9, 'nl', '', '', NULL);
 
 
 --
+-- Data for Name: user_types_translation_prod; Type: TABLE DATA; Schema: micadoapp; Owner: -
+--
+
+
+
+--
 -- Name: charts_id_seq; Type: SEQUENCE SET; Schema: micadoapp; Owner: -
 --
 
 SELECT pg_catalog.setval('micadoapp.charts_id_seq', 37, true);
+
+
+--
+-- Name: comment_translation_prod_id_seq; Type: SEQUENCE SET; Schema: micadoapp; Owner: -
+--
+
+SELECT pg_catalog.setval('micadoapp.comment_translation_prod_id_seq', 1, false);
 
 
 --
@@ -2739,6 +3175,13 @@ SELECT pg_catalog.setval('micadoapp.event_category_id_seq', 13, true);
 
 
 --
+-- Name: event_category_translation_prod_id_seq; Type: SEQUENCE SET; Schema: micadoapp; Owner: -
+--
+
+SELECT pg_catalog.setval('micadoapp.event_category_translation_prod_id_seq', 1, false);
+
+
+--
 -- Name: event_id_seq; Type: SEQUENCE SET; Schema: micadoapp; Owner: -
 --
 
@@ -2771,6 +3214,13 @@ SELECT pg_catalog.setval('micadoapp.event_topic_id_event_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('micadoapp.event_topic_id_topic_seq', 1, false);
+
+
+--
+-- Name: event_translation_prod_id_seq; Type: SEQUENCE SET; Schema: micadoapp; Owner: -
+--
+
+SELECT pg_catalog.setval('micadoapp.event_translation_prod_id_seq', 1, false);
 
 
 --
@@ -2879,6 +3329,13 @@ SELECT pg_catalog.setval('micadoapp.process_translation_id_seq', 1, false);
 
 
 --
+-- Name: process_translation_prod_id_seq; Type: SEQUENCE SET; Schema: micadoapp; Owner: -
+--
+
+SELECT pg_catalog.setval('micadoapp.process_translation_prod_id_seq', 1, false);
+
+
+--
 -- Name: process_users_id_process_seq; Type: SEQUENCE SET; Schema: micadoapp; Owner: -
 --
 
@@ -2921,6 +3378,13 @@ SELECT pg_catalog.setval('micadoapp.topic_translation_prod_id_seq', 1, false);
 
 
 --
+-- Name: user_type_translation_prod_id_seq; Type: SEQUENCE SET; Schema: micadoapp; Owner: -
+--
+
+SELECT pg_catalog.setval('micadoapp.user_type_translation_prod_id_seq', 1, false);
+
+
+--
 -- Name: user_types_id_seq; Type: SEQUENCE SET; Schema: micadoapp; Owner: -
 --
 
@@ -2932,6 +3396,13 @@ SELECT pg_catalog.setval('micadoapp.user_types_id_seq', 23, true);
 --
 
 SELECT pg_catalog.setval('micadoapp.user_types_translation_id_seq', 1, false);
+
+
+--
+-- Name: user_types_translation_prod_id_seq; Type: SEQUENCE SET; Schema: micadoapp; Owner: -
+--
+
+SELECT pg_catalog.setval('micadoapp.user_types_translation_prod_id_seq', 1, false);
 
 
 --
