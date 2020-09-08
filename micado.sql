@@ -17,11 +17,19 @@ SET row_security = off;
 
 ALTER TABLE IF EXISTS ONLY micadoapp.user_types_translation DROP CONSTRAINT IF EXISTS user_types_translation_lang_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.user_types_translation DROP CONSTRAINT IF EXISTS user_types_translation_id_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.user_types_translation_prod DROP CONSTRAINT IF EXISTS user_type_translation_prod_lang_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.user_types_translation_prod DROP CONSTRAINT IF EXISTS user_type_translation_prod_id_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.topic_translation_prod DROP CONSTRAINT IF EXISTS topic_translation_prod_lang_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.topic_translation_prod DROP CONSTRAINT IF EXISTS topic_translation_prod_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.topic_translation DROP CONSTRAINT IF EXISTS topic_translation_lang_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.topic_translation DROP CONSTRAINT IF EXISTS topic_translation_id_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.step_translation_prod DROP CONSTRAINT IF EXISTS step_translation_prod_lang_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.step_translation_prod DROP CONSTRAINT IF EXISTS step_translation_prod_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.step_translation DROP CONSTRAINT IF EXISTS step_translation_lang_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.step_translation DROP CONSTRAINT IF EXISTS step_translation_fk;
 ALTER TABLE IF EXISTS ONLY micadoapp.step_link_translation DROP CONSTRAINT IF EXISTS step_link_translation_step_fk;
+ALTER TABLE IF EXISTS ONLY micadoapp.step_link_translation_prod DROP CONSTRAINT IF EXISTS step_link_translation_prod_lang_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.step_link_translation_prod DROP CONSTRAINT IF EXISTS step_link_translation_prod_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.step_link_translation DROP CONSTRAINT IF EXISTS step_link_translation_fk;
 ALTER TABLE IF EXISTS ONLY micadoapp.step_link DROP CONSTRAINT IF EXISTS step_link_to_fk;
 ALTER TABLE IF EXISTS ONLY micadoapp.step_link DROP CONSTRAINT IF EXISTS step_link_from_fk;
@@ -32,20 +40,28 @@ ALTER TABLE IF EXISTS ONLY micadoapp.step_document DROP CONSTRAINT IF EXISTS ste
 ALTER TABLE IF EXISTS ONLY micadoapp.ratings DROP CONSTRAINT IF EXISTS ratings_um_user_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.process_users DROP CONSTRAINT IF EXISTS process_users_id_user_types_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.process_users DROP CONSTRAINT IF EXISTS process_users_id_process_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.process_translation_prod DROP CONSTRAINT IF EXISTS process_translation_prod_lang_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.process_translation_prod DROP CONSTRAINT IF EXISTS process_translation_prod_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.process_translation DROP CONSTRAINT IF EXISTS process_translation_lang_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.process_translation DROP CONSTRAINT IF EXISTS process_translation_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.process_topic DROP CONSTRAINT IF EXISTS process_topic_id_topic_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.process_topic DROP CONSTRAINT IF EXISTS process_topic_id_process_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.process DROP CONSTRAINT IF EXISTS process_fk;
+ALTER TABLE IF EXISTS ONLY micadoapp.picture_hotspot_translation_prod DROP CONSTRAINT IF EXISTS picture_hotspot_translation_prod_lang_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.picture_hotspot_translation_prod DROP CONSTRAINT IF EXISTS picture_hotspot_translation_prod_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.picture_hotspot_translation DROP CONSTRAINT IF EXISTS picture_hotspot_translation_fk_1;
 ALTER TABLE IF EXISTS ONLY micadoapp.picture_hotspot_translation DROP CONSTRAINT IF EXISTS picture_hotspot_translation_fk;
 ALTER TABLE IF EXISTS ONLY micadoapp.picture_hotspot DROP CONSTRAINT IF EXISTS picture_hotspot_fk;
+ALTER TABLE IF EXISTS ONLY micadoapp.intervention_types_translation_prod DROP CONSTRAINT IF EXISTS intervention_types_translation_prod_lang_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.intervention_types_translation_prod DROP CONSTRAINT IF EXISTS intervention_types_translation_prod_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.intervention_types_translation DROP CONSTRAINT IF EXISTS intervention_types_translation_lang_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.intervention_types_translation DROP CONSTRAINT IF EXISTS intervention_types_translation_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.intervention_types DROP CONSTRAINT IF EXISTS intervention_types_fk;
 ALTER TABLE IF EXISTS ONLY micadoapp.intervention_type_validator DROP CONSTRAINT IF EXISTS intervention_type_validator_fk;
 ALTER TABLE IF EXISTS ONLY micadoapp.intervention_processes DROP CONSTRAINT IF EXISTS intervention_processes_process_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.intervention_processes DROP CONSTRAINT IF EXISTS intervention_processes_intervention_type_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.intervention_category_translation_prod DROP CONSTRAINT IF EXISTS intervention_category_translation_prod_lang_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.intervention_category_translation_prod DROP CONSTRAINT IF EXISTS intervention_category_translation_prod_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.intervention_category_translation DROP CONSTRAINT IF EXISTS intervention_category_translation_fk;
 ALTER TABLE IF EXISTS ONLY micadoapp.intervention_category_translation DROP CONSTRAINT IF EXISTS intervention_category_id_translation_fk;
 ALTER TABLE IF EXISTS ONLY micadoapp.individual_intervention_plan DROP CONSTRAINT IF EXISTS individual_intervention_plan_um_user_id_fkey;
@@ -54,66 +70,94 @@ ALTER TABLE IF EXISTS ONLY micadoapp.individual_intervention_plan_interventions 
 ALTER TABLE IF EXISTS ONLY micadoapp.individual_intervention_plan_interventions DROP CONSTRAINT IF EXISTS individual_intervention_plan_interventions_intervention_type_fk;
 ALTER TABLE IF EXISTS ONLY micadoapp.process_comments DROP CONSTRAINT IF EXISTS id_process_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.process_comments DROP CONSTRAINT IF EXISTS id_comment_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.glossary_translation_prod DROP CONSTRAINT IF EXISTS glossary_translation_prod_lang_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.glossary_translation_prod DROP CONSTRAINT IF EXISTS glossary_translation_prod_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.glossary_translation DROP CONSTRAINT IF EXISTS glossary_translation_fk_1;
 ALTER TABLE IF EXISTS ONLY micadoapp.glossary_translation DROP CONSTRAINT IF EXISTS glossary_translation_fk;
 ALTER TABLE IF EXISTS ONLY micadoapp.features_flags_translation DROP CONSTRAINT IF EXISTS features_flags_translation_lang_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.features_flags_translation DROP CONSTRAINT IF EXISTS features_flags_translation_id_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.features_flags_translation_prod DROP CONSTRAINT IF EXISTS feature_flags_translation_prod_lang_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.features_flags_translation_prod DROP CONSTRAINT IF EXISTS feature_flags_translation_prod_id_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.event_translation_prod DROP CONSTRAINT IF EXISTS event_translation_prod_lang_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.event_translation_prod DROP CONSTRAINT IF EXISTS event_translation_prod_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.event_translation DROP CONSTRAINT IF EXISTS event_translation_lang_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.event_translation DROP CONSTRAINT IF EXISTS event_translation_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.event_topic DROP CONSTRAINT IF EXISTS event_topic_id_topic_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.event_topic DROP CONSTRAINT IF EXISTS event_topic_id_process_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.event_tags_translation_prod DROP CONSTRAINT IF EXISTS event_tags_translation_prod_lang_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.event_tags_translation_prod DROP CONSTRAINT IF EXISTS event_tags_translation_prod_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.event_tags_translation DROP CONSTRAINT IF EXISTS event_tags_translation_fk_1;
 ALTER TABLE IF EXISTS ONLY micadoapp.event_tags_translation DROP CONSTRAINT IF EXISTS event_tags_translation_fk;
 ALTER TABLE IF EXISTS ONLY micadoapp.event_tags DROP CONSTRAINT IF EXISTS event_tags_fk;
 ALTER TABLE IF EXISTS ONLY micadoapp.event DROP CONSTRAINT IF EXISTS event_fk;
+ALTER TABLE IF EXISTS ONLY micadoapp.event_category_translation_prod DROP CONSTRAINT IF EXISTS event_category_translation_prod_lang_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.event_category_translation_prod DROP CONSTRAINT IF EXISTS event_category_translation_prod_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.event_category_translation DROP CONSTRAINT IF EXISTS event_category_translation_lang_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.event_category_translation DROP CONSTRAINT IF EXISTS event_category_translation_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.document DROP CONSTRAINT IF EXISTS document_validated_um_user_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.document DROP CONSTRAINT IF EXISTS document_um_user_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.document_type_validator DROP CONSTRAINT IF EXISTS document_type_validator_validable_by_tenant_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.document_type_validator DROP CONSTRAINT IF EXISTS document_type_validator_document_type_id_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.document_type_translation_prod DROP CONSTRAINT IF EXISTS document_type_translation_prod_lang_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.document_type_translation_prod DROP CONSTRAINT IF EXISTS document_type_translation_prod_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.document_type_translation DROP CONSTRAINT IF EXISTS document_type_translation_lang_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.document_type_translation DROP CONSTRAINT IF EXISTS document_type_translation_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.document_type_picture DROP CONSTRAINT IF EXISTS document_type_picture_fk;
 ALTER TABLE IF EXISTS ONLY micadoapp.document_pictures DROP CONSTRAINT IF EXISTS document_pictures_fk;
 ALTER TABLE IF EXISTS ONLY micadoapp.document DROP CONSTRAINT IF EXISTS document_document_type_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.document DROP CONSTRAINT IF EXISTS document_ask_validate_by_tenant_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.comment_translation_prod DROP CONSTRAINT IF EXISTS comment_translation_prod_lang_fkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.comment_translation_prod DROP CONSTRAINT IF EXISTS comment_translation_prod_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.comments_translation DROP CONSTRAINT IF EXISTS comment_translation_lang_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.comments_translation DROP CONSTRAINT IF EXISTS comment_translation_id_fkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.user_types_translation DROP CONSTRAINT IF EXISTS user_types_translation_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.user_types DROP CONSTRAINT IF EXISTS user_types_pkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.user_types_translation_prod DROP CONSTRAINT IF EXISTS user_type_translation_prod_pk;
+ALTER TABLE IF EXISTS ONLY micadoapp.topic_translation_prod DROP CONSTRAINT IF EXISTS topic_translations_prod_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.topic_translation DROP CONSTRAINT IF EXISTS topic_translation_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.topic DROP CONSTRAINT IF EXISTS topic_pkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.step_translation_prod DROP CONSTRAINT IF EXISTS step_translation_prod_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.step_translation DROP CONSTRAINT IF EXISTS step_translation_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.step DROP CONSTRAINT IF EXISTS step_pk;
+ALTER TABLE IF EXISTS ONLY micadoapp.step_link_translation_prod DROP CONSTRAINT IF EXISTS step_link_translation_prod_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.step_link_translation DROP CONSTRAINT IF EXISTS step_link_translation_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.step_link DROP CONSTRAINT IF EXISTS step_link_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.step_document DROP CONSTRAINT IF EXISTS step_document_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.settings DROP CONSTRAINT IF EXISTS settings_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.process_users DROP CONSTRAINT IF EXISTS process_users_pk;
+ALTER TABLE IF EXISTS ONLY micadoapp.process_translation_prod DROP CONSTRAINT IF EXISTS process_translation_prod_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.process_translation DROP CONSTRAINT IF EXISTS process_translation_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.process_topic DROP CONSTRAINT IF EXISTS process_topic_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.process DROP CONSTRAINT IF EXISTS process_pkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.process_comments DROP CONSTRAINT IF EXISTS process_comment_pkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.picture_hotspot_translation_prod DROP CONSTRAINT IF EXISTS picture_hotspot_translation_prod_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.picture_hotspot_translation DROP CONSTRAINT IF EXISTS picture_hotspot_translation_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.picture_hotspot DROP CONSTRAINT IF EXISTS picture_hotspot_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.migrant_app_config DROP CONSTRAINT IF EXISTS migrant_app_config_pkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.languages DROP CONSTRAINT IF EXISTS languages_pkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.intervention_types_translation_prod DROP CONSTRAINT IF EXISTS intervention_types_translation_prod_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.intervention_types_translation DROP CONSTRAINT IF EXISTS intervention_types_translation_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.intervention_types DROP CONSTRAINT IF EXISTS intervention_types_pkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.intervention_type_validator DROP CONSTRAINT IF EXISTS intervention_type_validator_pk;
+ALTER TABLE IF EXISTS ONLY micadoapp.intervention_category_translation_prod DROP CONSTRAINT IF EXISTS intervention_category_translation_prod_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.intervention_category_translation DROP CONSTRAINT IF EXISTS intervention_category_translation_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.intervention_category DROP CONSTRAINT IF EXISTS intervention_category_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.individual_intervention_plan DROP CONSTRAINT IF EXISTS individual_intervention_plan_pkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.individual_intervention_plan_interventions DROP CONSTRAINT IF EXISTS individual_intervention_plan_interventions_pk;
+ALTER TABLE IF EXISTS ONLY micadoapp.glossary_translation_prod DROP CONSTRAINT IF EXISTS glossary_translation_prod_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.glossary_translation DROP CONSTRAINT IF EXISTS glossary_translation_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.glossary DROP CONSTRAINT IF EXISTS glossary_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.features_flags_translation DROP CONSTRAINT IF EXISTS features_flags_translation_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.features_flags DROP CONSTRAINT IF EXISTS features_flag_pkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.features_flags_translation_prod DROP CONSTRAINT IF EXISTS feature_flags_translation_prod_pk;
+ALTER TABLE IF EXISTS ONLY micadoapp.event_translation_prod DROP CONSTRAINT IF EXISTS event_translation_prod_pk;
+ALTER TABLE IF EXISTS ONLY micadoapp.event_tags_translation_prod DROP CONSTRAINT IF EXISTS event_tags_translation_prod_pkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.event_tags_translation DROP CONSTRAINT IF EXISTS event_tags_translation_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.event_tags DROP CONSTRAINT IF EXISTS event_tags_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.event DROP CONSTRAINT IF EXISTS event_pkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.event_category_translation_prod DROP CONSTRAINT IF EXISTS event_category_translation_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.event_category DROP CONSTRAINT IF EXISTS event_category_pkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.document_type_translation_prod DROP CONSTRAINT IF EXISTS document_type_translation_prod_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.document_type_translation DROP CONSTRAINT IF EXISTS document_type_translation_pkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.document_type DROP CONSTRAINT IF EXISTS document_type_pkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.document_type_picture DROP CONSTRAINT IF EXISTS document_type_picture_pk;
@@ -121,6 +165,7 @@ ALTER TABLE IF EXISTS ONLY micadoapp.document DROP CONSTRAINT IF EXISTS document
 ALTER TABLE IF EXISTS ONLY micadoapp.document_pictures DROP CONSTRAINT IF EXISTS document_pictures_pk;
 ALTER TABLE IF EXISTS ONLY micadoapp.comments_translation DROP CONSTRAINT IF EXISTS comments_translation_pkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.comments DROP CONSTRAINT IF EXISTS comments_pkey;
+ALTER TABLE IF EXISTS ONLY micadoapp.comment_translation_prod DROP CONSTRAINT IF EXISTS comment_translation_prod_pkey;
 ALTER TABLE IF EXISTS ONLY micadoapp.charts DROP CONSTRAINT IF EXISTS charts_pkey;
 ALTER TABLE IF EXISTS micadoapp.user_types_translation_prod ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.user_types_translation ALTER COLUMN id DROP DEFAULT;
@@ -159,7 +204,6 @@ ALTER TABLE IF EXISTS micadoapp.document_type ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.document ALTER COLUMN document_type DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.document ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE IF EXISTS micadoapp.comments ALTER COLUMN id DROP DEFAULT;
-ALTER TABLE IF EXISTS micadoapp.comment_translation_prod ALTER COLUMN id DROP DEFAULT;
 DROP SEQUENCE IF EXISTS micadoapp.user_types_translation_prod_id_seq;
 DROP TABLE IF EXISTS micadoapp.user_types_translation_prod;
 DROP SEQUENCE IF EXISTS micadoapp.user_types_translation_id_seq;
@@ -237,6 +281,7 @@ DROP TABLE IF EXISTS micadoapp.event_translation;
 DROP SEQUENCE IF EXISTS micadoapp.event_topic_id_topic_seq;
 DROP SEQUENCE IF EXISTS micadoapp.event_topic_id_event_seq;
 DROP TABLE IF EXISTS micadoapp.event_topic;
+DROP TABLE IF EXISTS micadoapp.event_tags_translation_prod;
 DROP TABLE IF EXISTS micadoapp.event_tags_translation;
 DROP SEQUENCE IF EXISTS micadoapp.event_tags_id_seq1;
 DROP SEQUENCE IF EXISTS micadoapp.event_tags_id_seq;
@@ -264,8 +309,8 @@ DROP TABLE IF EXISTS micadoapp.document;
 DROP TABLE IF EXISTS micadoapp.comments_translation;
 DROP SEQUENCE IF EXISTS micadoapp.comments_id_seq;
 DROP TABLE IF EXISTS micadoapp.comments;
-DROP SEQUENCE IF EXISTS micadoapp.comment_translation_prod_id_seq;
 DROP TABLE IF EXISTS micadoapp.comment_translation_prod;
+DROP SEQUENCE IF EXISTS micadoapp.comment_translation_prod_id_seq;
 DROP TABLE IF EXISTS micadoapp.charts;
 DROP SEQUENCE IF EXISTS micadoapp.charts_id_seq;
 DROP VIEW IF EXISTS micadoapp.active_features;
@@ -334,18 +379,6 @@ CREATE TABLE micadoapp.charts (
 
 
 --
--- Name: comment_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
---
-
-CREATE TABLE micadoapp.comment_translation_prod (
-    lang character varying(10) NOT NULL,
-    comment text,
-    translationdate date,
-    id smallint NOT NULL
-);
-
-
---
 -- Name: comment_translation_prod_id_seq; Type: SEQUENCE; Schema: micadoapp; Owner: -
 --
 
@@ -359,10 +392,15 @@ CREATE SEQUENCE micadoapp.comment_translation_prod_id_seq
 
 
 --
--- Name: comment_translation_prod_id_seq; Type: SEQUENCE OWNED BY; Schema: micadoapp; Owner: -
+-- Name: comment_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
 --
 
-ALTER SEQUENCE micadoapp.comment_translation_prod_id_seq OWNED BY micadoapp.comment_translation_prod.id;
+CREATE TABLE micadoapp.comment_translation_prod (
+    lang character varying(10) NOT NULL,
+    comment text,
+    translationdate date,
+    id smallint DEFAULT nextval('micadoapp.comment_translation_prod_id_seq'::regclass) NOT NULL
+);
 
 
 --
@@ -739,7 +777,7 @@ CREATE TABLE micadoapp.event_category_translation (
 
 CREATE TABLE micadoapp.event_category_translation_prod (
     id smallint NOT NULL,
-    lang character varying(10),
+    lang character varying(10) NOT NULL,
     event_category character varying(20),
     translation_date timestamp without time zone
 );
@@ -840,6 +878,18 @@ CREATE TABLE micadoapp.event_tags_translation (
 
 
 --
+-- Name: event_tags_translation_prod; Type: TABLE; Schema: micadoapp; Owner: -
+--
+
+CREATE TABLE micadoapp.event_tags_translation_prod (
+    id smallint NOT NULL,
+    lang character varying(10) NOT NULL,
+    tag character varying NOT NULL,
+    translation_date timestamp without time zone
+);
+
+
+--
 -- Name: event_topic; Type: TABLE; Schema: micadoapp; Owner: -
 --
 
@@ -908,7 +958,7 @@ CREATE TABLE micadoapp.event_translation (
 
 CREATE TABLE micadoapp.event_translation_prod (
     id smallint NOT NULL,
-    lang character varying(10),
+    lang character varying(10) NOT NULL,
     event character varying(20),
     description text,
     translation_date timestamp without time zone
@@ -2009,13 +2059,6 @@ ALTER SEQUENCE micadoapp.user_types_translation_prod_id_seq OWNED BY micadoapp.u
 
 
 --
--- Name: comment_translation_prod id; Type: DEFAULT; Schema: micadoapp; Owner: -
---
-
-ALTER TABLE ONLY micadoapp.comment_translation_prod ALTER COLUMN id SET DEFAULT nextval('micadoapp.comment_translation_prod_id_seq'::regclass);
-
-
---
 -- Name: comments id; Type: DEFAULT; Schema: micadoapp; Owner: -
 --
 
@@ -2461,6 +2504,12 @@ INSERT INTO micadoapp.event_tags_translation VALUES (122, 'en', 'language', NULL
 INSERT INTO micadoapp.event_tags_translation VALUES (123, 'en', 'spanish', NULL);
 INSERT INTO micadoapp.event_tags_translation VALUES (92, 'en', 'course', NULL);
 INSERT INTO micadoapp.event_tags_translation VALUES (93, 'en', 'english', NULL);
+
+
+--
+-- Data for Name: event_tags_translation_prod; Type: TABLE DATA; Schema: micadoapp; Owner: -
+--
+
 
 
 --
@@ -3414,6 +3463,14 @@ ALTER TABLE ONLY micadoapp.charts
 
 
 --
+-- Name: comment_translation_prod comment_translation_prod_pkey; Type: CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.comment_translation_prod
+    ADD CONSTRAINT comment_translation_prod_pkey PRIMARY KEY (lang, id);
+
+
+--
 -- Name: comments comments_pkey; Type: CONSTRAINT; Schema: micadoapp; Owner: -
 --
 
@@ -3470,11 +3527,27 @@ ALTER TABLE ONLY micadoapp.document_type_translation
 
 
 --
+-- Name: document_type_translation_prod document_type_translation_prod_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.document_type_translation_prod
+    ADD CONSTRAINT document_type_translation_prod_pk PRIMARY KEY (id, lang);
+
+
+--
 -- Name: event_category event_category_pkey; Type: CONSTRAINT; Schema: micadoapp; Owner: -
 --
 
 ALTER TABLE ONLY micadoapp.event_category
     ADD CONSTRAINT event_category_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: event_category_translation_prod event_category_translation_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.event_category_translation_prod
+    ADD CONSTRAINT event_category_translation_pk PRIMARY KEY (id, lang);
 
 
 --
@@ -3499,6 +3572,30 @@ ALTER TABLE ONLY micadoapp.event_tags
 
 ALTER TABLE ONLY micadoapp.event_tags_translation
     ADD CONSTRAINT event_tags_translation_pk PRIMARY KEY (id, lang);
+
+
+--
+-- Name: event_tags_translation_prod event_tags_translation_prod_pkey; Type: CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.event_tags_translation_prod
+    ADD CONSTRAINT event_tags_translation_prod_pkey PRIMARY KEY (id, lang);
+
+
+--
+-- Name: event_translation_prod event_translation_prod_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.event_translation_prod
+    ADD CONSTRAINT event_translation_prod_pk PRIMARY KEY (id, lang);
+
+
+--
+-- Name: features_flags_translation_prod feature_flags_translation_prod_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.features_flags_translation_prod
+    ADD CONSTRAINT feature_flags_translation_prod_pk PRIMARY KEY (id, lang);
 
 
 --
@@ -3534,6 +3631,14 @@ ALTER TABLE ONLY micadoapp.glossary_translation
 
 
 --
+-- Name: glossary_translation_prod glossary_translation_prod_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.glossary_translation_prod
+    ADD CONSTRAINT glossary_translation_prod_pk PRIMARY KEY (id, lang);
+
+
+--
 -- Name: individual_intervention_plan_interventions individual_intervention_plan_interventions_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
 --
 
@@ -3566,6 +3671,14 @@ ALTER TABLE ONLY micadoapp.intervention_category_translation
 
 
 --
+-- Name: intervention_category_translation_prod intervention_category_translation_prod_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.intervention_category_translation_prod
+    ADD CONSTRAINT intervention_category_translation_prod_pk PRIMARY KEY (id, lang);
+
+
+--
 -- Name: intervention_type_validator intervention_type_validator_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
 --
 
@@ -3587,6 +3700,14 @@ ALTER TABLE ONLY micadoapp.intervention_types
 
 ALTER TABLE ONLY micadoapp.intervention_types_translation
     ADD CONSTRAINT intervention_types_translation_pk PRIMARY KEY (id, lang);
+
+
+--
+-- Name: intervention_types_translation_prod intervention_types_translation_prod_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.intervention_types_translation_prod
+    ADD CONSTRAINT intervention_types_translation_prod_pk PRIMARY KEY (id, lang);
 
 
 --
@@ -3622,6 +3743,14 @@ ALTER TABLE ONLY micadoapp.picture_hotspot_translation
 
 
 --
+-- Name: picture_hotspot_translation_prod picture_hotspot_translation_prod_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.picture_hotspot_translation_prod
+    ADD CONSTRAINT picture_hotspot_translation_prod_pk PRIMARY KEY (pht_id, lang);
+
+
+--
 -- Name: process_comments process_comment_pkey; Type: CONSTRAINT; Schema: micadoapp; Owner: -
 --
 
@@ -3651,6 +3780,14 @@ ALTER TABLE ONLY micadoapp.process_topic
 
 ALTER TABLE ONLY micadoapp.process_translation
     ADD CONSTRAINT process_translation_pk PRIMARY KEY (id, lang);
+
+
+--
+-- Name: process_translation_prod process_translation_prod_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.process_translation_prod
+    ADD CONSTRAINT process_translation_prod_pk PRIMARY KEY (id, lang);
 
 
 --
@@ -3694,6 +3831,14 @@ ALTER TABLE ONLY micadoapp.step_link_translation
 
 
 --
+-- Name: step_link_translation_prod step_link_translation_prod_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.step_link_translation_prod
+    ADD CONSTRAINT step_link_translation_prod_pk PRIMARY KEY (lang, id);
+
+
+--
 -- Name: step step_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
 --
 
@@ -3710,6 +3855,14 @@ ALTER TABLE ONLY micadoapp.step_translation
 
 
 --
+-- Name: step_translation_prod step_translation_prod_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.step_translation_prod
+    ADD CONSTRAINT step_translation_prod_pk PRIMARY KEY (lang, id);
+
+
+--
 -- Name: topic topic_pkey; Type: CONSTRAINT; Schema: micadoapp; Owner: -
 --
 
@@ -3723,6 +3876,22 @@ ALTER TABLE ONLY micadoapp.topic
 
 ALTER TABLE ONLY micadoapp.topic_translation
     ADD CONSTRAINT topic_translation_pk PRIMARY KEY (id, lang);
+
+
+--
+-- Name: topic_translation_prod topic_translations_prod_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.topic_translation_prod
+    ADD CONSTRAINT topic_translations_prod_pk PRIMARY KEY (id, lang);
+
+
+--
+-- Name: user_types_translation_prod user_type_translation_prod_pk; Type: CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.user_types_translation_prod
+    ADD CONSTRAINT user_type_translation_prod_pk PRIMARY KEY (id, lang);
 
 
 --
@@ -3755,6 +3924,22 @@ ALTER TABLE ONLY micadoapp.comments_translation
 
 ALTER TABLE ONLY micadoapp.comments_translation
     ADD CONSTRAINT comment_translation_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) NOT VALID;
+
+
+--
+-- Name: comment_translation_prod comment_translation_prod_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.comment_translation_prod
+    ADD CONSTRAINT comment_translation_prod_id_fkey FOREIGN KEY (id) REFERENCES micadoapp.comments(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: comment_translation_prod comment_translation_prod_lang_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.comment_translation_prod
+    ADD CONSTRAINT comment_translation_prod_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
 
 
 --
@@ -3806,6 +3991,22 @@ ALTER TABLE ONLY micadoapp.document_type_translation
 
 
 --
+-- Name: document_type_translation_prod document_type_translation_prod_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.document_type_translation_prod
+    ADD CONSTRAINT document_type_translation_prod_id_fkey FOREIGN KEY (id) REFERENCES micadoapp.document_type(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: document_type_translation_prod document_type_translation_prod_lang_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.document_type_translation_prod
+    ADD CONSTRAINT document_type_translation_prod_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
 -- Name: document_type_validator document_type_validator_document_type_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
 --
 
@@ -3854,6 +4055,22 @@ ALTER TABLE ONLY micadoapp.event_category_translation
 
 
 --
+-- Name: event_category_translation_prod event_category_translation_prod_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.event_category_translation_prod
+    ADD CONSTRAINT event_category_translation_prod_id_fkey FOREIGN KEY (id) REFERENCES micadoapp.event_category(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: event_category_translation_prod event_category_translation_prod_lang_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.event_category_translation_prod
+    ADD CONSTRAINT event_category_translation_prod_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
 -- Name: event event_fk; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
 --
 
@@ -3883,6 +4100,22 @@ ALTER TABLE ONLY micadoapp.event_tags_translation
 
 ALTER TABLE ONLY micadoapp.event_tags_translation
     ADD CONSTRAINT event_tags_translation_fk_1 FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang);
+
+
+--
+-- Name: event_tags_translation_prod event_tags_translation_prod_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.event_tags_translation_prod
+    ADD CONSTRAINT event_tags_translation_prod_id_fkey FOREIGN KEY (id) REFERENCES micadoapp.event_tags(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: event_tags_translation_prod event_tags_translation_prod_lang_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.event_tags_translation_prod
+    ADD CONSTRAINT event_tags_translation_prod_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
 
 
 --
@@ -3918,6 +4151,38 @@ ALTER TABLE ONLY micadoapp.event_translation
 
 
 --
+-- Name: event_translation_prod event_translation_prod_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.event_translation_prod
+    ADD CONSTRAINT event_translation_prod_id_fkey FOREIGN KEY (id) REFERENCES micadoapp.event(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: event_translation_prod event_translation_prod_lang_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.event_translation_prod
+    ADD CONSTRAINT event_translation_prod_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: features_flags_translation_prod feature_flags_translation_prod_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.features_flags_translation_prod
+    ADD CONSTRAINT feature_flags_translation_prod_id_fkey FOREIGN KEY (id) REFERENCES micadoapp.features_flags(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: features_flags_translation_prod feature_flags_translation_prod_lang_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.features_flags_translation_prod
+    ADD CONSTRAINT feature_flags_translation_prod_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
 -- Name: features_flags_translation features_flags_translation_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
 --
 
@@ -3947,6 +4212,22 @@ ALTER TABLE ONLY micadoapp.glossary_translation
 
 ALTER TABLE ONLY micadoapp.glossary_translation
     ADD CONSTRAINT glossary_translation_fk_1 FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang);
+
+
+--
+-- Name: glossary_translation_prod glossary_translation_prod_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.glossary_translation_prod
+    ADD CONSTRAINT glossary_translation_prod_id_fkey FOREIGN KEY (id) REFERENCES micadoapp.glossary(id) NOT VALID;
+
+
+--
+-- Name: glossary_translation_prod glossary_translation_prod_lang_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.glossary_translation_prod
+    ADD CONSTRAINT glossary_translation_prod_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) NOT VALID;
 
 
 --
@@ -4014,6 +4295,22 @@ ALTER TABLE ONLY micadoapp.intervention_category_translation
 
 
 --
+-- Name: intervention_category_translation_prod intervention_category_translation_prod_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.intervention_category_translation_prod
+    ADD CONSTRAINT intervention_category_translation_prod_id_fkey FOREIGN KEY (id) REFERENCES micadoapp.intervention_category(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: intervention_category_translation_prod intervention_category_translation_prod_lang_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.intervention_category_translation_prod
+    ADD CONSTRAINT intervention_category_translation_prod_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
 -- Name: intervention_processes intervention_processes_intervention_type_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
 --
 
@@ -4062,6 +4359,22 @@ ALTER TABLE ONLY micadoapp.intervention_types_translation
 
 
 --
+-- Name: intervention_types_translation_prod intervention_types_translation_prod_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.intervention_types_translation_prod
+    ADD CONSTRAINT intervention_types_translation_prod_id_fkey FOREIGN KEY (id) REFERENCES micadoapp.intervention_types(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: intervention_types_translation_prod intervention_types_translation_prod_lang_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.intervention_types_translation_prod
+    ADD CONSTRAINT intervention_types_translation_prod_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
 -- Name: picture_hotspot picture_hotspot_fk; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
 --
 
@@ -4083,6 +4396,22 @@ ALTER TABLE ONLY micadoapp.picture_hotspot_translation
 
 ALTER TABLE ONLY micadoapp.picture_hotspot_translation
     ADD CONSTRAINT picture_hotspot_translation_fk_1 FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON DELETE CASCADE;
+
+
+--
+-- Name: picture_hotspot_translation_prod picture_hotspot_translation_prod_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.picture_hotspot_translation_prod
+    ADD CONSTRAINT picture_hotspot_translation_prod_id_fkey FOREIGN KEY (pht_id) REFERENCES micadoapp.picture_hotspot(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: picture_hotspot_translation_prod picture_hotspot_translation_prod_lang_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.picture_hotspot_translation_prod
+    ADD CONSTRAINT picture_hotspot_translation_prod_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
 
 
 --
@@ -4123,6 +4452,22 @@ ALTER TABLE ONLY micadoapp.process_translation
 
 ALTER TABLE ONLY micadoapp.process_translation
     ADD CONSTRAINT process_translation_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: process_translation_prod process_translation_prod_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.process_translation_prod
+    ADD CONSTRAINT process_translation_prod_id_fkey FOREIGN KEY (id) REFERENCES micadoapp.process(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: process_translation_prod process_translation_prod_lang_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.process_translation_prod
+    ADD CONSTRAINT process_translation_prod_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
 
 
 --
@@ -4206,6 +4551,22 @@ ALTER TABLE ONLY micadoapp.step_link_translation
 
 
 --
+-- Name: step_link_translation_prod step_link_translation_prod_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.step_link_translation_prod
+    ADD CONSTRAINT step_link_translation_prod_id_fkey FOREIGN KEY (id) REFERENCES micadoapp.step_link(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: step_link_translation_prod step_link_translation_prod_lang_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.step_link_translation_prod
+    ADD CONSTRAINT step_link_translation_prod_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
 -- Name: step_link_translation step_link_translation_step_fk; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
 --
 
@@ -4230,6 +4591,22 @@ ALTER TABLE ONLY micadoapp.step_translation
 
 
 --
+-- Name: step_translation_prod step_translation_prod_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.step_translation_prod
+    ADD CONSTRAINT step_translation_prod_id_fkey FOREIGN KEY (id) REFERENCES micadoapp.step(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: step_translation_prod step_translation_prod_lang_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.step_translation_prod
+    ADD CONSTRAINT step_translation_prod_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
 -- Name: topic_translation topic_translation_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
 --
 
@@ -4243,6 +4620,38 @@ ALTER TABLE ONLY micadoapp.topic_translation
 
 ALTER TABLE ONLY micadoapp.topic_translation
     ADD CONSTRAINT topic_translation_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: topic_translation_prod topic_translation_prod_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.topic_translation_prod
+    ADD CONSTRAINT topic_translation_prod_id_fkey FOREIGN KEY (id) REFERENCES micadoapp.topic(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: topic_translation_prod topic_translation_prod_lang_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.topic_translation_prod
+    ADD CONSTRAINT topic_translation_prod_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: user_types_translation_prod user_type_translation_prod_id_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.user_types_translation_prod
+    ADD CONSTRAINT user_type_translation_prod_id_fkey FOREIGN KEY (id) REFERENCES micadoapp.user_types(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
+
+
+--
+-- Name: user_types_translation_prod user_type_translation_prod_lang_fkey; Type: FK CONSTRAINT; Schema: micadoapp; Owner: -
+--
+
+ALTER TABLE ONLY micadoapp.user_types_translation_prod
+    ADD CONSTRAINT user_type_translation_prod_lang_fkey FOREIGN KEY (lang) REFERENCES micadoapp.languages(lang) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
 
 
 --
