@@ -501,7 +501,8 @@ CREATE TABLE micadoapp.comments_translation (
     lang character varying(10) NOT NULL,
     comment text,
     translationdate date,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -715,7 +716,8 @@ CREATE TABLE micadoapp.document_type_translation (
     document character varying(50),
     description text,
     translation_date timestamp without time zone,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -854,7 +856,8 @@ CREATE TABLE micadoapp.event_category_translation (
     lang character varying(10) NOT NULL,
     event_category character varying(20),
     translation_date timestamp without time zone,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -1063,7 +1066,8 @@ CREATE TABLE micadoapp.event_tags_translation (
     lang character varying(10) NOT NULL,
     tag character varying NOT NULL,
     translation_date timestamp without time zone,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -1189,7 +1193,8 @@ CREATE TABLE micadoapp.event_translation (
     event character varying(20),
     description text,
     translation_date timestamp without time zone,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -1388,7 +1393,8 @@ CREATE TABLE micadoapp.features_flags_translation (
     lang character varying(10) NOT NULL,
     feature character varying(30),
     translation_date timestamp without time zone,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -1460,7 +1466,8 @@ CREATE TABLE micadoapp.glossary_translation (
     title character varying(25),
     description text,
     translation_date timestamp without time zone,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -1599,7 +1606,8 @@ CREATE TABLE micadoapp.information_category_translation (
     lang character varying(10) NOT NULL,
     information_category character varying(20),
     translation_date timestamp without time zone,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -1612,7 +1620,8 @@ CREATE TABLE micadoapp.information_tags_translation (
     lang character varying(10) NOT NULL,
     tag character varying NOT NULL,
     translation_date timestamp without time zone,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -1638,7 +1647,8 @@ CREATE TABLE micadoapp.information_translation (
     information character varying(20),
     description text,
     translation_date timestamp without time zone,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -1682,7 +1692,8 @@ CREATE TABLE micadoapp.intervention_category_translation (
     lang character varying(10) NOT NULL,
     title character varying(30),
     translation_date timestamp without time zone,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -1800,7 +1811,8 @@ CREATE TABLE micadoapp.intervention_types_translation (
     intervention_title character varying(20),
     description text,
     translation_date timestamp without time zone,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -1881,7 +1893,8 @@ CREATE TABLE micadoapp.picture_hotspot_translation (
     lang character varying(10) NOT NULL,
     title character varying(20),
     message text,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -2017,7 +2030,8 @@ CREATE TABLE micadoapp.process_translation (
     process character varying(30),
     description text,
     translation_date timestamp without time zone,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -2231,7 +2245,8 @@ CREATE TABLE micadoapp.step_link_translation (
     lang character varying(10) NOT NULL,
     description character varying(25),
     id uuid NOT NULL,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -2256,7 +2271,8 @@ CREATE TABLE micadoapp.step_translation (
     description text,
     translation_date timestamp without time zone,
     id uuid NOT NULL,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -2314,7 +2330,8 @@ CREATE TABLE micadoapp.topic_translation (
     lang character varying(10) NOT NULL,
     topic character varying(20),
     translation_date timestamp without time zone,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -2437,7 +2454,8 @@ CREATE TABLE micadoapp.user_types_translation (
     user_type character varying(20),
     description text,
     translation_date timestamp without time zone,
-    "translationState" integer DEFAULT 0 NOT NULL
+    "translationState" integer DEFAULT 0 NOT NULL,
+    published boolean DEFAULT false
 );
 
 
@@ -2792,11 +2810,11 @@ INSERT INTO micadoapp.comments VALUES (false, NULL, 41);
 -- Data for Name: comments_translation; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
-INSERT INTO micadoapp.comments_translation VALUES (41, 'en', 'a comment', NULL, 0);
-INSERT INTO micadoapp.comments_translation VALUES (41, 'nl', '', NULL, 0);
-INSERT INTO micadoapp.comments_translation VALUES (41, 'de', '', NULL, 0);
-INSERT INTO micadoapp.comments_translation VALUES (41, 'es', '', NULL, 0);
-INSERT INTO micadoapp.comments_translation VALUES (41, 'it', '', NULL, 0);
+INSERT INTO micadoapp.comments_translation VALUES (41, 'en', 'a comment', NULL, 0, false);
+INSERT INTO micadoapp.comments_translation VALUES (41, 'nl', '', NULL, 0, false);
+INSERT INTO micadoapp.comments_translation VALUES (41, 'de', '', NULL, 0, false);
+INSERT INTO micadoapp.comments_translation VALUES (41, 'es', '', NULL, 0, false);
+INSERT INTO micadoapp.comments_translation VALUES (41, 'it', '', NULL, 0, false);
 
 
 --
@@ -2846,17 +2864,17 @@ INSERT INTO micadoapp.document_type_picture VALUES (10, 'string', 17, NULL);
 --
 
 INSERT INTO micadoapp.document_type_translation VALUES (3, 'en', 'Family status certificate', 'The Family Status Certificate is a document containing the data of persons residing at the same residence address and in the same housing unit. In case of family members, next to each name is written the specific role in the family composition.
-', '2020-04-14 18:17:39.35', 0);
-INSERT INTO micadoapp.document_type_translation VALUES (4, 'en', 'Employment contract', 'Employment contracts regulate the main aspects of the working relationship between employer and employee including job title, salary, responsibilities and duties, entitlement to sick pay and holidays, and applicable probationary and notice periods.', '2020-04-14 18:17:39.35', 0);
-INSERT INTO micadoapp.document_type_translation VALUES (5, 'en', 'stamp duty', 'Stamp duty is a tax that is levied on single property purchases or documents (historically, this included the majority of legal documents such as cheques, receipts, military commissions, marriage licences and land transactions.) A physical stamp (a revenue stamp) had to be attached to or impressed upon the document to denote that stamp duty had been paid before the document was legally effective. More modern versions of the tax no longer require an actual stamp.', '2020-04-14 18:17:39.35', 0);
-INSERT INTO micadoapp.document_type_translation VALUES (16, 'de', '', '', NULL, 0);
-INSERT INTO micadoapp.document_type_translation VALUES (16, 'nl', '', '', NULL, 0);
-INSERT INTO micadoapp.document_type_translation VALUES (16, 'es', '', '', NULL, 0);
-INSERT INTO micadoapp.document_type_translation VALUES (16, 'en', 'test type', '<p>test document</p>', NULL, 0);
-INSERT INTO micadoapp.document_type_translation VALUES (16, 'it', '', '', NULL, 0);
-INSERT INTO micadoapp.document_type_translation VALUES (2, 'en', 'Identity document', 'An identity document (also called a piece of identification or ID, or colloquially as papers) is any document that may be used to prove a person''s identity. If issued in a small, standard credit card size form, it is usually called an identity card (IC, ID card, citizen card),or passport card.', '2020-04-14 18:17:39.35', 0);
-INSERT INTO micadoapp.document_type_translation VALUES (1, 'it', 'permesso di soggiorno', 'bla bla', '2020-04-14 18:17:39.35', 0);
-INSERT INTO micadoapp.document_type_translation VALUES (1, 'en', 'Residence permit', 'A residence permit (less commonly residency permit) is a document or card required in some regions, allowing a foreign national to reside in a country for a fixed or indefinite length of time. These may be permits for temporary residency, or permanent residency. The exact rules vary between regions. In some cases (e.g. the UK) a temporary residence permit is required to extend a stay past some threshold, and can be an intermediate step to applying for permanent residency.', '2020-04-14 18:17:39.35', 0);
+', '2020-04-14 18:17:39.35', 0, false);
+INSERT INTO micadoapp.document_type_translation VALUES (4, 'en', 'Employment contract', 'Employment contracts regulate the main aspects of the working relationship between employer and employee including job title, salary, responsibilities and duties, entitlement to sick pay and holidays, and applicable probationary and notice periods.', '2020-04-14 18:17:39.35', 0, false);
+INSERT INTO micadoapp.document_type_translation VALUES (5, 'en', 'stamp duty', 'Stamp duty is a tax that is levied on single property purchases or documents (historically, this included the majority of legal documents such as cheques, receipts, military commissions, marriage licences and land transactions.) A physical stamp (a revenue stamp) had to be attached to or impressed upon the document to denote that stamp duty had been paid before the document was legally effective. More modern versions of the tax no longer require an actual stamp.', '2020-04-14 18:17:39.35', 0, false);
+INSERT INTO micadoapp.document_type_translation VALUES (16, 'de', '', '', NULL, 0, false);
+INSERT INTO micadoapp.document_type_translation VALUES (16, 'nl', '', '', NULL, 0, false);
+INSERT INTO micadoapp.document_type_translation VALUES (16, 'es', '', '', NULL, 0, false);
+INSERT INTO micadoapp.document_type_translation VALUES (16, 'en', 'test type', '<p>test document</p>', NULL, 0, false);
+INSERT INTO micadoapp.document_type_translation VALUES (16, 'it', '', '', NULL, 0, false);
+INSERT INTO micadoapp.document_type_translation VALUES (2, 'en', 'Identity document', 'An identity document (also called a piece of identification or ID, or colloquially as papers) is any document that may be used to prove a person''s identity. If issued in a small, standard credit card size form, it is usually called an identity card (IC, ID card, citizen card),or passport card.', '2020-04-14 18:17:39.35', 0, false);
+INSERT INTO micadoapp.document_type_translation VALUES (1, 'it', 'permesso di soggiorno', 'bla bla', '2020-04-14 18:17:39.35', 0, false);
+INSERT INTO micadoapp.document_type_translation VALUES (1, 'en', 'Residence permit', 'A residence permit (less commonly residency permit) is a document or card required in some regions, allowing a foreign national to reside in a country for a fixed or indefinite length of time. These may be permits for temporary residency, or permanent residency. The exact rules vary between regions. In some cases (e.g. the UK) a temporary residence permit is required to extend a stay past some threshold, and can be an intermediate step to applying for permanent residency.', '2020-04-14 18:17:39.35', 0, false);
 
 
 --
@@ -2950,8 +2968,8 @@ INSERT INTO micadoapp.features_flags VALUES (3, 'FEAT_ASSISTANT', true);
 -- Data for Name: features_flags_translation; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
-INSERT INTO micadoapp.features_flags_translation VALUES (1, 'it', 'Portafoglio documenti', '2020-04-14 17:54:28.436', 0);
-INSERT INTO micadoapp.features_flags_translation VALUES (1, 'en', 'Document wallet', '2020-04-14 17:54:28.436', 0);
+INSERT INTO micadoapp.features_flags_translation VALUES (1, 'it', 'Portafoglio documenti', '2020-04-14 17:54:28.436', 0, false);
+INSERT INTO micadoapp.features_flags_translation VALUES (1, 'en', 'Document wallet', '2020-04-14 17:54:28.436', 0, false);
 
 
 --
@@ -2973,12 +2991,12 @@ INSERT INTO micadoapp.glossary VALUES (35, true, '2020-08-03');
 -- Data for Name: glossary_translation; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
-INSERT INTO micadoapp.glossary_translation VALUES (1, 'it', 'Permesso di soggiorno', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"italian test 2"}]}]}', '2020-07-09 13:31:56.182', 0);
-INSERT INTO micadoapp.glossary_translation VALUES (1, 'es', 'Permiso de residencia', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"test"}]}]}', '2020-07-15 12:45:28.465', 0);
-INSERT INTO micadoapp.glossary_translation VALUES (2, 'es', 'test', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"test"}]}]}', '2020-07-23 13:10:03.199', 0);
-INSERT INTO micadoapp.glossary_translation VALUES (35, 'en', 'Arbeitsamt', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Job center in German"}]}]}', '2020-08-03 17:36:46.107', 0);
-INSERT INTO micadoapp.glossary_translation VALUES (2, 'en', 'Identity Card', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"An "},{"type":"text","marks":[{"type":"bold"}],"text":"identity document"},{"type":"text","text":" (also called a "},{"type":"text","marks":[{"type":"bold"}],"text":"piece of identification"},{"type":"text","text":" or "},{"type":"text","marks":[{"type":"bold"}],"text":"ID"},{"type":"text","text":", or colloquially as "},{"type":"text","marks":[{"type":"bold"}],"text":"papers"},{"type":"text","text":") is any document that may be used to prove a person''s identity. If issued in a small, standard credit card size form, it is usually called an "},{"type":"text","marks":[{"type":"bold"}],"text":"identity card"},{"type":"text","text":" ("},{"type":"text","marks":[{"type":"bold"}],"text":"IC"},{"type":"text","text":", "},{"type":"text","marks":[{"type":"bold"}],"text":"ID card"},{"type":"text","text":", "},{"type":"text","marks":[{"type":"bold"}],"text":"citizen card"},{"type":"text","text":"), or "},{"type":"text","marks":[{"type":"bold"}],"text":"passport card"},{"type":"text","text":". Some countries issue formal identity documents, as national identification cards which may be compulsory or non-compulsory, while others may require identity verification using regional identification or informal documents. When the identity document incorporates a person''s photograph, it may be called photo ID."}]}]}', '2020-09-03 10:06:55.97', 0);
-INSERT INTO micadoapp.glossary_translation VALUES (1, 'en', 'Residence permit', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"A "},{"type":"text","marks":[{"type":"bold"}],"text":"residence permit"},{"type":"text","text":" (less commonly "},{"type":"text","marks":[{"type":"italic"}],"text":"residency permit"},{"type":"text","text":") is a document or card required in some regions, allowing a foreign national to reside in a country for a fixed or indefinite length of time. These may be permits for temporary residency, or permanent residency. The exact rules vary between regions. In some cases (e.g. the UK) a temporary residence permit is required to extend a stay past some threshold, and can be an intermediate step to applying for permanent residency. An "},{"type":"mention","attrs":{"id":2,"label":"Identity Card"}},{"type":"text","text":" is usually needed for acquiring a Residence permit"}]}]}', '2020-09-03 10:08:17.779', 0);
+INSERT INTO micadoapp.glossary_translation VALUES (1, 'it', 'Permesso di soggiorno', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"italian test 2"}]}]}', '2020-07-09 13:31:56.182', 0, false);
+INSERT INTO micadoapp.glossary_translation VALUES (1, 'es', 'Permiso de residencia', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"test"}]}]}', '2020-07-15 12:45:28.465', 0, false);
+INSERT INTO micadoapp.glossary_translation VALUES (2, 'es', 'test', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"test"}]}]}', '2020-07-23 13:10:03.199', 0, false);
+INSERT INTO micadoapp.glossary_translation VALUES (35, 'en', 'Arbeitsamt', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Job center in German"}]}]}', '2020-08-03 17:36:46.107', 0, false);
+INSERT INTO micadoapp.glossary_translation VALUES (2, 'en', 'Identity Card', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"An "},{"type":"text","marks":[{"type":"bold"}],"text":"identity document"},{"type":"text","text":" (also called a "},{"type":"text","marks":[{"type":"bold"}],"text":"piece of identification"},{"type":"text","text":" or "},{"type":"text","marks":[{"type":"bold"}],"text":"ID"},{"type":"text","text":", or colloquially as "},{"type":"text","marks":[{"type":"bold"}],"text":"papers"},{"type":"text","text":") is any document that may be used to prove a person''s identity. If issued in a small, standard credit card size form, it is usually called an "},{"type":"text","marks":[{"type":"bold"}],"text":"identity card"},{"type":"text","text":" ("},{"type":"text","marks":[{"type":"bold"}],"text":"IC"},{"type":"text","text":", "},{"type":"text","marks":[{"type":"bold"}],"text":"ID card"},{"type":"text","text":", "},{"type":"text","marks":[{"type":"bold"}],"text":"citizen card"},{"type":"text","text":"), or "},{"type":"text","marks":[{"type":"bold"}],"text":"passport card"},{"type":"text","text":". Some countries issue formal identity documents, as national identification cards which may be compulsory or non-compulsory, while others may require identity verification using regional identification or informal documents. When the identity document incorporates a person''s photograph, it may be called photo ID."}]}]}', '2020-09-03 10:06:55.97', 0, false);
+INSERT INTO micadoapp.glossary_translation VALUES (1, 'en', 'Residence permit', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"A "},{"type":"text","marks":[{"type":"bold"}],"text":"residence permit"},{"type":"text","text":" (less commonly "},{"type":"text","marks":[{"type":"italic"}],"text":"residency permit"},{"type":"text","text":") is a document or card required in some regions, allowing a foreign national to reside in a country for a fixed or indefinite length of time. These may be permits for temporary residency, or permanent residency. The exact rules vary between regions. In some cases (e.g. the UK) a temporary residence permit is required to extend a stay past some threshold, and can be an intermediate step to applying for permanent residency. An "},{"type":"mention","attrs":{"id":2,"label":"Identity Card"}},{"type":"text","text":" is usually needed for acquiring a Residence permit"}]}]}', '2020-09-03 10:08:17.779', 0, false);
 
 
 --
@@ -3022,8 +3040,9 @@ INSERT INTO micadoapp.individual_intervention_plan_interventions VALUES (32, 10,
 INSERT INTO micadoapp.information VALUES (44, NULL, true, '2020-09-02 15:42:11.017', 13);
 INSERT INTO micadoapp.information VALUES (48, NULL, true, '2020-09-02 15:57:55.536', 12);
 INSERT INTO micadoapp.information VALUES (49, NULL, true, '2020-09-03 15:36:11.076', 12);
-INSERT INTO micadoapp.information VALUES (50, NULL, false, '2020-09-03 15:55:32.655', 12);
 INSERT INTO micadoapp.information VALUES (43, NULL, true, '2020-09-02 15:36:08.607', 12);
+INSERT INTO micadoapp.information VALUES (50, NULL, false, '2020-09-03 15:55:32.655', 12);
+INSERT INTO micadoapp.information VALUES (51, NULL, true, '2020-09-18 10:11:34.229', 13);
 
 
 --
@@ -3038,16 +3057,16 @@ INSERT INTO micadoapp.information_category VALUES (13, NULL, true);
 -- Data for Name: information_category_translation; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
-INSERT INTO micadoapp.information_category_translation VALUES (12, 'de', '', NULL, 0);
-INSERT INTO micadoapp.information_category_translation VALUES (12, 'nl', '', NULL, 0);
-INSERT INTO micadoapp.information_category_translation VALUES (12, 'es', 'curso', NULL, 0);
-INSERT INTO micadoapp.information_category_translation VALUES (12, 'en', 'course', NULL, 0);
-INSERT INTO micadoapp.information_category_translation VALUES (12, 'it', '', NULL, 0);
-INSERT INTO micadoapp.information_category_translation VALUES (13, 'de', '', NULL, 0);
-INSERT INTO micadoapp.information_category_translation VALUES (13, 'en', 'integration', NULL, 0);
-INSERT INTO micadoapp.information_category_translation VALUES (13, 'es', 'integración', NULL, 0);
-INSERT INTO micadoapp.information_category_translation VALUES (13, 'it', '', NULL, 0);
-INSERT INTO micadoapp.information_category_translation VALUES (13, 'nl', '', NULL, 0);
+INSERT INTO micadoapp.information_category_translation VALUES (12, 'de', '', NULL, 0, false);
+INSERT INTO micadoapp.information_category_translation VALUES (12, 'nl', '', NULL, 0, false);
+INSERT INTO micadoapp.information_category_translation VALUES (12, 'es', 'curso', NULL, 0, false);
+INSERT INTO micadoapp.information_category_translation VALUES (12, 'en', 'course', NULL, 0, false);
+INSERT INTO micadoapp.information_category_translation VALUES (12, 'it', '', NULL, 0, false);
+INSERT INTO micadoapp.information_category_translation VALUES (13, 'de', '', NULL, 0, false);
+INSERT INTO micadoapp.information_category_translation VALUES (13, 'en', 'integration', NULL, 0, false);
+INSERT INTO micadoapp.information_category_translation VALUES (13, 'es', 'integración', NULL, 0, false);
+INSERT INTO micadoapp.information_category_translation VALUES (13, 'it', '', NULL, 0, false);
+INSERT INTO micadoapp.information_category_translation VALUES (13, 'nl', '', NULL, 0, false);
 
 
 --
@@ -3070,22 +3089,23 @@ INSERT INTO micadoapp.information_tags VALUES (122, 50);
 INSERT INTO micadoapp.information_tags VALUES (123, 50);
 INSERT INTO micadoapp.information_tags VALUES (92, 43);
 INSERT INTO micadoapp.information_tags VALUES (93, 43);
+INSERT INTO micadoapp.information_tags VALUES (124, 51);
 
 
 --
 -- Data for Name: information_tags_translation; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
-INSERT INTO micadoapp.information_tags_translation VALUES (109, 'en', 'family', NULL, 0);
-INSERT INTO micadoapp.information_tags_translation VALUES (117, 'en', 'residence', NULL, 0);
-INSERT INTO micadoapp.information_tags_translation VALUES (119, 'en', 'permit', NULL, 0);
-INSERT INTO micadoapp.information_tags_translation VALUES (118, 'en', 'documentation', NULL, 0);
-INSERT INTO micadoapp.information_tags_translation VALUES (120, 'en', 'documents', NULL, 0);
-INSERT INTO micadoapp.information_tags_translation VALUES (121, 'en', 'course', NULL, 0);
-INSERT INTO micadoapp.information_tags_translation VALUES (122, 'en', 'language', NULL, 0);
-INSERT INTO micadoapp.information_tags_translation VALUES (123, 'en', 'spanish', NULL, 0);
-INSERT INTO micadoapp.information_tags_translation VALUES (92, 'en', 'course', NULL, 0);
-INSERT INTO micadoapp.information_tags_translation VALUES (93, 'en', 'english', NULL, 0);
+INSERT INTO micadoapp.information_tags_translation VALUES (109, 'en', 'family', NULL, 0, false);
+INSERT INTO micadoapp.information_tags_translation VALUES (117, 'en', 'residence', NULL, 0, false);
+INSERT INTO micadoapp.information_tags_translation VALUES (119, 'en', 'permit', NULL, 0, false);
+INSERT INTO micadoapp.information_tags_translation VALUES (118, 'en', 'documentation', NULL, 0, false);
+INSERT INTO micadoapp.information_tags_translation VALUES (120, 'en', 'documents', NULL, 0, false);
+INSERT INTO micadoapp.information_tags_translation VALUES (121, 'en', 'course', NULL, 0, false);
+INSERT INTO micadoapp.information_tags_translation VALUES (122, 'en', 'language', NULL, 0, false);
+INSERT INTO micadoapp.information_tags_translation VALUES (123, 'en', 'spanish', NULL, 0, false);
+INSERT INTO micadoapp.information_tags_translation VALUES (92, 'en', 'course', NULL, 0, false);
+INSERT INTO micadoapp.information_tags_translation VALUES (93, 'en', 'english', NULL, 0, false);
 
 
 --
@@ -3104,11 +3124,11 @@ INSERT INTO micadoapp.information_tags_translation VALUES (93, 'en', 'english', 
 -- Data for Name: information_translation; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
-INSERT INTO micadoapp.information_translation VALUES (48, 'en', 'Residence permit', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Now you can get your "},{"type":"mention","attrs":{"id":1,"label":"Residence permit"}},{"type":"text","text":". For more information click here: http://example.com "},{"type":"mention","attrs":{"id":2,"label":"Identity Card"}},{"type":"text","text":" bla bla "},{"type":"mention","attrs":{"id":1,"label":"Residence permit"}},{"type":"text","text":"  "}]}]}', '2020-09-03 15:31:29.926', 0);
-INSERT INTO micadoapp.information_translation VALUES (49, 'en', 'New event', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"dadada"}]}]}', '2020-09-03 15:36:11.136', 0);
-INSERT INTO micadoapp.information_translation VALUES (50, 'en', 'CSO created event', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Spanish course on evenings"}]}]}', '2020-09-03 15:55:32.897', 0);
-INSERT INTO micadoapp.information_translation VALUES (43, 'en', 'English course', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"The english course is now available. For more information check here: http://example.com"}]}]}', '2020-09-02 15:38:19.477', 0);
-INSERT INTO micadoapp.information_translation VALUES (44, 'en', 'Family reunification', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Spouses and registered partners, parents and minor, unmarried children may migrate to _____ in order to join their family members in order to protect the institution of marriage and the family."}]}]}', '2020-09-02 15:54:52.119', 0);
+INSERT INTO micadoapp.information_translation VALUES (48, 'en', 'Residence permit', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Now you can get your "},{"type":"mention","attrs":{"id":1,"label":"Residence permit"}},{"type":"text","text":". For more information click here: http://example.com "},{"type":"mention","attrs":{"id":2,"label":"Identity Card"}},{"type":"text","text":" bla bla "},{"type":"mention","attrs":{"id":1,"label":"Residence permit"}},{"type":"text","text":"  "}]}]}', '2020-09-03 15:31:29.926', 0, false);
+INSERT INTO micadoapp.information_translation VALUES (49, 'en', 'New event', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"dadada"}]}]}', '2020-09-03 15:36:11.136', 0, false);
+INSERT INTO micadoapp.information_translation VALUES (50, 'en', 'CSO created event', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Spanish course on evenings"}]}]}', '2020-09-03 15:55:32.897', 0, false);
+INSERT INTO micadoapp.information_translation VALUES (43, 'en', 'English course', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"The english course is now available. For more information check here: http://example.com"}]}]}', '2020-09-02 15:38:19.477', 0, false);
+INSERT INTO micadoapp.information_translation VALUES (44, 'en', 'Family reunification', '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Spouses and registered partners, parents and minor, unmarried children may migrate to _____ in order to join their family members in order to protect the institution of marriage and the family."}]}]}', '2020-09-02 15:54:52.119', 0, false);
 
 
 --
@@ -3172,26 +3192,26 @@ INSERT INTO micadoapp.intervention_types VALUES (14, true, NULL, NULL);
 -- Data for Name: intervention_types_translation; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
-INSERT INTO micadoapp.intervention_types_translation VALUES (11, 'en', 'Type3', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (11, 'es', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (11, 'de', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (11, 'nl', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (11, 'it', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (13, 'de', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (13, 'it', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (13, 'nl', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (13, 'es', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (13, 'en', 'language practice', '<p>blabla-lab</p>', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (10, 'it', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (10, 'nl', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (10, 'de', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (10, 'es', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (10, 'en', 'Language course', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (9, 'de', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (9, 'es', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (9, 'nl', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (9, 'it', '', '', NULL, 0);
-INSERT INTO micadoapp.intervention_types_translation VALUES (9, 'en', 'Professional course', '', NULL, 0);
+INSERT INTO micadoapp.intervention_types_translation VALUES (11, 'en', 'Type3', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (11, 'es', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (11, 'de', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (11, 'nl', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (11, 'it', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (13, 'de', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (13, 'it', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (13, 'nl', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (13, 'es', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (13, 'en', 'language practice', '<p>blabla-lab</p>', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (10, 'it', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (10, 'nl', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (10, 'de', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (10, 'es', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (10, 'en', 'Language course', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (9, 'de', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (9, 'es', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (9, 'nl', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (9, 'it', '', '', NULL, 0, false);
+INSERT INTO micadoapp.intervention_types_translation VALUES (9, 'en', 'Professional course', '', NULL, 0, false);
 
 
 --
@@ -3274,36 +3294,36 @@ INSERT INTO micadoapp.process_topic VALUES (48, 1);
 -- Data for Name: process_translation; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
-INSERT INTO micadoapp.process_translation VALUES (48, 'de', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (48, 'it', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (48, 'en', 'Get residence permit', 'This is the process that will allow you to get a permit to reside in the country', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (48, 'es', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (48, 'nl', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (47, 'de', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (47, 'es', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (47, 'en', 'Enroll children to school', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (90, 'it', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (90, 'es', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (47, 'it', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (47, 'nl', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (90, 'de', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (90, 'nl', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (90, 'en', 'a new process', '<p>test test test</p>', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (91, 'en', 'new process by Jowie', '<p>test test</p>', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (91, 'it', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (91, 'es', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (91, 'de', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (91, 'nl', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (92, 'de', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (92, 'es', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (92, 'nl', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (92, 'it', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (92, 'en', 'test', NULL, NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (46, 'nl', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (46, 'es', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (46, 'en', 'Certify your education degree', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (46, 'de', '', '', NULL, 0);
-INSERT INTO micadoapp.process_translation VALUES (46, 'it', '', '', NULL, 0);
+INSERT INTO micadoapp.process_translation VALUES (48, 'de', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (48, 'it', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (48, 'en', 'Get residence permit', 'This is the process that will allow you to get a permit to reside in the country', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (48, 'es', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (48, 'nl', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (47, 'de', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (47, 'es', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (47, 'en', 'Enroll children to school', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (90, 'it', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (90, 'es', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (47, 'it', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (47, 'nl', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (90, 'de', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (90, 'nl', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (90, 'en', 'a new process', '<p>test test test</p>', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (91, 'en', 'new process by Jowie', '<p>test test</p>', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (91, 'it', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (91, 'es', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (91, 'de', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (91, 'nl', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (92, 'de', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (92, 'es', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (92, 'nl', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (92, 'it', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (92, 'en', 'test', NULL, NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (46, 'nl', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (46, 'es', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (46, 'en', 'Certify your education degree', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (46, 'de', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (46, 'it', '', '', NULL, 0, false);
 
 
 --
@@ -3357,7 +3377,6 @@ INSERT INTO micadoapp.settings VALUES ('translationState', '[{"value":0,"transla
 -- Data for Name: step; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
-INSERT INTO micadoapp.step VALUES ('3c7dcedb-6337-4542-956b-ca06206add50', 0, false, '', 0, 0, 46);
 INSERT INTO micadoapp.step VALUES ('401e4ded-b123-48c1-a9ac-f582e2d38fb2', 0, false, '', 0, 0, 46);
 INSERT INTO micadoapp.step VALUES ('c5f515d9-6c4c-43d7-aeb1-74861ad92768', 0, false, '', 0, 0, 46);
 INSERT INTO micadoapp.step VALUES ('2d99d6f9-6b8d-42ef-b7f3-bec3ca91039b', 0, false, '', 0, 0, 46);
@@ -3374,12 +3393,14 @@ INSERT INTO micadoapp.step VALUES ('fd02ce7f-6d27-49d5-b614-450250be241a', 0, fa
 INSERT INTO micadoapp.step VALUES ('6e46dc06-8360-4d92-8acb-15ad858f0961', 0, false, '', 0, 0, 90);
 INSERT INTO micadoapp.step VALUES ('96b85464-2727-4013-a006-52b7a52a743b', 0, false, '', 0, 0, 91);
 INSERT INTO micadoapp.step VALUES ('f624a0f6-251b-4fc9-8223-f18b6d7687ff', 0, false, '', 0, 0, 91);
+INSERT INTO micadoapp.step VALUES ('3c7dcedb-6337-4542-956b-ca06206add50', 0, false, '', 0, 0, 46);
 
 
 --
 -- Data for Name: step_document; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
+INSERT INTO micadoapp.step_document VALUES (2, false, '$10.00', '3c7dcedb-6337-4542-956b-ca06206add50');
 
 
 --
@@ -3404,66 +3425,66 @@ INSERT INTO micadoapp.step_link VALUES ('bf32d87a-4281-4a98-9de5-faaa0149c316', 
 -- Data for Name: step_link_translation; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
-INSERT INTO micadoapp.step_link_translation VALUES ('de', '', 'b9ed5b42-069b-41e1-8b50-23167806fef8', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('en', '', 'b9ed5b42-069b-41e1-8b50-23167806fef8', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', 'b9ed5b42-069b-41e1-8b50-23167806fef8', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('it', '', 'b9ed5b42-069b-41e1-8b50-23167806fef8', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('es', '', 'b9ed5b42-069b-41e1-8b50-23167806fef8', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('en', '', 'c835af3e-2c08-4190-881b-449cda712ab6', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('es', '', 'c835af3e-2c08-4190-881b-449cda712ab6', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('it', '', 'c835af3e-2c08-4190-881b-449cda712ab6', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', 'c835af3e-2c08-4190-881b-449cda712ab6', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('de', '', 'c835af3e-2c08-4190-881b-449cda712ab6', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('es', '', 'bd95d515-80f7-4ba0-b40f-3d2c671ceeec', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('de', '', 'bd95d515-80f7-4ba0-b40f-3d2c671ceeec', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('it', '', 'bd95d515-80f7-4ba0-b40f-3d2c671ceeec', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', 'bd95d515-80f7-4ba0-b40f-3d2c671ceeec', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('en', '', 'bd95d515-80f7-4ba0-b40f-3d2c671ceeec', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('en', '', 'c572cd83-e93f-48df-9c04-53a02f295401', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('es', '', 'c572cd83-e93f-48df-9c04-53a02f295401', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('it', '', 'c572cd83-e93f-48df-9c04-53a02f295401', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', 'c572cd83-e93f-48df-9c04-53a02f295401', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('de', '', 'c572cd83-e93f-48df-9c04-53a02f295401', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('en', '', 'ffa46501-d84f-4b3c-8ab4-cabcf5161baf', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('it', '', 'ffa46501-d84f-4b3c-8ab4-cabcf5161baf', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('es', '', 'ffa46501-d84f-4b3c-8ab4-cabcf5161baf', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('de', '', 'ffa46501-d84f-4b3c-8ab4-cabcf5161baf', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', 'ffa46501-d84f-4b3c-8ab4-cabcf5161baf', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('de', '', 'bf32d87a-4281-4a98-9de5-faaa0149c316', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('en', '', 'bf32d87a-4281-4a98-9de5-faaa0149c316', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('es', '', 'bf32d87a-4281-4a98-9de5-faaa0149c316', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('it', '', 'bf32d87a-4281-4a98-9de5-faaa0149c316', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', 'bf32d87a-4281-4a98-9de5-faaa0149c316', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('de', '', '1a6b4f39-f325-4ccf-8c7b-b9672f9f98a6', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('es', '', '1a6b4f39-f325-4ccf-8c7b-b9672f9f98a6', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('en', '', '1a6b4f39-f325-4ccf-8c7b-b9672f9f98a6', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', '1a6b4f39-f325-4ccf-8c7b-b9672f9f98a6', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('it', '', '1a6b4f39-f325-4ccf-8c7b-b9672f9f98a6', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('de', '', '57ed9288-8a73-4742-ba6b-830a07a63030', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('it', '', '57ed9288-8a73-4742-ba6b-830a07a63030', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('es', '', '57ed9288-8a73-4742-ba6b-830a07a63030', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', '57ed9288-8a73-4742-ba6b-830a07a63030', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('en', '', '57ed9288-8a73-4742-ba6b-830a07a63030', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('en', '', '6ce5cbdc-e04b-4ad8-9329-6250a3bd5161', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('de', '', '6ce5cbdc-e04b-4ad8-9329-6250a3bd5161', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('es', '', '6ce5cbdc-e04b-4ad8-9329-6250a3bd5161', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', '6ce5cbdc-e04b-4ad8-9329-6250a3bd5161', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('it', '', '6ce5cbdc-e04b-4ad8-9329-6250a3bd5161', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('de', '', '5c6698d1-3258-467b-8fe5-61e50fb78078', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('en', '', '5c6698d1-3258-467b-8fe5-61e50fb78078', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', '5c6698d1-3258-467b-8fe5-61e50fb78078', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('es', '', '5c6698d1-3258-467b-8fe5-61e50fb78078', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('it', '', '5c6698d1-3258-467b-8fe5-61e50fb78078', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('de', '', '8cf797a6-9051-4368-a477-7d8c6cbab638', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', '8cf797a6-9051-4368-a477-7d8c6cbab638', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('it', '', '8cf797a6-9051-4368-a477-7d8c6cbab638', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('es', '', '8cf797a6-9051-4368-a477-7d8c6cbab638', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('en', '', '8cf797a6-9051-4368-a477-7d8c6cbab638', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('es', '', '9b9f97f8-0ebd-4426-8554-b83bfa491439', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('de', '', '9b9f97f8-0ebd-4426-8554-b83bfa491439', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('it', '', '9b9f97f8-0ebd-4426-8554-b83bfa491439', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', '9b9f97f8-0ebd-4426-8554-b83bfa491439', 0);
-INSERT INTO micadoapp.step_link_translation VALUES ('en', '', '9b9f97f8-0ebd-4426-8554-b83bfa491439', 0);
+INSERT INTO micadoapp.step_link_translation VALUES ('de', '', 'b9ed5b42-069b-41e1-8b50-23167806fef8', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('en', '', 'b9ed5b42-069b-41e1-8b50-23167806fef8', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', 'b9ed5b42-069b-41e1-8b50-23167806fef8', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('it', '', 'b9ed5b42-069b-41e1-8b50-23167806fef8', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('es', '', 'b9ed5b42-069b-41e1-8b50-23167806fef8', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('en', '', 'c835af3e-2c08-4190-881b-449cda712ab6', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('es', '', 'c835af3e-2c08-4190-881b-449cda712ab6', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('it', '', 'c835af3e-2c08-4190-881b-449cda712ab6', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', 'c835af3e-2c08-4190-881b-449cda712ab6', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('de', '', 'c835af3e-2c08-4190-881b-449cda712ab6', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('es', '', 'bd95d515-80f7-4ba0-b40f-3d2c671ceeec', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('de', '', 'bd95d515-80f7-4ba0-b40f-3d2c671ceeec', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('it', '', 'bd95d515-80f7-4ba0-b40f-3d2c671ceeec', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', 'bd95d515-80f7-4ba0-b40f-3d2c671ceeec', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('en', '', 'bd95d515-80f7-4ba0-b40f-3d2c671ceeec', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('en', '', 'c572cd83-e93f-48df-9c04-53a02f295401', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('es', '', 'c572cd83-e93f-48df-9c04-53a02f295401', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('it', '', 'c572cd83-e93f-48df-9c04-53a02f295401', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', 'c572cd83-e93f-48df-9c04-53a02f295401', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('de', '', 'c572cd83-e93f-48df-9c04-53a02f295401', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('en', '', 'ffa46501-d84f-4b3c-8ab4-cabcf5161baf', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('it', '', 'ffa46501-d84f-4b3c-8ab4-cabcf5161baf', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('es', '', 'ffa46501-d84f-4b3c-8ab4-cabcf5161baf', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('de', '', 'ffa46501-d84f-4b3c-8ab4-cabcf5161baf', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', 'ffa46501-d84f-4b3c-8ab4-cabcf5161baf', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('de', '', 'bf32d87a-4281-4a98-9de5-faaa0149c316', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('en', '', 'bf32d87a-4281-4a98-9de5-faaa0149c316', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('es', '', 'bf32d87a-4281-4a98-9de5-faaa0149c316', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('it', '', 'bf32d87a-4281-4a98-9de5-faaa0149c316', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', 'bf32d87a-4281-4a98-9de5-faaa0149c316', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('de', '', '1a6b4f39-f325-4ccf-8c7b-b9672f9f98a6', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('es', '', '1a6b4f39-f325-4ccf-8c7b-b9672f9f98a6', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('en', '', '1a6b4f39-f325-4ccf-8c7b-b9672f9f98a6', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', '1a6b4f39-f325-4ccf-8c7b-b9672f9f98a6', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('it', '', '1a6b4f39-f325-4ccf-8c7b-b9672f9f98a6', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('de', '', '57ed9288-8a73-4742-ba6b-830a07a63030', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('it', '', '57ed9288-8a73-4742-ba6b-830a07a63030', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('es', '', '57ed9288-8a73-4742-ba6b-830a07a63030', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', '57ed9288-8a73-4742-ba6b-830a07a63030', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('en', '', '57ed9288-8a73-4742-ba6b-830a07a63030', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('en', '', '6ce5cbdc-e04b-4ad8-9329-6250a3bd5161', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('de', '', '6ce5cbdc-e04b-4ad8-9329-6250a3bd5161', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('es', '', '6ce5cbdc-e04b-4ad8-9329-6250a3bd5161', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', '6ce5cbdc-e04b-4ad8-9329-6250a3bd5161', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('it', '', '6ce5cbdc-e04b-4ad8-9329-6250a3bd5161', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('de', '', '5c6698d1-3258-467b-8fe5-61e50fb78078', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('en', '', '5c6698d1-3258-467b-8fe5-61e50fb78078', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', '5c6698d1-3258-467b-8fe5-61e50fb78078', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('es', '', '5c6698d1-3258-467b-8fe5-61e50fb78078', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('it', '', '5c6698d1-3258-467b-8fe5-61e50fb78078', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('de', '', '8cf797a6-9051-4368-a477-7d8c6cbab638', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', '8cf797a6-9051-4368-a477-7d8c6cbab638', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('it', '', '8cf797a6-9051-4368-a477-7d8c6cbab638', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('es', '', '8cf797a6-9051-4368-a477-7d8c6cbab638', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('en', '', '8cf797a6-9051-4368-a477-7d8c6cbab638', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('es', '', '9b9f97f8-0ebd-4426-8554-b83bfa491439', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('de', '', '9b9f97f8-0ebd-4426-8554-b83bfa491439', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('it', '', '9b9f97f8-0ebd-4426-8554-b83bfa491439', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('nl', '', '9b9f97f8-0ebd-4426-8554-b83bfa491439', 0, false);
+INSERT INTO micadoapp.step_link_translation VALUES ('en', '', '9b9f97f8-0ebd-4426-8554-b83bfa491439', 0, false);
 
 
 --
@@ -3476,91 +3497,91 @@ INSERT INTO micadoapp.step_link_translation VALUES ('en', '', '9b9f97f8-0ebd-442
 -- Data for Name: step_translation; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '891b58f3-de13-4e1c-9a30-6cf67e6ead27', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'Contact public school', 'Contact your local public school for an application for enrolment form. The school can help you with your application.', NULL, '891b58f3-de13-4e1c-9a30-6cf67e6ead27', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '891b58f3-de13-4e1c-9a30-6cf67e6ead27', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '891b58f3-de13-4e1c-9a30-6cf67e6ead27', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '891b58f3-de13-4e1c-9a30-6cf67e6ead27', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, 'a35368db-37d1-4de7-a759-218c443b1912', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'Submit application', '', NULL, 'a35368db-37d1-4de7-a759-218c443b1912', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '8aa4b3f1-bb79-4f4f-98bf-51ad7f0c1d4f', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '8aa4b3f1-bb79-4f4f-98bf-51ad7f0c1d4f', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '8aa4b3f1-bb79-4f4f-98bf-51ad7f0c1d4f', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, 'a35368db-37d1-4de7-a759-218c443b1912', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '8aa4b3f1-bb79-4f4f-98bf-51ad7f0c1d4f', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'Wait for response', '', NULL, '8aa4b3f1-bb79-4f4f-98bf-51ad7f0c1d4f', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, 'a35368db-37d1-4de7-a759-218c443b1912', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, 'a35368db-37d1-4de7-a759-218c443b1912', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'Complete enrollment', '', NULL, 'f73226c5-5bdd-4b06-a173-922b3c5ee6ac', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, 'f73226c5-5bdd-4b06-a173-922b3c5ee6ac', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, 'f73226c5-5bdd-4b06-a173-922b3c5ee6ac', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, 'f73226c5-5bdd-4b06-a173-922b3c5ee6ac', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, 'f73226c5-5bdd-4b06-a173-922b3c5ee6ac', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, 'fd02ce7f-6d27-49d5-b614-450250be241a', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'step 1', 'blabla', NULL, 'fd02ce7f-6d27-49d5-b614-450250be241a', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, 'fd02ce7f-6d27-49d5-b614-450250be241a', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, 'fd02ce7f-6d27-49d5-b614-450250be241a', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, 'fd02ce7f-6d27-49d5-b614-450250be241a', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '6e46dc06-8360-4d92-8acb-15ad858f0961', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'step 2', 'test test test', NULL, '6e46dc06-8360-4d92-8acb-15ad858f0961', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '6e46dc06-8360-4d92-8acb-15ad858f0961', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '6e46dc06-8360-4d92-8acb-15ad858f0961', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '6e46dc06-8360-4d92-8acb-15ad858f0961', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '3c7dcedb-6337-4542-956b-ca06206add50', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '3c7dcedb-6337-4542-956b-ca06206add50', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'Look at degree programme', 'Choose the degree program whose study plan and syllabus are similar to the degree program you attended abroad. The study plan of each degree program is available on the degree program website.', NULL, '3c7dcedb-6337-4542-956b-ca06206add50', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '3c7dcedb-6337-4542-956b-ca06206add50', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '3c7dcedb-6337-4542-956b-ca06206add50', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'Register on UniTO website', '', NULL, '401e4ded-b123-48c1-a9ac-f582e2d38fb2', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '401e4ded-b123-48c1-a9ac-f582e2d38fb2', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '401e4ded-b123-48c1-a9ac-f582e2d38fb2', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '401e4ded-b123-48c1-a9ac-f582e2d38fb2', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '401e4ded-b123-48c1-a9ac-f582e2d38fb2', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, 'c5f515d9-6c4c-43d7-aeb1-74861ad92768', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, 'c5f515d9-6c4c-43d7-aeb1-74861ad92768', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, 'c5f515d9-6c4c-43d7-aeb1-74861ad92768', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, 'c5f515d9-6c4c-43d7-aeb1-74861ad92768', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'Book an appointment', '', NULL, 'c5f515d9-6c4c-43d7-aeb1-74861ad92768', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '2d99d6f9-6b8d-42ef-b7f3-bec3ca91039b', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '2d99d6f9-6b8d-42ef-b7f3-bec3ca91039b', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '2d99d6f9-6b8d-42ef-b7f3-bec3ca91039b', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '2d99d6f9-6b8d-42ef-b7f3-bec3ca91039b', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'Pay the fixed fee', '', NULL, '2d99d6f9-6b8d-42ef-b7f3-bec3ca91039b', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, 'fea231ad-9fc6-4027-9475-8c7ed1bb7645', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, 'fea231ad-9fc6-4027-9475-8c7ed1bb7645', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'Go to Questura', '', NULL, 'fea231ad-9fc6-4027-9475-8c7ed1bb7645', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, 'fea231ad-9fc6-4027-9475-8c7ed1bb7645', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, 'b2b7a5a5-2876-477e-8076-b0bc39ce7c9c', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'Go to Municipality', '', NULL, 'b2b7a5a5-2876-477e-8076-b0bc39ce7c9c', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, 'fea231ad-9fc6-4027-9475-8c7ed1bb7645', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, 'b2b7a5a5-2876-477e-8076-b0bc39ce7c9c', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, 'b2b7a5a5-2876-477e-8076-b0bc39ce7c9c', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, 'b2b7a5a5-2876-477e-8076-b0bc39ce7c9c', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '08563497-e81f-4006-a709-5229506a60f4', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '08563497-e81f-4006-a709-5229506a60f4', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '08563497-e81f-4006-a709-5229506a60f4', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'Go to Housing department', '', NULL, '08563497-e81f-4006-a709-5229506a60f4', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '08563497-e81f-4006-a709-5229506a60f4', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'Get a Postal Kit', '', NULL, '49376d63-f3ed-447c-b317-4d36d42ad4db', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '49376d63-f3ed-447c-b317-4d36d42ad4db', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '49376d63-f3ed-447c-b317-4d36d42ad4db', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '49376d63-f3ed-447c-b317-4d36d42ad4db', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '49376d63-f3ed-447c-b317-4d36d42ad4db', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '503153d2-2000-4214-9818-4d2e819057d4', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '503153d2-2000-4214-9818-4d2e819057d4', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'Send the kit', '', NULL, '503153d2-2000-4214-9818-4d2e819057d4', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '503153d2-2000-4214-9818-4d2e819057d4', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '503153d2-2000-4214-9818-4d2e819057d4', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '96b85464-2727-4013-a006-52b7a52a743b', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'step 1', 'test ', NULL, '96b85464-2727-4013-a006-52b7a52a743b', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '96b85464-2727-4013-a006-52b7a52a743b', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '96b85464-2727-4013-a006-52b7a52a743b', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '96b85464-2727-4013-a006-52b7a52a743b', 0);
-INSERT INTO micadoapp.step_translation VALUES ('en', 'step 2', 'test', NULL, 'f624a0f6-251b-4fc9-8223-f18b6d7687ff', 0);
-INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, 'f624a0f6-251b-4fc9-8223-f18b6d7687ff', 0);
-INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, 'f624a0f6-251b-4fc9-8223-f18b6d7687ff', 0);
-INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, 'f624a0f6-251b-4fc9-8223-f18b6d7687ff', 0);
-INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, 'f624a0f6-251b-4fc9-8223-f18b6d7687ff', 0);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '891b58f3-de13-4e1c-9a30-6cf67e6ead27', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'Contact public school', 'Contact your local public school for an application for enrolment form. The school can help you with your application.', NULL, '891b58f3-de13-4e1c-9a30-6cf67e6ead27', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '891b58f3-de13-4e1c-9a30-6cf67e6ead27', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '891b58f3-de13-4e1c-9a30-6cf67e6ead27', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '891b58f3-de13-4e1c-9a30-6cf67e6ead27', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, 'a35368db-37d1-4de7-a759-218c443b1912', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'Submit application', '', NULL, 'a35368db-37d1-4de7-a759-218c443b1912', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '8aa4b3f1-bb79-4f4f-98bf-51ad7f0c1d4f', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '8aa4b3f1-bb79-4f4f-98bf-51ad7f0c1d4f', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '8aa4b3f1-bb79-4f4f-98bf-51ad7f0c1d4f', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, 'a35368db-37d1-4de7-a759-218c443b1912', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '8aa4b3f1-bb79-4f4f-98bf-51ad7f0c1d4f', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'Wait for response', '', NULL, '8aa4b3f1-bb79-4f4f-98bf-51ad7f0c1d4f', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, 'a35368db-37d1-4de7-a759-218c443b1912', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, 'a35368db-37d1-4de7-a759-218c443b1912', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'Complete enrollment', '', NULL, 'f73226c5-5bdd-4b06-a173-922b3c5ee6ac', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, 'f73226c5-5bdd-4b06-a173-922b3c5ee6ac', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, 'f73226c5-5bdd-4b06-a173-922b3c5ee6ac', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, 'f73226c5-5bdd-4b06-a173-922b3c5ee6ac', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, 'f73226c5-5bdd-4b06-a173-922b3c5ee6ac', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, 'fd02ce7f-6d27-49d5-b614-450250be241a', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'step 1', 'blabla', NULL, 'fd02ce7f-6d27-49d5-b614-450250be241a', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, 'fd02ce7f-6d27-49d5-b614-450250be241a', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, 'fd02ce7f-6d27-49d5-b614-450250be241a', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, 'fd02ce7f-6d27-49d5-b614-450250be241a', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '6e46dc06-8360-4d92-8acb-15ad858f0961', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'step 2', 'test test test', NULL, '6e46dc06-8360-4d92-8acb-15ad858f0961', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '6e46dc06-8360-4d92-8acb-15ad858f0961', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '6e46dc06-8360-4d92-8acb-15ad858f0961', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '6e46dc06-8360-4d92-8acb-15ad858f0961', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'Register on UniTO website', '', NULL, '401e4ded-b123-48c1-a9ac-f582e2d38fb2', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '401e4ded-b123-48c1-a9ac-f582e2d38fb2', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '401e4ded-b123-48c1-a9ac-f582e2d38fb2', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '401e4ded-b123-48c1-a9ac-f582e2d38fb2', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '401e4ded-b123-48c1-a9ac-f582e2d38fb2', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, 'c5f515d9-6c4c-43d7-aeb1-74861ad92768', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, 'c5f515d9-6c4c-43d7-aeb1-74861ad92768', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, 'c5f515d9-6c4c-43d7-aeb1-74861ad92768', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, 'c5f515d9-6c4c-43d7-aeb1-74861ad92768', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'Book an appointment', '', NULL, 'c5f515d9-6c4c-43d7-aeb1-74861ad92768', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '2d99d6f9-6b8d-42ef-b7f3-bec3ca91039b', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '2d99d6f9-6b8d-42ef-b7f3-bec3ca91039b', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '2d99d6f9-6b8d-42ef-b7f3-bec3ca91039b', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '2d99d6f9-6b8d-42ef-b7f3-bec3ca91039b', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'Pay the fixed fee', '', NULL, '2d99d6f9-6b8d-42ef-b7f3-bec3ca91039b', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, 'fea231ad-9fc6-4027-9475-8c7ed1bb7645', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, 'fea231ad-9fc6-4027-9475-8c7ed1bb7645', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'Go to Questura', '', NULL, 'fea231ad-9fc6-4027-9475-8c7ed1bb7645', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, 'fea231ad-9fc6-4027-9475-8c7ed1bb7645', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, 'b2b7a5a5-2876-477e-8076-b0bc39ce7c9c', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'Go to Municipality', '', NULL, 'b2b7a5a5-2876-477e-8076-b0bc39ce7c9c', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, 'fea231ad-9fc6-4027-9475-8c7ed1bb7645', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, 'b2b7a5a5-2876-477e-8076-b0bc39ce7c9c', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, 'b2b7a5a5-2876-477e-8076-b0bc39ce7c9c', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, 'b2b7a5a5-2876-477e-8076-b0bc39ce7c9c', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '08563497-e81f-4006-a709-5229506a60f4', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '08563497-e81f-4006-a709-5229506a60f4', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '08563497-e81f-4006-a709-5229506a60f4', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'Go to Housing department', '', NULL, '08563497-e81f-4006-a709-5229506a60f4', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '08563497-e81f-4006-a709-5229506a60f4', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'Get a Postal Kit', '', NULL, '49376d63-f3ed-447c-b317-4d36d42ad4db', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '49376d63-f3ed-447c-b317-4d36d42ad4db', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '49376d63-f3ed-447c-b317-4d36d42ad4db', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '49376d63-f3ed-447c-b317-4d36d42ad4db', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '49376d63-f3ed-447c-b317-4d36d42ad4db', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '503153d2-2000-4214-9818-4d2e819057d4', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '503153d2-2000-4214-9818-4d2e819057d4', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'Send the kit', '', NULL, '503153d2-2000-4214-9818-4d2e819057d4', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '503153d2-2000-4214-9818-4d2e819057d4', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '503153d2-2000-4214-9818-4d2e819057d4', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '96b85464-2727-4013-a006-52b7a52a743b', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'step 1', 'test ', NULL, '96b85464-2727-4013-a006-52b7a52a743b', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '96b85464-2727-4013-a006-52b7a52a743b', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '96b85464-2727-4013-a006-52b7a52a743b', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '96b85464-2727-4013-a006-52b7a52a743b', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'step 2', 'test', NULL, 'f624a0f6-251b-4fc9-8223-f18b6d7687ff', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, 'f624a0f6-251b-4fc9-8223-f18b6d7687ff', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, 'f624a0f6-251b-4fc9-8223-f18b6d7687ff', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, 'f624a0f6-251b-4fc9-8223-f18b6d7687ff', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, 'f624a0f6-251b-4fc9-8223-f18b6d7687ff', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('de', '', '', NULL, '3c7dcedb-6337-4542-956b-ca06206add50', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('es', '', '', NULL, '3c7dcedb-6337-4542-956b-ca06206add50', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('en', 'Look at degree programme', 'Choose the degree program whose study plan and syllabus are similar to the degree program you attended abroad. The study plan of each degree program is available on the degree program website.', NULL, '3c7dcedb-6337-4542-956b-ca06206add50', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('nl', '', '', NULL, '3c7dcedb-6337-4542-956b-ca06206add50', 0, false);
+INSERT INTO micadoapp.step_translation VALUES ('it', '', '', NULL, '3c7dcedb-6337-4542-956b-ca06206add50', 0, false);
 
 
 --
@@ -3584,31 +3605,31 @@ INSERT INTO micadoapp.topic VALUES (7, '', false, NULL);
 -- Data for Name: topic_translation; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
-INSERT INTO micadoapp.topic_translation VALUES (1, 'it', 'Casa', '2020-06-18 16:31:27.89', 0);
-INSERT INTO micadoapp.topic_translation VALUES (1, 'de', 'aggiornato', '2020-06-24 17:59:35.993', 0);
-INSERT INTO micadoapp.topic_translation VALUES (1, 'en', 'House', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (2, 'en', 'Employment', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (2, 'de', 'Werk', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (2, 'it', 'Lavoro', '2020-06-18 19:42:09.469', 0);
-INSERT INTO micadoapp.topic_translation VALUES (3, 'de', '', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (3, 'es', '', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (3, 'nl', '', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (3, 'it', '', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (3, 'en', 'Health', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (4, 'de', '', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (4, 'es', '', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (4, 'it', '', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (4, 'en', 'Education', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (4, 'nl', '', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (1, 'es', NULL, NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (1, 'nl', NULL, NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (2, 'es', NULL, NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (2, 'nl', NULL, NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (7, 'es', '', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (7, 'de', '', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (7, 'en', 'Cultural', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (7, 'nl', '', NULL, 0);
-INSERT INTO micadoapp.topic_translation VALUES (7, 'it', '', NULL, 0);
+INSERT INTO micadoapp.topic_translation VALUES (1, 'it', 'Casa', '2020-06-18 16:31:27.89', 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (1, 'de', 'aggiornato', '2020-06-24 17:59:35.993', 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (1, 'en', 'House', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (2, 'en', 'Employment', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (2, 'de', 'Werk', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (2, 'it', 'Lavoro', '2020-06-18 19:42:09.469', 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (3, 'de', '', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (3, 'es', '', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (3, 'nl', '', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (3, 'it', '', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (3, 'en', 'Health', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (4, 'de', '', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (4, 'es', '', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (4, 'it', '', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (4, 'en', 'Education', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (4, 'nl', '', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (1, 'es', NULL, NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (1, 'nl', NULL, NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (2, 'es', NULL, NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (2, 'nl', NULL, NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (7, 'es', '', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (7, 'de', '', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (7, 'en', 'Cultural', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (7, 'nl', '', NULL, 0, false);
+INSERT INTO micadoapp.topic_translation VALUES (7, 'it', '', NULL, 0, false);
 
 
 --
@@ -3631,21 +3652,21 @@ INSERT INTO micadoapp.user_types VALUES (24, 'data:image/jpeg;base64,/9j/4AAQSkZ
 -- Data for Name: user_types_translation; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
-INSERT INTO micadoapp.user_types_translation VALUES (1, 'it', 'Rifugiato', NULL, NULL, 0);
-INSERT INTO micadoapp.user_types_translation VALUES (1, 'en', 'Refugee', NULL, NULL, 0);
-INSERT INTO micadoapp.user_types_translation VALUES (1, 'de', NULL, NULL, NULL, 0);
-INSERT INTO micadoapp.user_types_translation VALUES (1, 'es', NULL, NULL, NULL, 0);
-INSERT INTO micadoapp.user_types_translation VALUES (1, 'nl', NULL, NULL, NULL, 0);
-INSERT INTO micadoapp.user_types_translation VALUES (7, 'de', '', '', NULL, 0);
-INSERT INTO micadoapp.user_types_translation VALUES (7, 'es', '', '', NULL, 0);
-INSERT INTO micadoapp.user_types_translation VALUES (7, 'en', 'Migrant ', '', NULL, 0);
-INSERT INTO micadoapp.user_types_translation VALUES (7, 'nl', '', '', NULL, 0);
-INSERT INTO micadoapp.user_types_translation VALUES (7, 'it', 'Migrante ', '', NULL, 0);
-INSERT INTO micadoapp.user_types_translation VALUES (9, 'de', '', '', NULL, 0);
-INSERT INTO micadoapp.user_types_translation VALUES (9, 'it', '', '', NULL, 0);
-INSERT INTO micadoapp.user_types_translation VALUES (9, 'en', 'Asylum Seeker', '', NULL, 0);
-INSERT INTO micadoapp.user_types_translation VALUES (9, 'es', '', '', NULL, 0);
-INSERT INTO micadoapp.user_types_translation VALUES (9, 'nl', '', '', NULL, 0);
+INSERT INTO micadoapp.user_types_translation VALUES (1, 'it', 'Rifugiato', NULL, NULL, 0, false);
+INSERT INTO micadoapp.user_types_translation VALUES (1, 'en', 'Refugee', NULL, NULL, 0, false);
+INSERT INTO micadoapp.user_types_translation VALUES (1, 'de', NULL, NULL, NULL, 0, false);
+INSERT INTO micadoapp.user_types_translation VALUES (1, 'es', NULL, NULL, NULL, 0, false);
+INSERT INTO micadoapp.user_types_translation VALUES (1, 'nl', NULL, NULL, NULL, 0, false);
+INSERT INTO micadoapp.user_types_translation VALUES (7, 'de', '', '', NULL, 0, false);
+INSERT INTO micadoapp.user_types_translation VALUES (7, 'es', '', '', NULL, 0, false);
+INSERT INTO micadoapp.user_types_translation VALUES (7, 'en', 'Migrant ', '', NULL, 0, false);
+INSERT INTO micadoapp.user_types_translation VALUES (7, 'nl', '', '', NULL, 0, false);
+INSERT INTO micadoapp.user_types_translation VALUES (7, 'it', 'Migrante ', '', NULL, 0, false);
+INSERT INTO micadoapp.user_types_translation VALUES (9, 'de', '', '', NULL, 0, false);
+INSERT INTO micadoapp.user_types_translation VALUES (9, 'it', '', '', NULL, 0, false);
+INSERT INTO micadoapp.user_types_translation VALUES (9, 'en', 'Asylum Seeker', '', NULL, 0, false);
+INSERT INTO micadoapp.user_types_translation VALUES (9, 'es', '', '', NULL, 0, false);
+INSERT INTO micadoapp.user_types_translation VALUES (9, 'nl', '', '', NULL, 0, false);
 
 
 --
@@ -3742,7 +3763,7 @@ SELECT pg_catalog.setval('micadoapp.event_category_translation_prod_id_seq1', 1,
 -- Name: event_id_seq; Type: SEQUENCE SET; Schema: micadoapp; Owner: -
 --
 
-SELECT pg_catalog.setval('micadoapp.event_id_seq', 50, true);
+SELECT pg_catalog.setval('micadoapp.event_id_seq', 51, true);
 
 
 --
@@ -3763,7 +3784,7 @@ SELECT pg_catalog.setval('micadoapp.event_tags_id_seq', 1, false);
 -- Name: event_tags_id_seq1; Type: SEQUENCE SET; Schema: micadoapp; Owner: -
 --
 
-SELECT pg_catalog.setval('micadoapp.event_tags_id_seq1', 123, true);
+SELECT pg_catalog.setval('micadoapp.event_tags_id_seq1', 124, true);
 
 
 --
