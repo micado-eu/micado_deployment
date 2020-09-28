@@ -462,6 +462,7 @@ services:
 
   mongodb:
     image: mongo:4.1
+    hostname: mongodb
 #    environment:
 #      - MONGODB_USERNAME=countly
 #      - MONGODB_PASSWORD
@@ -473,9 +474,31 @@ services:
       - "com.centurylinklabs.watchtower.enable=false"
     volumes:
       - mongo_data:/data/db
+#    healthcheck:
+#      test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --quiet) -eq 1
+#      interval: 10s
+#      start_period: 30s
+#    command: ["-f", "/etc/mongod.conf", "--replSet", "${MONGO_REPLICA_SET_NAME}", "--bind_ip_all"]
+    command: mongod --oplogSize 128 --replSet rs0
     <<: *generic
 
-
+  mongo-init-replica:
+    image: mongo:4.1
+    command: >
+      bash -c
+        "for i in `seq 1 30`; do
+          mongo mongodb/rocketchat --eval \"
+            rs.initiate({
+              _id: 'rs0',
+              members: [ { _id: 0, host: 'localhost:27017' } ]})\" &&
+          s=$$? && break || s=$$?;
+          echo \"Tried $$i times. Waiting 5 secs...\";
+          sleep 5;
+        done; (exit $$s)"
+    depends_on:
+      - mongodb
+    <<: *generic
+    
   mongo-express:
     image: mongo-express
 #    restart: always
