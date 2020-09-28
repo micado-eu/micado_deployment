@@ -616,14 +616,14 @@ services:
 
   watchtower:
     image: containrrr/watchtower
-    environment:
-      - http_proxy=http://10.138.149.7:3128
-      - https_proxy=http://10.138.149.7:3128
-      - HTTP_PROXY=http://10.138.149.7:3128
-      - HTTPS_PROXY=http://10.138.149.7:3128
+#    environment:
+#      - http_proxy=http://10.138.149.7:3128
+#      - https_proxy=http://10.138.149.7:3128
+#      - HTTP_PROXY=http://10.138.149.7:3128
+#      - HTTPS_PROXY=http://10.138.149.7:3128
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /root/.docker/config.json:/config.json
+#      - /root/.docker/config.json:/config.json
     command: --interval 300 --debug
     <<: *generic
 
