@@ -627,14 +627,14 @@ services:
 #      DB_HOST: micado_db:5432
 #      DB_NAME: ${POSTGRES_DB}
 #      DB_USER: ${GITEA_DB_USER}
-#      DB_PASSWD: ${GITEA_DB_PWD}
+      GIT_HOSTNAME: ${GIT_HOSTNAME}
       DISABLE_REGISTRATION: "true"
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
       - "traefik.http.routers.git1.rule=Host(`${GIT_HOSTNAME}`)"
       - "traefik.http.routers.git1.entrypoints=web"
       - "traefik.http.routers.git1.service=git1"
-      - "traefik.http.services.git1.loadbalancer.server.port=80"
+      - "traefik.http.services.git1.loadbalancer.server.port=3000"
       - "traefik.http.routers.git2.rule=Host(`${GIT_HOSTNAME}`)"
       - "traefik.http.routers.git2.entrypoints=web-secure"
       - "traefik.http.routers.git2.tls=true"
