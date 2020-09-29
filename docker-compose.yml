@@ -347,6 +347,7 @@ services:
     image: micadoproject/backend
     environment:
       HOST: backend
+      MICADO_GIT_URL: ${MICADO_GIT_URL}
 #    ports:
 #      - "3001:3000"
     <<: *generic
