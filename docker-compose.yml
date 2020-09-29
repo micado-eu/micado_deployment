@@ -631,6 +631,7 @@ services:
       DISABLE_REGISTRATION: "true"
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
+      - "traefik.enable=true"
       - "traefik.http.routers.git1.rule=Host(`${GIT_HOSTNAME}`)"
       - "traefik.http.routers.git1.entrypoints=web"
       - "traefik.http.routers.git1.service=git1"
