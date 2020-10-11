@@ -28,7 +28,7 @@ services:
   identity_server:
     ports:
       - "9763:9763"
-      - "9444:9443"
+      - "9443:9443"
 
   dashboard:
     ports:
@@ -50,6 +50,9 @@ services:
     ports:
       - 5005:5005
 
+  portainer:
+    ports:
+      - 9000:9000
 
 
   weblate:
@@ -60,3 +63,26 @@ services:
     ports:
       - "3000:3000"
       - "222:22"
+
+  sequelize:
+    image: micadoproject/auto_sequelize
+    command: "sh -c 'sequelize-automate -t js -h micado_db -d micado -u micadoapp -p micadoapp -P 5432  -e postgres -o /code '"
+    env_file:
+      - prod.env
+    environment:
+      PGRST_DB_URI: postgres://${MICADO_DB_PWD}:${MICADO_DB_USER}@micado_db:5432/${POSTGRES_DB}
+      PGRST_DB_SCHEMA: ${MICADO_DB_SCHEMA}
+      PGRST_DB_ANON_ROLE: ${MICADO_DB_USER} #In production this role should not be the same as the one used for the connection
+    volumes:
+      - sequelize:/code
+    networks:
+      - micado_net
+
+volumes:
+  sequelize:
+    driver: local
+    driver_opts:
+      type: none
+      # device is the path in the host that has to be absolute
+      device: $PWD/sequelize
+      o: bind

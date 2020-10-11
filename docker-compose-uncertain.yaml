@@ -22,6 +22,36 @@ services:
     networks:
       - micado_net
 
+  rocketchat:
+    image: rocketchat/rocket.chat:3.6.0
+    command: >
+      bash -c
+        "for i in `seq 1 30`; do
+          node main.js &&
+          s=$$? && break || s=$$?;
+          echo \"Tried $$i times. Waiting 5 secs...\";
+          sleep 5;
+        done; (exit $$s)"
+#    restart: unless-stopped
+    volumes:
+      - ./rc_uploads:/app/uploads
+    environment:
+      - PORT=3000
+      - ROOT_URL=http://localhost:3000
+      - MONGO_URL=mongodb://mongodb:27017/rocketchat
+      - MONGO_OPLOG_URL=mongodb://mongodb:27017/local
+      - MAIL_URL=smtp://smtp.email
+#       - HTTP_PROXY=http://proxy.domain.com
+#       - HTTPS_PROXY=http://proxy.domain.com
+#    depends_on:
+#      - mongo
+    ports:
+      - 3000:3000
+    labels:
+      - "traefik.backend=rocketchat"
+      - "traefik.frontend.rule=Host: your.domain.tld"
+    networks:
+      - micado_net
 
   swagger:
     image: swaggerapi/swagger-ui
@@ -50,4 +80,4 @@ services:
 
 
 
-volumes:
+#volumes:
