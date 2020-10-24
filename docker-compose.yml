@@ -483,7 +483,7 @@ services:
       - prod.env
     environment:
       - PORT=3000
-      - ROOT_URL=http://${ROCKETCHAT_HOSTNAME}
+      - ROOT_URL=https://${ROCKETCHAT_HOSTNAME}
       - ADMIN_USERNAME=${ROCKETCHAT_ADMIN}
       - ADMIN_PASS=${ROCKETCHAT_ADMIN_PWD}
       - ADMIN_EMAIL=${ROCKETCHAT_ADMIN_MAIL}
