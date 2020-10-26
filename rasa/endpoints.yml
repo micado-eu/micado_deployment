@@ -40,6 +40,6 @@ action_endpoint:
 #  password: password
 #  queue: queue
 rocketchat:
-  user: "bbgreat"
+  user: "rasa_bot"
   password: "micadobot"
   server_url: "http://rocketchat:3000"
