@@ -12,7 +12,6 @@
 
 action_endpoint:
   url: "http://action_server:5055/webhook"
-
 # Tracker store which is used to store the conversations.
 # By default the conversations are stored in memory.
 # https://rasa.com/docs/rasa/api/tracker-stores/
@@ -39,8 +38,3 @@ action_endpoint:
 #  username: username
 #  password: password
 #  queue: queue
-rocketchat:
-  user: "rasa_bot"
-  password: "micadobot"
-  server_url: "https://admin2.micadoproject.eu"
-  ssl_verify: false
