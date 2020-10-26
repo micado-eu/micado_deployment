@@ -42,4 +42,4 @@ action_endpoint:
 rocketchat:
   user: "rasa_bot"
   password: "micadobot"
-  server_url: "http://rocketchat:3000"
+  server_url: "http://admin2.micadoproject.eu"
