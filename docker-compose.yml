@@ -428,6 +428,8 @@ services:
     image: rasa/rasa:1.10.10-full
  #   volumes:
  #     - /home/gioppo/Development/dockerfiles/micado_new/rasa:/app
+    env_file:
+      - prod.env
     command:
 #      - train
       - run
