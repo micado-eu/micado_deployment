@@ -350,9 +350,14 @@ services:
 
   backend:
     image: micadoproject/backend
+    env_file:
+      - prod.env
     environment:
       HOST: backend
       MICADO_GIT_URL: ${MICADO_GIT_URL}
+      MICADO_TRANSLATIONS_DIR: ${MICADO_TRANSLATIONS_DIR}
+      COUNTLY_MIGRANTS_APP_ID: ${COUNTLY_MIGRANTS_APP_ID}
+      COUNTLY_MIGRANTS_API_KEY: ${COUNTLY_MIGRANTS_API_KEY}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 #    ports:
