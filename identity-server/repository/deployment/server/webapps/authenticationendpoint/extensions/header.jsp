@@ -25,10 +25,9 @@
     <div class="container-fluid">
         <div class="pull-left brand float-remove-xs text-center-xs">
             <a href="#">
-                <img src="images/logo-inverse.svg"
-		             alt="<%=AuthenticationEndpointUtil.i18n(resourceBundle, "business.name")%>"
-                     title="<%=AuthenticationEndpointUtil.i18n(resourceBundle, "business.name")%>"
-                     class="logo">
+                <img src="images/powered_Micado_white.png"
+                    alt="<%=AuthenticationEndpointUtil.i18n(resourceBundle, "business.name")%>"
+                    title="<%=AuthenticationEndpointUtil.i18n(resourceBundle, "business.name")%>" class="logo">
                 <h1><em><%=AuthenticationEndpointUtil.i18n(resourceBundle, "identity.server")%></em></h1>
             </a>
         </div>
@@ -36,28 +35,32 @@
 
     <style type="text/css">
         body {
-            background: #1e1e2f;
-            color: #ffffff;
+            background: #ffffff;
+            color: #000000;
         }
+
         .logo-container {
             padding: 15px 30px;
         }
+
         header .brand img.logo {
             height: 40px;
         }
+
         .wr-title {
-            background: #32344e !important;
+            background: #FF7C44 !important;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
         }
+
         .header {
-            border-top: 3px solid #1e8cf8;
-            background: #1e1e2f;
+            background: #0F3A5D;
             min-height: 70px;
             border-bottom: 1px solid #31314b;
         }
+
         .boarder-all {
-            background: #27293d;
+            background: #ffffff;
             border: 0;
             position: relative;
             width: 100%;
@@ -66,55 +69,65 @@
             border-bottom-left-radius: 10px;
             border-bottom-right-radius: 10px;
         }
+
         .wr-login input[type=text],
         .wr-login input[type=password] {
             height: 45px;
             padding: 10px 15px;
             font-size: 1.3rem;
             line-height: 1.42857;
-            color: #cbcbcb;
-            background-color: #27293d;
+            color: #000000;
+            background-color: #F6F6F6;
             background-clip: padding-box;
             border: 1px solid #cad1d7;
             box-shadow: none;
-            border-color: #2b3553;
+            border-color: #cad1d7;
             border-radius: 10px;
         }
+
         .wr-btn {
-            background: linear-gradient(0deg, #3358f4, #1d8cf8);
-            border-radius: 10px;
+            background: #FF7C44 !important;
+            border-radius: 50px;
         }
+
         .form-group label {
             font-weight: normal;
         }
+
         .wr-login input[type=text]:focus,
         .wr-login input[type=password]:focus {
-            border-color: #1d8cf8;
+            border-color: #FF7C44;
         }
+
         .alert-warning {
-            background: #1e1e2f;
-            color: white;
+            background: #cad1d7;
+            color: #000000;
             border: 1px solid #f8b01e;
             margin-bottom: 10px;
         }
+
         .footer {
             border-top: 1px solid #31314b;
             background: #1e1e2f;
             min-height: 70px;
         }
+
         .footer p {
             text-align: center;
             margin-top: 20px;
         }
+
         .checkbox {
             margin-bottom: 0;
         }
+
         a {
-            color: #1e8cf8;
+            color: #FF7C44;
         }
+
         a:hover,
         a:active {
-            color: #3a9dff;
+            color: #FF7C44;
         }
     </style>
 </header>
