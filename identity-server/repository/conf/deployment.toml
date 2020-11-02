@@ -84,7 +84,7 @@ password = "wso2carbon"
 data_source = "jdbc/WSO2AM_DB"
 
 [identity.auth_framework.endpoint]
-#tenant_list_enabled="false"
+tenant_list_enabled="true"
 hostname_verification_enabled="false"
 
 
