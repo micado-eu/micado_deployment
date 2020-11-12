@@ -54,6 +54,19 @@ WEBLATE_ADMIN_PASSWORD=secretpassword9
 WEBLATE_POSTGRES_PASSWORD=secretpassword10
 WEBLATE_EMAIL_HOST_PASSWORD=secretpassword11
 GITEA_DB_PWD=secretpassword12
+MICADO_GIT_URL=http://xxxxx%40csi.it:pwd@git:3000/micadoadmin/backend.git
+
+# ------- ENV vars for javascript apps
+MICADO_API_KEY=api_key
+ROCKETCHAT_ADMIN_PWD=xxx
+ROCKETCHAT_USER=rasa_bot
+ROCKETCHAT_PASSWORD=micadobot
+RESPOND_TO_LIVECHAT=true
+
+COUNTLY_MIGRANTS_APP_ID=xxx
+COUNTLY_MIGRANTS_API_KEY=xxxx
+
+
 ```
 
 Than execute the following command:
