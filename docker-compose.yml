@@ -160,7 +160,7 @@ services:
   micado_db:
     image: mdillon/postgis:11-alpine
     env_file:
-#      - .env
+      - .env
       - prod.env
     volumes:
       - type: volume
