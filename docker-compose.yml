@@ -358,6 +358,10 @@ services:
       MICADO_TRANSLATIONS_DIR: ${MICADO_TRANSLATIONS_DIR}
       COUNTLY_MIGRANTS_APP_ID: ${COUNTLY_MIGRANTS_APP_ID}
       COUNTLY_MIGRANTS_API_KEY: ${COUNTLY_MIGRANTS_API_KEY}
+      POSTGRES_DB: ${POSTGRES_DB}
+      MICADO_DB_PWD: ${MICADO_DB_PWD} 
+      MICADO_DB_USER: ${MICADO_DB_USER} 
+      MICADO_DB_SCHEMA: ${MICADO_DB_SCHEMA} 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
 #    ports:
