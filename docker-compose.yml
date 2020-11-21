@@ -75,6 +75,12 @@ services:
         read_only: true
         volume:
           nocopy: true
+      - type: volume
+        source: shared_images
+        target: /usr/share/nginx/html/images
+        read_only: true
+        volume:
+          nocopy: true
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nginx.rule=Host(`${MIGRANTS_HOSTNAME}`)"
@@ -128,8 +134,8 @@ services:
 #      - "traefik.http.routers.countly_frontend.service=countly_frontend_service"
 #      - "traefik.http.services.countly_frontend_service.loadbalancer.server.port=6001"
     <<: *generic
-    depends_on:
-      - countly_api
+#    depends_on:
+#      - countly_api
 
   data_migrants:
     command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
@@ -141,7 +147,13 @@ services:
 
 
   data_pa:
-    command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
+    env_file:
+      - prod.env
+      - .env
+    environment:
+      MICADO_API_KEY: ${MICADO_API_KEY}
+      API_HOSTNAME: ${API_HOSTNAME}
+    command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
     #TODO more elegant copy like copy with mv
     image: micadoproject/pa_app_site # change tag and redeploy stack
     volumes:
@@ -152,8 +164,10 @@ services:
   data_ngo:
     env_file:
       - prod.env
+      - .env
     environment:
       MICADO_API_KEY: ${MICADO_API_KEY}
+      API_HOSTNAME: ${API_HOSTNAME}
     command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
     #TODO more elegant copy like copy with mv
     image: micadoproject/ngo_app_site # change tag and redeploy stack
@@ -346,9 +360,10 @@ services:
     volumes:
       - ./identity-server:/home/wso2carbon/wso2-config-volume
       - ./pg_lib/postgresql-42.2.9.jar:/home/wso2carbon/wso2is-km-5.9.0/repository/components/lib/postgresql-42.2.9.jar
+#      - ./identity-server/repository/conf/identity/EndpointConfig.properties:/home/wso2carbon/wso2is-km-5.9.0/repository/conf/identity/EndpointConfig.properties
       - identity_server_vol:/home/wso2carbon/wso2is-km-5.9.0/repository/deployment/server
-    depends_on:
-      - micado_db
+#    depends_on:
+#      - micado_db
     <<: *generic
     networks:
       micado_net:
@@ -375,6 +390,9 @@ services:
       MICADO_ENV: ${MICADO_ENV} 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - type: volume
+        source: shared_images
+        target: /images
 #    ports:
 #      - "3001:3000"
     <<: *generic
@@ -853,14 +871,46 @@ volumes:
 
   api_sinapse:
     driver: local
+    driver_opts:
+      type: none
+      device: $PWD/api_manager_data/synapse-configs
+      o: bind
   api_executionplans:
     driver: local
+    driver_opts:
+      type: none
+      device: $PWD/api_manager_data/executionplans
+      o: bind
   api_tenants:
     driver: local
+    driver_opts:
+      type: none
+      device: $PWD/api_manager_data/tenants
+      o: bind
   api_database:
     driver: local
+    driver_opts:
+      type: none
+      device: $PWD/api_manager_data/database
+      o: bind
   identity_server_vol:
     driver: local
+    driver_opts:
+      type: none
+      device: $PWD/identity-server_data/deployment
+      o: bind
+  is_tenants:
+    driver: local
+    driver_opts:
+      type: none
+      device: $PWD/identity-server_data/tenants
+      o: bind
+  shared_images:
+    driver: local
+    driver_opts:
+      type: none
+      device: $PWD/shared_images
+      o: bind
 
 #secrets:
 #  WSO2_API_ADMIN_PWD:

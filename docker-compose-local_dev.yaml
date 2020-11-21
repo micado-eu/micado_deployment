@@ -7,6 +7,10 @@ services:
       - ./traefik/dynamic.toml:/etc/traefik/dynamic.toml
       - ./traefik/certs:/etc/certs # SSL Development certificates
 
+  nginx:
+    ports:
+      - "80:80"
+
   micado_db:
     ports:
       - "5432:5432"
