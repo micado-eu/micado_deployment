@@ -388,6 +388,12 @@ services:
       WSO2_IDENTITY_ADMIN_PWD: ${WSO2_IDENTITY_ADMIN_PWD} 
       WSO2_IDENTITY_ADMIN_USER: ${WSO2_IDENTITY_ADMIN_USER} 
       MICADO_ENV: ${MICADO_ENV} 
+      ALGORITHM: ${ALGORITHM}
+      SALT: ${SALT}
+      KEY_LENGTH: ${KEY_LENGTH}
+      BUFFER_0: ${BUFFER_0}
+      BUFFER_1: ${BUFFER_1}
+      ALGORITHM_PASSWORD: ${ALGORITHM_PASSWORD}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - type: volume
