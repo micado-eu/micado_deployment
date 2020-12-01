@@ -69,24 +69,40 @@ pool_options.validationInterval = 10000
 #file_name = "micadokeystore.jks"
 file_name = "wso2carbon.jks"
 #password = "micadostorepass"
-password = "wso2carbon"
-alias = "micadocert"
-key_password = "micadokeypass"
+password = "$env{WSO2_IDENTITY_KEYSTORE_PWD}"
+#alias = "micadocert"
+#key_password = "micadokeypass"
+alias = "$env{WSO2_IDENTITY_CERTIFICATE_ALIAS}"
+key_password = "$env{WSO2_IDENTITY_CERTIFICATE_PWD}"
 
 [truststore]
 #file_name = "micado-truststore.jks"
 #password = "wso2carbonmicado"
 file_name = "client-truststore.jks"
-password = "wso2carbon"
+password = "$env{WSO2_IDENTITY_TRUSTSTORE_PWD}"
 
 
 [identity]
 data_source = "jdbc/WSO2AM_DB"
 
 [identity.auth_framework.endpoint]
-tenant_list_enabled="true"
-hostname_verification_enabled="false"
+tenant_list_enabled=false
+tenantListEnabled=true
+hostname_verification_enabled=false
+mutual_ssl_username="admin"
+client_keystore="wso2carbon.jks"
+carbon_security_keystore_password="$env{WSO2_IDENTITY_KEYSTORE_PWD}"
+carbon_security_truststore_password="$env{WSO2_IDENTITY_TRUSTSTORE_PWD}"
+trust_manager_type="SunX509"
+key_manager_type="SunX509"
+mutual_ssl_manager_enabled=true
+identity_server_service_url="https://$ref{server.hostname}:9443/services"
 
+[tenant.domain_drop_down]
+enable = false
+
+[admin_console.authenticator.mutual_ssl_authenticator]
+enable = true
 
 [authentication.consent]
 data_source = "jdbc/WSO2AM_DB"
@@ -99,6 +115,8 @@ certificateVerification = "want"
 #proxyPort = 80
 #[transport.https.properties]
 #proxyPort = 443
+#[transport.https.properties]
+#clientAuth="want"
 
 [tasks]
 client_dispatch_address = "https://$ref{server.hostname}:9448"
@@ -182,7 +200,7 @@ enable_user_claims = true
 claims_extractor_impl = "org.wso2.carbon.apimgt.impl.token.DefaultClaimsRetriever"
 
 [output_adapter.email]
-from_address= "development@micadoproject.eu"
+from_address= "$env{WEBLATE_ADMIN_EMAIL}"
 username= "$env{WEBLATE_ADMIN_EMAIL}"
 password= "$env{WEBLATE_EMAIL_HOST_PASSWORD}"
 hostname= "$env{WEBLATE_EMAIL_HOST}"
@@ -194,5 +212,5 @@ enable_authentication= true
 enable = true
 
 [output_adapter.email.custom_properties]
-"mail.smtp.proxy.host"="10.138.149.7"
-"mail.smtp.proxy.port"="3128"
+#"mail.smtp.proxy.host"="10.138.149.7"
+#"mail.smtp.proxy.port"="3128"
