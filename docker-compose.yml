@@ -255,10 +255,10 @@ services:
 #      - ./api_manager/deployment.toml:/home/wso2carbon/wso2am-3.0.0/repository/conf/deployment.toml
       - ./api_manager:/home/wso2carbon/wso2-config-volume
       - ./pg_lib/postgresql-42.2.9.jar:/home/wso2carbon/wso2am-3.0.0/repository/components/lib/postgresql-42.2.9.jar
-      - api_sinapse:/home/wso2carbon/wso2am-3.0.0/repository/deployment/server/synapse-configs
-      - api_executionplans:/home/wso2carbon/wso2am-3.0.0/repository/deployment/server/executionplans
-      - api_tenants:/home/wso2carbon/wso2am-3.0.0/repository/tenants
-      - api_database:/home/wso2carbon/wso2am-3.0.0/repository/database
+#      - api_sinapse:/home/wso2carbon/wso2am-3.0.0/repository/deployment/server/synapse-configs
+#      - api_executionplans:/home/wso2carbon/wso2am-3.0.0/repository/deployment/server/executionplans
+#      - api_tenants:/home/wso2carbon/wso2am-3.0.0/repository/tenants
+#      - api_database:/home/wso2carbon/wso2am-3.0.0/repository/database
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
       - "traefik.enable=true"
