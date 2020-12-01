@@ -36,7 +36,7 @@ services:
 
   dashboard:
     ports:
-      - "3000:3000"
+      - "3002:3000"
 
   countly_frontend:
     ports:
@@ -65,7 +65,7 @@ services:
 
   git:
     ports:
-      - "3000:3000"
+      - "3003:3000"
       - "222:22"
 
   sequelize:
