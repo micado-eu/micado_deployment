@@ -153,11 +153,11 @@ services:
     environment:
       MICADO_API_KEY: ${MICADO_API_KEY}
       API_HOSTNAME: ${API_HOSTNAME}
-      ANALYTIC_HOSTNAME: "$ANALYTIC_HOSTNAME",
-      IDENTITY_HOSTNAME: "$IDENTITY_HOSTNAME",
-      COUNTLY_MIGRANTS_API_KEY: "$COUNTLY_MIGRANTS_API_KEY",
-      IDENTITY_SP_PA_CLIENT_ID: "$IDENTITY_SP_PA_CLIENT_ID",
-      PA_HOSTNAME: "$PA_HOSTNAME"
+      ANALYTIC_HOSTNAME: ${ANALYTIC_HOSTNAME}
+      IDENTITY_HOSTNAME: ${IDENTITY_HOSTNAME}
+      COUNTLY_MIGRANTS_API_KEY: ${COUNTLY_MIGRANTS_API_KEY}
+      IDENTITY_SP_PA_CLIENT_ID: ${IDENTITY_SP_PA_CLIENT_ID}
+      PA_HOSTNAME: ${PA_HOSTNAME}
     command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
     #TODO more elegant copy like copy with mv
     image: micadoproject/pa_app_site # change tag and redeploy stack
@@ -401,7 +401,6 @@ services:
       ANALYTIC_HOSTNAME: ${ANALYTIC_HOSTNAME} 
       COUNTLY_ADMIN: ${COUNTLY_ADMIN} 
       COUNTLY_ADMIN_PWD: ${COUNTLY_ADMIN_PWD} 
-
       ALGORITHM: ${ALGORITHM}
       SALT: ${SALT}
       KEY_LENGTH: ${KEY_LENGTH}
@@ -417,70 +416,6 @@ services:
 #      - "3001:3000"
     <<: *generic
 
-
-# DASHBOARD
-  dashboard:
-    image: metabase/metabase:v0.34.2
-    labels:
-      - "com.centurylinklabs.watchtower.enable=false"
-      - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=Host(`${DASHBOARD_HOSTNAME}`)"
-      - "traefik.http.routers.dashboard.entrypoints=web"
-      - "traefik.http.routers.dashboard.service=dashboard"
-      - "traefik.http.routers.dashboard.middlewares=redirect"
-      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
-      - "traefik.http.services.dashboard.loadbalancer.server.port=3000"
-      - "traefik.http.routers.dashboard2.rule=Host(`${DASHBOARD_HOSTNAME}`)"
-      - "traefik.http.routers.dashboard2.entrypoints=web-secure"
-      - "traefik.http.routers.dashboard2.tls=true"
-      - "traefik.http.routers.dashboard2.tls.certresolver=myresolver"
-      - "traefik.http.routers.dashboard2.service=dashboard2"
-      - "traefik.http.services.dashboard2.loadbalancer.server.port=3000"
-    depends_on:
-      - micado_db
-    environment:
-#      MAPBOX_API_KEY: ${MAPBOX_API_KEY}
-      MAPBOX_API_KEY: pk.eyJ1IjoiZ2lvcHBvbHVjYSIsImEiOiJjajhvd2d0bHIwODNsMnBwY3cwcjk2ZmU1In0.z4104Ptx7zgjW4yOjh7Wlg
-      MB_DB_FILE: /metabase-data/metabase.db
-    volumes:
-      - type: volume
-        source: metabase_data
-        # target is the path in the container
-        target: /metabase-data
-    <<: *generic
-
-
-  upload_service:
-    image: tusproject/tusd:v1.0.2
-    ports:
-      - "1080:1080"
-    command:
-      - -behind-proxy
-      - -port=1080
-#      - -hooks-dir=/hooks/
-      - -expose-metrics=true
-      - -metrics-path=/metrics
-      - -hooks-enabled-events=post-create,post-finish,pre-create
-      - -upload-dir=/data
-      - -hooks-http=http://node:8081
-    volumes:
-      - type: volume
-        source: tusd_hooks
-        # target is the path in the container
-        target: /hooks
-      - type: volume
-        source: tusd_data
-        # target is the path in the container
-        target: /data
-    labels:
-      - "com.centurylinklabs.watchtower.enable=false"
-#    labels:
-#      - "traefik.enable=true"
-#      - "traefik.http.routers.upload_service.rule=Host(`upload.micado.csi.it`)"
-#      - "traefik.http.services.upload_service.loadbalancer.server.port=1080"
-#      - "traefik.http.routers.upload_service.entrypoints=web"
-    networks:
-      - micado_net
 
   chatbot:
     image: rasa/rasa:1.10.10-full
