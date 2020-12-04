@@ -141,7 +141,19 @@ services:
 #      - countly_api
 
   data_migrants:
-    command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
+    env_file:
+      - prod.env
+      - .env
+    environment:
+      MICADO_API_KEY: ${MICADO_API_KEY}
+      API_HOSTNAME: ${API_HOSTNAME}
+      ANALYTIC_HOSTNAME: ${ANALYTIC_HOSTNAME}
+      IDENTITY_HOSTNAME: ${IDENTITY_HOSTNAME}
+      COUNTLY_MIGRANTS_API_KEY: ${COUNTLY_MIGRANTS_API_KEY}
+      COUNTLY_MIGRANTS_APP_ID: ${COUNTLY_MIGRANTS_APP_ID}
+      IDENTITY_SP_MIGRANTS_CLIENT_ID: ${IDENTITY_SP_MIGRANTS_CLIENT_ID}
+      MIGRANTS_HOSTNAME: ${MIGRANTS_HOSTNAME}
+    command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
     #TODO more elegant copy like copy with mv
     image: micadoproject/migrant_app_site # change tag and redeploy stack
     volumes:
@@ -158,7 +170,7 @@ services:
       API_HOSTNAME: ${API_HOSTNAME}
       ANALYTIC_HOSTNAME: ${ANALYTIC_HOSTNAME}
       IDENTITY_HOSTNAME: ${IDENTITY_HOSTNAME}
-      COUNTLY_MIGRANTS_API_KEY: ${COUNTLY_MIGRANTS_API_KEY}
+      COUNTLY_PA_API_KEY: ${COUNTLY_PA_API_KEY}
       IDENTITY_SP_PA_CLIENT_ID: ${IDENTITY_SP_PA_CLIENT_ID}
       PA_HOSTNAME: ${PA_HOSTNAME}
     command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
