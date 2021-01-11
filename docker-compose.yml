@@ -708,7 +708,7 @@ services:
   # Environment Management
 
   watchtower:
-    image: containrrr/watchtower
+    image: containrrr/watchtower:1.1.6
     environment:
       TZ: Europe/Rome
     #    environment:
@@ -721,7 +721,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /root/.docker/config.json:/config.json
-    command: --interval 1600 --debug --cleanup
+    command: --interval 1600 --debug --cleanup --include-stopped --revive-stopped
     <<: *generic
 
   portainer:
