@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 services:
   balancer:
     ports:
@@ -34,10 +34,6 @@ services:
       - "9763:9763"
       - "9443:9443"
 
-  dashboard:
-    ports:
-      - "3000:3000"
-
   countly_frontend:
     ports:
       - "6001:6001"
@@ -57,7 +53,6 @@ services:
   portainer:
     ports:
       - 9000:9000
-
 
   weblate:
     ports:
