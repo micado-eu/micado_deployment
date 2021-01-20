@@ -9,7 +9,13 @@ do_install=n ; }                     # Timeout => answer No
 if [[ $do_install =~ ^(y|Y|)$ ]]
 then
     echo -e "\033[0;34m\nI'm starting the deployment\e[0m "
-    
+
+    echo -e "\033[0;34m\nCreating folders\e[0m "
+    mkdir -p db_data weblate_data redis_data identity-server_data/deployment identity-server_data/tenants shared_images
+    chmod 777 shared_images
+    touch traefik/traefik-acme/acme.json
+    chmod 600 traefik/traefik-acme/acme.json
+
     echo -e "\033[0;36m\nStarting PostgreSQL container deployment\e[0m "
     (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d micado_db)
 
@@ -56,6 +62,27 @@ then
     (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml logs identity_server)
     echo -e "\033[0;36m\nStarted Identity Server\e[0m "
 
+# Configure IDENTITY SERVER
+#curl --write-out "%{http_code}\n" -X POST https://identity.micadoproject.eu/services/RemoteAuthorizationManagerService.RemoteAuthorizationManagerServiceHttpsSoap11Endpoint/   -H 'Content-Type: text/xml'   -H 'Authorization: Basic YWRtaW5AcGEubWljYWRvLmV1Om1pY2Fkb2FkbTIwMjA='   -H 'SOAPAction: urn:authorizeRole'   -d '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.ws.um.carbon.wso2.org"><soapenv:Header/><soapenv:Body><ser:authorizeRole><ser:roleName>Application/pa_sp</ser:roleName><ser:resourceId>/permission/admin/login</ser:resourceId><ser:action>ui.execute</ser:action></ser:authorizeRole></soapenv:Body></soapenv:Envelope>'
+
+    # WEBLATE
+    echo -e "\033[0;36m\nStarting WEBLATE containers deployment\e[0m "
+    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d cache)
+    sleep 15
+    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d git)
+    sleep 15
+    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d weblate)
+    sleep 25
+    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml logs weblate)
+    echo -e "\033[0;36m\nStarted WEBLATE\e[0m "
+
+    while true; do
+        read -p "Weblate is started now you need to configure GIT before installation can continue, press y after you configured " ready
+        case $ready in
+            [Yy]* ) break;;
+            * ) echo "Please answer yes (Y or y).";;
+        esac
+    done
 
     # BACKEND
     echo -e "\033[0;36m\nStarting backend container deployment\e[0m "
@@ -105,16 +132,6 @@ then
     (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml logs rocketchat)
     echo -e "\033[0;36m\nStarted ROCKETCHAT\e[0m "
 
-    # WEBLATE
-    echo -e "\033[0;36m\nStarting WEBLATE containers deployment\e[0m "
-    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d cache)
-    sleep 15
-    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d git)
-    sleep 15
-    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d weblate)
-    sleep 25
-    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml logs weblate)
-    echo -e "\033[0;36m\nStarted WEBLATE\e[0m "
 
     read -n 1 -p $'\e[1;32m
     Now you have to properly configure the Identity Manager and the API manager and write correctly the env vars; when ready press (Y/n)\e[0m ' continue_install
