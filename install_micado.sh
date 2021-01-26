@@ -1,6 +1,14 @@
 #!/bin/bash
 echo $'\e[1;32mThis is the installer of the MICADO platform\e[0m '
 
+#740  keytool -genkey -alias micado -keyalg RSA -keysize 2048 -keystore wso2carbon.jks -storepass wso2carbon -keyalg RSA -validity 3650 -dname “CN=identity.micadoproject.eu, OU=micado, O=Micado, L=TO, ST=TO, C=IT”
+#  741  keytool -genkey -alias micado -keyalg RSA -keysize 2048 -keystore wso2carbon.jks -storepass wso2carbon -keyalg RSA -validity 3650 -dname "CN=identity.micadoproject.eu, O=Micado, L=TO, ST=TO, C=IT”
+#  742  keytool -genkey -alias micado -keyalg RSA -keysize 2048 -keystore wso2carbon.jks -storepass wso2carbon -keyalg RSA -validity 3650 -dname "CN=identity.micadoproject.eu, OU=micado, O=Micado, L=TO, ST=TO, C=IT"
+#  743  keytool -export -alias micado -keystore wso2carbon.jks -file micado.pem
+#  744  keytool -import -alias micado -file micado.pem -keystore client-truststore.jks -storepass wso2carbon
+
+
+
 do_install=y
 [[ -t 0 ]] && {                   # Timeout 5 seconds (read -t 5)
 read -t 15 -n 1 -p $'\e[1;32m
