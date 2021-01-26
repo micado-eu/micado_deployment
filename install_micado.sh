@@ -19,14 +19,30 @@ then
     touch traefik/traefik-acme/acme.json
     chmod 600 traefik/traefik-acme/acme.json
 
-    echo -e "\033[0;34m\nPreparing certificates for the Identity Server\e[0m "
+    echo "\nSetting environment"
     set -a; source prod.env; set +a;
     set -a; source .env; set +a;
+
+    echo -e "\033[0;34m\nPreparing certificates for the Identity Server\e[0m "
     cp templates/*.jks deployment/
     keytool -genkey -alias micado -keyalg RSA -keysize 2048 -keystore deployment/wso2carbon.jks -storepass wso2carbon -keypass ws2carbon -keyalg RSA -validity 3650 -dname "CN=$IDENTITY_HOSTNAME, OU=micado, O=Micado, L=TO, ST=TO, C=EU"
     keytool -list -v -storepass wso2carbon -keystore deployment/wso2carbon.jks|grep "micado"
     keytool -export -alias micado -storepass wso2carbon -keystore deployment/wso2carbon.jks -file deployment/micado.pem
     keytool -import -alias micado -storepass wso2carbon -file deployment/micado.pem -keystore deployment/client-truststore.jks -noprompt
+    cp deployment/*.jks identity-server/repository/resources/security/
+
+    echo -e "\033[0;34m\nPreparing service provider files\e[0m "
+    export NEW_MIGRANT_UUID=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+    export NEW_PA_UUID=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+    export NEW_NGO_UUID=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+    envsubst < templates/migrants_sp.xml.templates > deployment/migrants_sp.xml
+    envsubst < templates/pa_sp.xml.templates > deployment/pa_sp.xml
+    envsubst < templates/ngo_sp.xml.templates > deployment/ngo_sp.xml
+    # Now we copy the UUID to the prod.env
+    sed -ir "s/^[#]*\s*IDENTITY_SP_MIGRANTS_CLIENT_ID=.*/IDENTITY_SP_MIGRANTS_CLIENT_ID=$NEW_MIGRANT_UUID/" prod.env
+    sed -ir "s/^[#]*\s*IDENTITY_SP_PA_CLIENT_ID=.*/IDENTITY_SP_PA_CLIENT_ID=$NEW_PA_UUID/" prod.env
+    sed -ir "s/^[#]*\s*IDENTITY_SP_NGO_CLIENT_ID=.*/IDENTITY_SP_NGO_CLIENT_ID=$NEW_NGO_UUID/" prod.env
+
 
     echo -e "\033[0;36m\nStarting PostgreSQL container deployment\e[0m "
     (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d micado_db)
