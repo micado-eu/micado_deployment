@@ -3345,15 +3345,15 @@ INSERT INTO micadoapp.event_user_types VALUES (62, 9);
 -- Data for Name: features_flags; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
-INSERT INTO micadoapp.features_flags VALUES (2, 'FEAT_GLOSSARY', true);
-INSERT INTO micadoapp.features_flags VALUES (3, 'FEAT_ASSISTANT', true);
 INSERT INTO micadoapp.features_flags VALUES (1, 'FEAT_DOCUMENTS', true);
-INSERT INTO micadoapp.features_flags VALUES (8, 'FEAT_DEFAULT', true);
-INSERT INTO micadoapp.features_flags VALUES (4, 'FEAT_PROCESSES', true);
+INSERT INTO micadoapp.features_flags VALUES (3, 'FEAT_ASSISTANT', true);
 INSERT INTO micadoapp.features_flags VALUES (7, 'FEAT_GEOPORTAL', true);
+INSERT INTO micadoapp.features_flags VALUES (8, 'FEAT_DEFAULT', true);
+INSERT INTO micadoapp.features_flags VALUES (2, 'FEAT_GLOSSARY', true);
+INSERT INTO micadoapp.features_flags VALUES (4, 'FEAT_PROCESSES', true);
 INSERT INTO micadoapp.features_flags VALUES (6, 'FEAT_EVENTS', true);
-INSERT INTO micadoapp.features_flags VALUES (5, 'FEAT_TASKS', true);
 INSERT INTO micadoapp.features_flags VALUES (9, 'FEAT_INFO', true);
+INSERT INTO micadoapp.features_flags VALUES (5, 'FEAT_TASKS', true);
 
 
 --
@@ -4030,6 +4030,7 @@ INSERT INTO micadoapp.picture_hotspot_translation_prod VALUES (385, 'en', 'First
 INSERT INTO micadoapp.process VALUES (116, '', false);
 INSERT INTO micadoapp.process VALUES (111, '', false);
 INSERT INTO micadoapp.process VALUES (128, '', false);
+INSERT INTO micadoapp.process VALUES (47, '', false);
 INSERT INTO micadoapp.process VALUES (92, '', true);
 INSERT INTO micadoapp.process VALUES (174, '', false);
 INSERT INTO micadoapp.process VALUES (175, '', false);
@@ -4041,7 +4042,6 @@ INSERT INTO micadoapp.process VALUES (117, '', false);
 INSERT INTO micadoapp.process VALUES (48, '', false);
 INSERT INTO micadoapp.process VALUES (126, '', false);
 INSERT INTO micadoapp.process VALUES (127, '', false);
-INSERT INTO micadoapp.process VALUES (47, '', false);
 
 
 --
@@ -4058,9 +4058,10 @@ INSERT INTO micadoapp.process_comments VALUES (60, 180);
 -- Data for Name: process_produced_documents; Type: TABLE DATA; Schema: micadoapp; Owner: -
 --
 
-INSERT INTO micadoapp.process_produced_documents VALUES (47, 1);
 INSERT INTO micadoapp.process_produced_documents VALUES (111, 61);
 INSERT INTO micadoapp.process_produced_documents VALUES (128, 3);
+INSERT INTO micadoapp.process_produced_documents VALUES (47, 1);
+INSERT INTO micadoapp.process_produced_documents VALUES (47, 5);
 INSERT INTO micadoapp.process_produced_documents VALUES (180, 212);
 INSERT INTO micadoapp.process_produced_documents VALUES (126, 2);
 INSERT INTO micadoapp.process_produced_documents VALUES (127, 2);
@@ -4071,11 +4072,11 @@ INSERT INTO micadoapp.process_produced_documents VALUES (127, 2);
 --
 
 INSERT INTO micadoapp.process_topic VALUES (116, 7);
-INSERT INTO micadoapp.process_topic VALUES (47, 4);
 INSERT INTO micadoapp.process_topic VALUES (111, 1);
 INSERT INTO micadoapp.process_topic VALUES (128, 3);
 INSERT INTO micadoapp.process_topic VALUES (175, 4);
 INSERT INTO micadoapp.process_topic VALUES (128, 13);
+INSERT INTO micadoapp.process_topic VALUES (47, 4);
 INSERT INTO micadoapp.process_topic VALUES (179, 3);
 INSERT INTO micadoapp.process_topic VALUES (117, 3);
 INSERT INTO micadoapp.process_topic VALUES (48, 1);
@@ -4118,26 +4119,26 @@ INSERT INTO micadoapp.process_translation VALUES (127, 'it', '', '', NULL, 2, fa
 INSERT INTO micadoapp.process_translation VALUES (127, 'es', '', '', NULL, 2, false);
 INSERT INTO micadoapp.process_translation VALUES (46, 'nl', '', '', NULL, 2, false);
 INSERT INTO micadoapp.process_translation VALUES (127, 'en', 'Enrollment in nursery education in Antwerp', '<p>Atlas will help you find a first school for your child.</p><p>In Belgium every child is entitled to education. Even children without valid residence documents.</p><p>Your child can go to nursery school as soon as it is 2 years and 6 months old. A toddler who has turned 2 years and 6 months can start school:</p><p>- after the summer holiday (September)- after the autumn holiday (November)- after the Christmas holidays (January)- on the first school day of February- after the spring holiday (February - March)- after the Easter holiday (April)- after Ascension Day (May)</p><p>Children aged 3 or over can start school right away. They do not have to wait.</p><p>Please note that for nursery school, you can enroll your child up to a year in advance. Ask for information as soon as your child is 1 year old.</p><p>Nursery school is not compulsory, but it is very important. Your child will be learning Dutch and has the opportunity to play with other children. Ask Atlas or the school for more information.</p><p>More info at: <a href="https://www.atlas-antwerpen.be/sites/default/files/uploads/pagina" rel="noopener noreferrer nofollow">https://www.atlas-antwerpen.be/sites/default/files/uploads/pagina</a>''s/InfogidsMinderjarigen<em>EN</em>3.pdf</p>', NULL, 2, false);
-INSERT INTO micadoapp.process_translation VALUES (47, 'es', '', '', NULL, 2, false);
-INSERT INTO micadoapp.process_translation VALUES (47, 'it', '', '', NULL, 2, false);
 INSERT INTO micadoapp.process_translation VALUES (111, 'it', '', '', NULL, 0, false);
 INSERT INTO micadoapp.process_translation VALUES (111, 'es', '', '', NULL, 0, false);
 INSERT INTO micadoapp.process_translation VALUES (111, 'de', '', '', NULL, 0, false);
-INSERT INTO micadoapp.process_translation VALUES (47, 'en', 'Enroll children to school', '<p>How to enroll children to school</p>', NULL, 2, false);
-INSERT INTO micadoapp.process_translation VALUES (47, 'de', '', '', NULL, 2, false);
 INSERT INTO micadoapp.process_translation VALUES (92, 'nl', '', '', NULL, 2, false);
 INSERT INTO micadoapp.process_translation VALUES (92, 'de', '', '', NULL, 2, false);
 INSERT INTO micadoapp.process_translation VALUES (92, 'es', '', '', NULL, 2, false);
 INSERT INTO micadoapp.process_translation VALUES (92, 'it', '', '', NULL, 2, false);
-INSERT INTO micadoapp.process_translation VALUES (47, 'nl', 'Je kind inschrijven in een school', '<p>Hoe je kind inschrijven in een school...</p>', NULL, 3, false);
 INSERT INTO micadoapp.process_translation VALUES (127, 'nl', 'Inschrijven in kleuterschool', '<p>Atlas zal u helpen</p>', NULL, 3, false);
 INSERT INTO micadoapp.process_translation VALUES (111, 'en', 'Getting the registration certificate', '<p>Getting your “<strong>certificado de empadronamiento</strong>” or your address registration certificate is probably the first and most important step when arriving to access some services and probe your residence.</p>', NULL, 0, false);
 INSERT INTO micadoapp.process_translation VALUES (111, 'nl', '', '', NULL, 0, false);
 INSERT INTO micadoapp.process_translation VALUES (128, 'it', '', '', NULL, 0, false);
 INSERT INTO micadoapp.process_translation VALUES (128, 'es', '', '', NULL, 0, false);
 INSERT INTO micadoapp.process_translation VALUES (128, 'de', '', '', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (47, 'es', '', '', NULL, 2, false);
 INSERT INTO micadoapp.process_translation VALUES (128, 'nl', '', '', NULL, 0, false);
 INSERT INTO micadoapp.process_translation VALUES (128, 'en', 'Hoe sluit ik me aan bij een ziekenfonds in België?', '<p>Een ziekenfonds (= mutualiteit) zorgt voor de terugbetaling van een deel van de dokterskosten, geneesmiddelen, ziekenhuiskosten, ... waarbij het Rijksinstituut voor Ziekte- en Invaliditeitsuitkering (RIZIV) bepaalt welke medische zorgen de mutualiteit terugbetaalt. De terugbetaling bedraagt ongeveer 75 % van de kosten voor mensen zonder een verhoogde tegemoetkoming en 90 % van de kosten voor mensen met een verhoogde tegemoetkoming.</p><p>Aansluiten bij een mutualiteit is verplicht voor iedereen die officieel in België woont én • ouder is dan 25 jaar</p><p>• jonger is dan 25 jaar en werkt</p><p>• jonger is dan 25 jaar, werkloos is én een uitkering krijgt</p><p>• ook erkende vluchtelingen en subsidiair beschermden moeten dat</p><p>Niet vergeten: de ouders moeten hun kinderen bij de geboorte aansluiten.</p><p>Bron: antwerpen.be</p>', NULL, 0, false);
+INSERT INTO micadoapp.process_translation VALUES (47, 'de', '', '', NULL, 2, false);
+INSERT INTO micadoapp.process_translation VALUES (47, 'nl', 'Je kind inschrijven in een school', '<p>Hoe je kind inschrijven in een school...</p>', NULL, 3, false);
+INSERT INTO micadoapp.process_translation VALUES (47, 'it', '', '', NULL, 2, false);
+INSERT INTO micadoapp.process_translation VALUES (47, 'en', 'Enroll children to school', '<p>How to enroll children to school</p>', NULL, 2, false);
 INSERT INTO micadoapp.process_translation VALUES (117, 'nl', '', '', NULL, 0, false);
 INSERT INTO micadoapp.process_translation VALUES (117, 'es', '', '', NULL, 0, false);
 INSERT INTO micadoapp.process_translation VALUES (117, 'en', 'Permesso di soggiorno', '<p>ciao</p>', NULL, 0, false);
@@ -4200,13 +4201,14 @@ INSERT INTO micadoapp.process_users VALUES (117, 1);
 INSERT INTO micadoapp.process_users VALUES (48, 1);
 INSERT INTO micadoapp.process_users VALUES (48, 7);
 INSERT INTO micadoapp.process_users VALUES (48, 9);
-INSERT INTO micadoapp.process_users VALUES (47, 9);
-INSERT INTO micadoapp.process_users VALUES (47, 7);
-INSERT INTO micadoapp.process_users VALUES (47, 1);
 INSERT INTO micadoapp.process_users VALUES (111, 7);
 INSERT INTO micadoapp.process_users VALUES (128, 1);
 INSERT INTO micadoapp.process_users VALUES (128, 7);
 INSERT INTO micadoapp.process_users VALUES (128, 9);
+INSERT INTO micadoapp.process_users VALUES (47, 1);
+INSERT INTO micadoapp.process_users VALUES (47, 9);
+INSERT INTO micadoapp.process_users VALUES (47, 7);
+INSERT INTO micadoapp.process_users VALUES (47, 32);
 INSERT INTO micadoapp.process_users VALUES (92, 9);
 INSERT INTO micadoapp.process_users VALUES (92, 7);
 INSERT INTO micadoapp.process_users VALUES (92, 1);
@@ -5257,7 +5259,7 @@ SELECT pg_catalog.setval('micadoapp.glossary_id_seq', 118, true);
 -- Name: individual_intervention_plan_id_seq; Type: SEQUENCE SET; Schema: micadoapp; Owner: -
 --
 
-SELECT pg_catalog.setval('micadoapp.individual_intervention_plan_id_seq', 69, true);
+SELECT pg_catalog.setval('micadoapp.individual_intervention_plan_id_seq', 70, true);
 
 
 --
@@ -5271,7 +5273,7 @@ SELECT pg_catalog.setval('micadoapp.individual_intervention_plan_intervention_in
 -- Name: individual_intervention_plan_interventions_id_seq; Type: SEQUENCE SET; Schema: micadoapp; Owner: -
 --
 
-SELECT pg_catalog.setval('micadoapp.individual_intervention_plan_interventions_id_seq', 145, true);
+SELECT pg_catalog.setval('micadoapp.individual_intervention_plan_interventions_id_seq', 146, true);
 
 
 --
