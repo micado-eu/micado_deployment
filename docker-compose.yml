@@ -510,6 +510,8 @@ services:
       - "traefik.http.routers.rocketchat.service=rocketchat"
       - "traefik.http.routers.rocketchat.middlewares=redirect"
       - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect.headers.customrequestheaders.X-Forwarded-Proto=http"
+      - "traefik.http.middlewares.redirect.redirectScheme.permanent=true"
       - "traefik.http.services.rocketchat.loadbalancer.server.port=3000"
       - "traefik.http.routers.rocketchat2.rule=Host(`${ROCKETCHAT_HOSTNAME}`)"
       - "traefik.http.routers.rocketchat2.entrypoints=web-secure"
@@ -517,6 +519,8 @@ services:
       - "traefik.http.routers.rocketchat2.tls.certresolver=myresolver"
       - "traefik.http.routers.rocketchat2.service=rocketchat2"
       - "traefik.http.services.rocketchat2.loadbalancer.server.port=3000"
+      - "traefik.http.services.rocketchat2.loadbalancer.sticky=true"
+      - "traefik.http.services.rocketchat2.loadbalancer.passhostheader=true"
     <<: *generic
 
   mongodb:
