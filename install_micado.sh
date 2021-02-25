@@ -164,6 +164,7 @@ then
 
     # Configure RocketChat
     ## Auth
+    bot_name=rasa_bot
     rktauth=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/login -H 'Content-Type: application/json' -d "{\"username\": \"$ROCKETCHAT_ADMIN\", \"password\": \"$ROCKETCHAT_ADMIN_PWD\"}"`
     echo "$rktauth"| jq '.'
     rktuid=`echo "$rktauth"| jq -r '.data.userId'`
@@ -197,7 +198,7 @@ then
     rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/livechat/department -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{\"department\":{\"enabled\": true,\"showOnRegistration\": true,\"showOnOfflineForm\":false,\"email\": \"email@email.com\",\"name\": \"micado\",\"description\": \"default department\"},\"agents\": [{\"agentId\": \"$agent_user_id\",\"username\": \"$bot_name\",\"count\": 0,\"order\": 0}]}"`
     echo "$rktres" | jq '.'
     ##CREATE WEBHOOK
-    rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/integrations.create -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{ \"type\": \"webhook-outgoing\", \"name\": \"Rasa\", \"event\": \"sendMessage\", \"enabled\": true, \"username\": \"$bot_name\", \"urls\": [\"http://chatbot:5005/webhooks/rocketchat/webhook\"], \"scriptEnabled\": true, \"channel\":\"all_public_channels\" }"`
+    rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/integrations.create -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{ \"type\": \"webhook-outgoing\", \"name\": \"Rasa\", \"event\": \"sendMessage\", \"enabled\": true, \"username\": \"$bot_name\", \"urls\": [\"http://chatbot:5005/webhooks/rocketchat/webhook\"], \"scriptEnabled\": true, \"channel\":\"all_direct_messages\" }"`
     echo "$rktres" | jq '.'
 
     read -n 1 -p $'\e[1;32m Now you have to properly configure the Identity Manager and the API manager and write correctly the env vars; when ready press (Y/n)\e[0m ' continue_install
