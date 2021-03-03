@@ -557,6 +557,11 @@ services:
       #      DB_NAME: ${POSTGRES_DB}
       #      DB_USER: ${GITEA_DB_USER}
       GIT_HOSTNAME: ${GIT_HOSTNAME}
+      DB_TYPE: postgres
+      DB_HOST: micado_db:${POSTGRES_PORT}
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${GITEA_DB_USER}
+      DB_PASSWD: ${GITEA_DB_PWD}
       DISABLE_REGISTRATION: "true"
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
