@@ -182,11 +182,11 @@ then
     echo "$rkttk"
     ## 
     echo "create user"
-    rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/users.create -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{\"name\": \"rasa_bot\",\"email\": \"luca.gioppo@csi.it\",\"password\": \"micadobot\",\"username\": \"rasa_bot\",\"requirePasswordChange\": false,\"sendWelcomeEmail\": false, \"roles\": [\"bot\"]}"`
+    rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/users.create -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{\"name\": \"$BOT_NAME\",\"email\": \"luca.gioppo@csi.it\",\"password\": \"$RASA_BOT_PASSWORD\",\"username\": \"$BOT_NAME\",\"requirePasswordChange\": false,\"sendWelcomeEmail\": false, \"roles\": [\"bot\"]}"`
     echo "$rktres"
     echo "$rktres" | jq '.'
     ##CREATE LIVE CHAT AGENT
-    rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/livechat/users/agent -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{\"username\": \"$bot_name\"}"`
+    rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/livechat/users/agent -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{\"username\": \"$BOT_NAME\"}"`
     echo "$rktres"
     agent_user_id=`echo "$rktres"| jq -r '.user._id'`
     echo "$agent_user_id"
