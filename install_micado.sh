@@ -25,10 +25,16 @@ then
 
     echo -e "\033[0;34m\nPreparing certificates for the Identity Server\e[0m "
     cp templates/*.jks deployment/
-    keytool -genkey -alias micado -keyalg RSA -keysize 2048 -keystore deployment/wso2carbon.jks -storepass wso2carbon -keypass ws2carbon -keyalg RSA -validity 3650 -dname "CN=$IDENTITY_HOSTNAME, OU=micado, O=Micado, L=TO, ST=TO, C=EU"
+    keytool -genkey -alias micado -keyalg RSA -keysize 2048 -keystore deployment/wso2carbon.jks -storepass wso2carbon -keypass wso2carbon -keyalg RSA -validity 3650 -dname "CN=$IDENTITY_HOSTNAME, OU=micado, O=Micado, L=TO, ST=TO, C=EU"
     keytool -list -v -storepass wso2carbon -keystore deployment/wso2carbon.jks|grep "micado"
     keytool -export -alias micado -storepass wso2carbon -keystore deployment/wso2carbon.jks -file deployment/micado.pem
     keytool -import -alias micado -storepass wso2carbon -file deployment/micado.pem -keystore deployment/client-truststore.jks -noprompt
+    sed -ir "s/^[#]*\s*WSO2_IDENTITY_KEYSTORE_PWD=.*/WSO2_IDENTITY_KEYSTORE_PWD=wso2carbon/" prod.env
+    sed -ir "s/^[#]*\s*WSO2_IDENTITY_TRUSTSTORE_PWD=.*/WSO2_IDENTITY_TRUSTSTORE_PWD=wso2carbon/" prod.env
+    sed -ir "s/^[#]*\s*WSO2_IDENTITY_CERTIFICATE_PWD=.*/WSO2_IDENTITY_CERTIFICATE_PWD=wso2carbon/" prod.env
+    sed -ir "s/^[#]*\s*WSO2_IDENTITY_CERTIFICATE_ALIAS=.*/WSO2_IDENTITY_CERTIFICATE_ALIAS=micado/" prod.env
+    set -a; source prod.env; set +a;
+
     cp deployment/*.jks identity-server/repository/resources/security/
 
     echo -e "\033[0;34m\nPreparing service provider files\e[0m "
@@ -42,6 +48,7 @@ then
     sed -ir "s/^[#]*\s*IDENTITY_SP_MIGRANTS_CLIENT_ID=.*/IDENTITY_SP_MIGRANTS_CLIENT_ID=$NEW_MIGRANT_UUID/" prod.env
     sed -ir "s/^[#]*\s*IDENTITY_SP_PA_CLIENT_ID=.*/IDENTITY_SP_PA_CLIENT_ID=$NEW_PA_UUID/" prod.env
     sed -ir "s/^[#]*\s*IDENTITY_SP_NGO_CLIENT_ID=.*/IDENTITY_SP_NGO_CLIENT_ID=$NEW_NGO_UUID/" prod.env
+    set -a; source prod.env; set +a;
 
 
     echo -e "\033[0;36m\nStarting PostgreSQL container deployment\e[0m "
@@ -164,6 +171,7 @@ then
 
     # Configure RocketChat
     ## Auth
+    bot_name=rasa_bot
     rktauth=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/login -H 'Content-Type: application/json' -d "{\"username\": \"$ROCKETCHAT_ADMIN\", \"password\": \"$ROCKETCHAT_ADMIN_PWD\"}"`
     echo "$rktauth"| jq '.'
     rktuid=`echo "$rktauth"| jq -r '.data.userId'`
@@ -197,7 +205,7 @@ then
     rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/livechat/department -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{\"department\":{\"enabled\": true,\"showOnRegistration\": true,\"showOnOfflineForm\":false,\"email\": \"email@email.com\",\"name\": \"micado\",\"description\": \"default department\"},\"agents\": [{\"agentId\": \"$agent_user_id\",\"username\": \"$bot_name\",\"count\": 0,\"order\": 0}]}"`
     echo "$rktres" | jq '.'
     ##CREATE WEBHOOK
-    rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/integrations.create -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{ \"type\": \"webhook-outgoing\", \"name\": \"Rasa\", \"event\": \"sendMessage\", \"enabled\": true, \"username\": \"$bot_name\", \"urls\": [\"http://chatbot:5005/webhooks/rocketchat/webhook\"], \"scriptEnabled\": true, \"channel\":\"all_public_channels\" }"`
+    rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/integrations.create -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{ \"type\": \"webhook-outgoing\", \"name\": \"Rasa\", \"event\": \"sendMessage\", \"enabled\": true, \"username\": \"$bot_name\", \"urls\": [\"http://chatbot:5005/webhooks/rocketchat/webhook\"], \"scriptEnabled\": true, \"channel\":\"all_direct_messages\" }"`
     echo "$rktres" | jq '.'
 
     read -n 1 -p $'\e[1;32m Now you have to properly configure the Identity Manager and the API manager and write correctly the env vars; when ready press (Y/n)\e[0m ' continue_install
