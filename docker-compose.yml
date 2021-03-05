@@ -140,6 +140,10 @@ services:
     #      - "traefik.http.routers.countly_frontend.service=countly_frontend_service"
     #      - "traefik.http.services.countly_frontend_service.loadbalancer.server.port=6001"
     <<: *generic
+    networks:
+      micado_net:
+        aliases:
+          - ${RASA_HOSTNAME}
   #    depends_on:
   #      - countly_api
 
