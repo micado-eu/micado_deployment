@@ -106,6 +106,9 @@ then
     sleep 15
     (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d git)
     sleep 15
+    echo -e "\033[0;36m\nAdding SCHEMA to git_data/gitea/conf/app.ini, if it's not working try running running the command as root\e[0m "
+    sed  -i "/DB_TYPE/a SCHEMA=$GITEA_DB_SCHEMA" git_data/gitea/conf/app.ini
+
     (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d weblate)
     sleep 25
     (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml logs weblate)
