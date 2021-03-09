@@ -655,10 +655,22 @@ volumes:
       o: bind
   data_site_migrant:
     driver: local
+    driver_opts:
+      type: none
+      device: $PWD/data_site_migrant
+      o: bind
   data_site_pa:
     driver: local
+    driver_opts:
+      type: none
+      device: $PWD/data_site_pa
+      o: bind
   data_site_ngo:
     driver: local
+    driver_opts:
+      type: none
+      device: $PWD/data_site_ngo
+      o: bind
   mongo_data:
     driver: local
     driver_opts:
