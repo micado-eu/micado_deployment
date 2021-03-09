@@ -211,6 +211,11 @@ then
         (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d data_migrants)
         (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d data_pa)
         (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d data_ngo)
+        sleep 5
+        echo -e "\033[0;36m\nAdding custom css links\e[0m "
+        sed -i 's/<\/head>/<link rel="stylesheet" type="text\/css" href="\/css\/custom.css"><\/head>/' data_site_pa/index.html
+        sed -i 's/<\/head>/<link rel="stylesheet" type="text\/css" href="\/css\/custom.css"><\/head>/' data_site_ngo/index.html 
+        sed -i 's/<\/head>/<link rel="stylesheet" type="text\/css" href="\/css\/custom.css"><\/head>/' data_site_migrant/index.html 
         echo -e "\033[0;36m\nStarted MICADO applications\e[0m "
 
     fi
