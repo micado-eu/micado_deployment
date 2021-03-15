@@ -795,7 +795,7 @@ volumes:
       # device is the path in the host that has to be absolute
       device: $PWD/db_init
       o: bind
-  chatbot_actions:
+  chatbot_action:
     driver: local
     driver_opts:
       type: none
