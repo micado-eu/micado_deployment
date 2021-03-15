@@ -485,6 +485,9 @@ services:
 
   action_server:
     image: rasa/rasa:2.3.1-full
+    env_file:
+      - .env
+      - prod.env
     volumes:
       - type: volume
         source: chatbot_action
