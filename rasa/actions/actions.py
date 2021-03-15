@@ -6,6 +6,7 @@ from rasa_sdk.forms import FormAction
 import requests
 import logging
 import os
+import sys
 
 logger = logging.getLogger(__name__)
 root = logging.getLogger()
