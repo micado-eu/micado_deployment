@@ -448,22 +448,32 @@ services:
     #      - "3001:3000"
     <<: *generic
 
-  chatbot:
-    image: rasa/rasa:1.10.10-full
-    #   volumes:
-    #     - /home/gioppo/Development/dockerfiles/micado_new/rasa:/app
+  chatbot_en:
+    image: rasa/rasa:2.3.1-full
+    user: 1000:1000
+    container_name: chatbot_en
     env_file:
+      - .env
       - prod.env
+ #   volumes:
+ #     - /home/gioppo/Development/dockerfiles/micado_new/rasa:/app
+#    entrypoint: python multibot.py
     command:
-      #      - train
+#      - python 
+#      - micado.py
+#      - train
       - run
       - --cors
       - "*"
       - -p
       - "5005"
+      - -m
+      - rasa/models/micado_en.tar.gz
       - --enable-api
       - --auth-token
-      - "thisismysecret"
+      - "${RASA_SECRET}"
+    ports:
+      - "5005:5005"
     volumes:
       - type: volume
         source: chatbot_data
@@ -474,10 +484,10 @@ services:
     <<: *generic
 
   action_server:
-    image: rasa/rasa-sdk:1.10.2
+    image: rasa/rasa:2.3.1-full
     volumes:
       - type: volume
-        source: chatbot_actions
+        source: chatbot_action
         # target is the path in the container
         target: /app/actions
     labels:
@@ -485,7 +495,7 @@ services:
     <<: *generic
 
   duckling_server:
-    image: rasa/duckling:0.1.6.3
+    image: rasa/duckling:0.1.6.5
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
     <<: *generic
