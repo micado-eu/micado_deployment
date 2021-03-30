@@ -438,6 +438,7 @@ services:
       BUFFER_0: ${BUFFER_0}
       BUFFER_1: ${BUFFER_1}
       ALGORITHM_PASSWORD: ${ALGORITHM_PASSWORD}
+      MICADO_WEBLATE_KEY: ${MICADO_WEBLATE_KEY}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - type: volume
