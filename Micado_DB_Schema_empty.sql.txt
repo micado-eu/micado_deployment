@@ -838,7 +838,8 @@ CREATE TABLE micadoapp.event (
     end_date timestamp without time zone,
     published boolean DEFAULT false,
     location text,
-    creator integer
+    creator integer,
+    cost text
 );
 
 

@@ -31,15 +31,18 @@ services:
     <<: *generic
 
   nginx:
-    image: nginx:1.19.3
+    image: openresty/openresty:1.19.3.1-3-buster
     environment:
       - MIGRANTS_HOSTNAME=${MIGRANTS_HOSTNAME}
       - PA_HOSTNAME=${PA_HOSTNAME}
       - NGO_HOSTNAME=${NGO_HOSTNAME}
       - ANALYTIC_HOSTNAME=${ANALYTIC_HOSTNAME}
+      - RASA_HOSTNAME=${RASA_HOSTNAME}
+      - BOT_NAME=${BOT_NAME}
       - NGINX_PORT=80
     volumes:
-      - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template
+      - $PWD/nginx/run.sh:/run.sh
+      - $PWD/nginx/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf.template
       - type: volume
         source: data_site_migrant
         target: /usr/share/nginx/html/migrants
@@ -66,6 +69,7 @@ services:
           nocopy: true
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
+      - "com.centurylinklabs.watchtower.enable=false"
       - "traefik.enable=true"
       - "traefik.http.routers.nginx.rule=Host(`${MIGRANTS_HOSTNAME}`)"
       - "traefik.http.routers.nginx.entrypoints=web"
@@ -82,6 +86,8 @@ services:
       - "traefik.http.routers.nginx3.rule=Host(`${PA_HOSTNAME}`)"
       - "traefik.http.routers.nginx3.entrypoints=web"
       - "traefik.http.routers.nginx3.service=nginx3"
+      - "traefik.http.routers.nginx3.middlewares=redirect_pa"
+      - "traefik.http.middlewares.redirect_pa.redirectscheme.scheme=https"
       - "traefik.http.services.nginx3.loadbalancer.server.port=80"
       - "traefik.http.routers.nginx4.rule=Host(`${PA_HOSTNAME}`)"
       - "traefik.http.routers.nginx4.entrypoints=web-secure"
@@ -92,6 +98,8 @@ services:
       - "traefik.http.routers.nginx5.rule=Host(`${NGO_HOSTNAME}`)"
       - "traefik.http.routers.nginx5.entrypoints=web"
       - "traefik.http.routers.nginx5.service=nginx5"
+      - "traefik.http.routers.nginx5.middlewares=redirect_ngo"
+      - "traefik.http.middlewares.redirect_ngo.redirectscheme.scheme=https"
       - "traefik.http.services.nginx5.loadbalancer.server.port=80"
       - "traefik.http.routers.nginx6.rule=Host(`${NGO_HOSTNAME}`)"
       - "traefik.http.routers.nginx6.entrypoints=web-secure"
@@ -106,6 +114,10 @@ services:
       - "traefik.http.routers.countly.tls.certresolver=myresolver"
       - "traefik.http.services.countly_service.loadbalancer.server.port=80"
     <<: *generic
+    networks:
+      micado_net:
+        aliases:
+          - ${RASA_HOSTNAME}
 
   data_migrants:
     env_file:
@@ -121,7 +133,8 @@ services:
       IDENTITY_SP_MIGRANTS_CLIENT_ID: ${IDENTITY_SP_MIGRANTS_CLIENT_ID}
       MIGRANTS_HOSTNAME: ${MIGRANTS_HOSTNAME}
       ROCKETCHAT_HOSTNAME: ${ROCKETCHAT_HOSTNAME}
-    command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
+      BOT_NAME: ${BOT_NAME}
+    #    command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
     image: micadoproject/migrant_app_site:latest
     volumes:
       - data_site_migrant:/var/www/html
@@ -139,7 +152,7 @@ services:
       COUNTLY_PA_APP_KEY: ${COUNTLY_PA_APP_KEY}
       IDENTITY_SP_PA_CLIENT_ID: ${IDENTITY_SP_PA_CLIENT_ID}
       PA_HOSTNAME: ${PA_HOSTNAME}
-    command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
+    #    command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
     image: micadoproject/pa_app_site:latest
     volumes:
       - data_site_pa:/var/www/html
@@ -157,7 +170,7 @@ services:
       COUNTLY_NGO_APP_KEY: ${COUNTLY_NGO_APP_KEY}
       IDENTITY_SP_NGO_CLIENT_ID: ${IDENTITY_SP_NGO_CLIENT_ID}
       NGO_HOSTNAME: ${NGO_HOSTNAME}
-    command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
+    #    command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
     image: micadoproject/ngo_app_site:latest
     volumes:
       - data_site_ngo:/var/www/html
@@ -166,7 +179,7 @@ services:
   # DATABASE CONTAINERS
 
   micado_db:
-    image: mdillon/postgis:11-alpine
+    image: groonga/pgroonga:2.2.6-alpine-11-slim
     env_file:
       - .env
       - prod.env
@@ -337,6 +350,7 @@ services:
       BUFFER_0: ${BUFFER_0}
       BUFFER_1: ${BUFFER_1}
       ALGORITHM_PASSWORD: ${ALGORITHM_PASSWORD}
+      MICADO_WEBLATE_KEY: ${MICADO_WEBLATE_KEY}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - type: volume
@@ -344,10 +358,19 @@ services:
         target: /images
     <<: *generic
 
-  chatbot:
-    image: rasa/rasa:1.10.10-full
+  chatbot_en:
+    image: rasa/rasa:2.3.1-full
+    user: 1000:1000
+    container_name: chatbot_en
     env_file:
+      - .env
       - prod.env
+    environment:
+      BOT_NAME: ${BOT_NAME}
+      RASA_BOT_PASSWORD: ${RASA_BOT_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      RASA_DB_USER: ${RASA_DB_USER}
+      RASA_DB_PASSWORD: ${RASA_DB_PASSWORD}
     command:
       #      - train
       - run
@@ -355,9 +378,11 @@ services:
       - "*"
       - -p
       - "5005"
+      - -m
+      - rasa/models/micado_en.tar.gz
       - --enable-api
       - --auth-token
-      - "thisismysecret"
+      - "${RASA_SECRET}"
     volumes:
       - type: volume
         source: chatbot_data
@@ -367,7 +392,10 @@ services:
     <<: *generic
 
   action_server:
-    image: rasa/rasa-sdk:1.10.2
+    image: rasa/rasa-sdk:2.3.1
+    env_file:
+      - .env
+      - prod.env
     volumes:
       - type: volume
         source: chatbot_actions
@@ -377,7 +405,7 @@ services:
     <<: *generic
 
   duckling_server:
-    image: rasa/duckling:0.1.6.3
+    image: rasa/duckling:0.1.6.5
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
     <<: *generic
@@ -405,15 +433,17 @@ services:
       - ADMIN_EMAIL=${ROCKETCHAT_ADMIN_MAIL}
       - MONGO_URL=mongodb://mongodb:27017/rocketchat
       - MONGO_OPLOG_URL=mongodb://mongodb:27017/local
-      - MAIL_URL=smtp://mailfarm-app.csi.it
+      - MAIL_URL=smtp://${WEBLATE_EMAIL_HOST}
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
       - "traefik.enable=true"
       - "traefik.http.routers.rocketchat.rule=Host(`${ROCKETCHAT_HOSTNAME}`)"
       - "traefik.http.routers.rocketchat.entrypoints=web"
       - "traefik.http.routers.rocketchat.service=rocketchat"
-      - "traefik.http.routers.rocketchat.middlewares=redirect"
-      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.rocketchat.middlewares=redirect1"
+      - "traefik.http.middlewares.redirect1.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect1.headers.customrequestheaders.X-Forwarded-Proto=http"
+      - "traefik.http.middlewares.redirect1.redirectScheme.permanent=true"
       - "traefik.http.services.rocketchat.loadbalancer.server.port=3000"
       - "traefik.http.routers.rocketchat2.rule=Host(`${ROCKETCHAT_HOSTNAME}`)"
       - "traefik.http.routers.rocketchat2.entrypoints=web-secure"
@@ -421,6 +451,8 @@ services:
       - "traefik.http.routers.rocketchat2.tls.certresolver=myresolver"
       - "traefik.http.routers.rocketchat2.service=rocketchat2"
       - "traefik.http.services.rocketchat2.loadbalancer.server.port=3000"
+      - "traefik.http.services.rocketchat2.loadbalancer.sticky=true"
+      - "traefik.http.services.rocketchat2.loadbalancer.passhostheader=true"
     <<: *generic
 
   mongodb:
@@ -633,30 +665,6 @@ volumes:
     driver_opts:
       type: none
       device: $PWD/rasa
-      o: bind
-  metabase_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: $PWD/metabase
-      o: bind
-  tusd_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: $PWD/tusd_data
-      o: bind
-  tusd_hooks:
-    driver: local
-    driver_opts:
-      type: none
-      device: $PWD/tusd_config/hooks
-      o: bind
-  fail2ban_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: $PWD/fail2ban
       o: bind
   data_site_migrant:
     driver: local
