@@ -69,7 +69,6 @@ services:
           nocopy: true
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
-      - "com.centurylinklabs.watchtower.enable=false"
       - "traefik.enable=true"
       - "traefik.http.routers.nginx.rule=Host(`${MIGRANTS_HOSTNAME}`)"
       - "traefik.http.routers.nginx.entrypoints=web"
