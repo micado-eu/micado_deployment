@@ -25,10 +25,10 @@ then
 
     echo -e "\033[0;34m\nPreparing certificates for the Identity Server\e[0m "
     cp templates/*.jks deployment/
-    keytool -genkey -alias micado -keyalg RSA -keysize 2048 -keystore deployment/wso2carbon.jks -storepass wso2carbon -keypass wso2carbon -keyalg RSA -validity 3650 -dname "CN=$IDENTITY_HOSTNAME, OU=micado, O=Micado, L=TO, ST=TO, C=EU"
-    keytool -list -v -storepass wso2carbon -keystore deployment/wso2carbon.jks|grep "micado"
-    keytool -export -alias micado -storepass wso2carbon -keystore deployment/wso2carbon.jks -file deployment/micado.pem
-    keytool -import -alias micado -storepass wso2carbon -file deployment/micado.pem -keystore deployment/client-truststore.jks -noprompt
+    docker run -v "$PWD"/deployment:/deployment --rm jboss/base-jdk:11 keytool -genkey -alias micado -keyalg RSA -keysize 2048 -keystore /deployment/wso2carbon.jks -storepass wso2carbon -keypass wso2carbon -keyalg RSA -validity 3650 -dname "CN=$IDENTITY_HOSTNAME, OU=micado, O=Micado, L=TO, ST=TO, C=EU"
+    docker run -v "$PWD"/deployment:/deployment --rm jboss/base-jdk:11 keytool -list -v -storepass wso2carbon -keystore /deployment/wso2carbon.jks|grep "micado"
+    docker run -v "$PWD"/deployment:/deployment --rm jboss/base-jdk:11 keytool -export -alias micado -storepass wso2carbon -keystore /deployment/wso2carbon.jks -file /deployment/micado.pem
+    docker run -v "$PWD"/deployment:/deployment --rm jboss/base-jdk:11 keytool -import -alias micado -storepass wso2carbon -file /deployment/micado.pem -keystore /deployment/client-truststore.jks -noprompt
     sed -ir "s/^[#]*\s*WSO2_IDENTITY_KEYSTORE_PWD=.*/WSO2_IDENTITY_KEYSTORE_PWD=wso2carbon/" prod.env
     sed -ir "s/^[#]*\s*WSO2_IDENTITY_TRUSTSTORE_PWD=.*/WSO2_IDENTITY_TRUSTSTORE_PWD=wso2carbon/" prod.env
     sed -ir "s/^[#]*\s*WSO2_IDENTITY_CERTIFICATE_PWD=.*/WSO2_IDENTITY_CERTIFICATE_PWD=wso2carbon/" prod.env
