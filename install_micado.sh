@@ -14,7 +14,7 @@ then
     echo -e "\033[0;34m\nI'm starting the deployment\e[0m "
 
     echo -e "\033[0;34m\nCreating folders\e[0m "
-    mkdir -p db_data weblate_data redis_data identity-server_data/deployment identity-server_data/tenants shared_images
+    mkdir -p db_data weblate_data redis_data identity-server_data/deployment identity-server_data/tenants shared_images identity-server/repository/resources/security/
     chmod 777 shared_images
     touch traefik/traefik-acme/acme.json
     chmod 600 traefik/traefik-acme/acme.json
@@ -35,7 +35,7 @@ then
     sed -ir "s/^[#]*\s*WSO2_IDENTITY_CERTIFICATE_ALIAS=.*/WSO2_IDENTITY_CERTIFICATE_ALIAS=micado/" prod.env
     set -a; source prod.env; set +a;
 
-    cp deployment/*.jks identity-server/repository/resources/security/
+    cp "$PWD"/deployment/*.jks "$PWD"/identity-server/repository/resources/security/
 
     echo -e "\033[0;34m\nPreparing service provider files\e[0m "
     export NEW_MIGRANT_UUID=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
@@ -120,7 +120,7 @@ then
     sudo sed  -i "/INSTALL_LOCK.*=.*/c\INSTALL_LOCK=true" git_data/gitea/conf/app.ini
     (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d git)
     sleep 15
-    docker-compose exec git curl -X POST "http://$GITEA_USERNAME:$GITEA_PASSWORD@git:3000/api/v1/user/repos" -H "Content-Type: application/json" -d '{"name": "$GITEA_REPO", "auto_init": true }'
+    docker-compose exec git curl -X POST "http://$GITEA_USERNAME:$GITEA_PASSWORD@git:3000/api/v1/user/repos" -H "Content-Type: application/json" -d "{\"name\": \"$GITEA_REPO\", \"auto_init\": true }"
     docker-compose exec git curl -X POST "http://$GITEA_USERNAME:$GITEA_PASSWORD@git:3000/api/v1/repos/$GITEA_USERNAME/$GITEA_REPO/hooks" -H "Content-Type: application/json" -d '{"active": true,"branch_filter": "*","config": {"content_type": "json","url": "http://weblate/hooks/gitea/","http_method": "post"},"events": ["push"],"type": "gitea"}'
 
     (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d weblate)
@@ -172,9 +172,9 @@ then
     sleep 15
     (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d duckling_server)
     sleep 15
-    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d chatbot)
+    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d chatbot_en)
     sleep 25
-    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml logs chatbot)
+    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml logs chatbot_en)
     echo -e "\033[0;36m\nStarted Chatbot\e[0m "
 
     # ROCKETCHAT
