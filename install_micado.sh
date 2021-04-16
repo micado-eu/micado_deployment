@@ -190,9 +190,9 @@ then
     ## Auth
     bot_name=rasa_bot
     rktauth=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/login -H 'Content-Type: application/json' -d "{\"username\": \"$ROCKETCHAT_ADMIN\", \"password\": \"$ROCKETCHAT_ADMIN_PWD\"}"`
-    echo "$rktauth"| jq '.'
-    rktuid=`echo "$rktauth"| jq -r '.data.userId'`
-    rkttk=`echo "$rktauth"| jq -r '.data.authToken'`
+    echo "$rktauth"| ./jq '.'
+    rktuid=`echo "$rktauth"| ./jq -r '.data.userId'`
+    rkttk=`echo "$rktauth"| ./jq -r '.data.authToken'`
     echo "\n"
     echo "$rktuid"
     echo "\n"
@@ -201,11 +201,11 @@ then
     echo "create user"
     rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/users.create -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{\"name\": \"$BOT_NAME\",\"email\": \"luca.gioppo@csi.it\",\"password\": \"$RASA_BOT_PASSWORD\",\"username\": \"$BOT_NAME\",\"requirePasswordChange\": false,\"sendWelcomeEmail\": false, \"roles\": [\"bot\"]}"`
     echo "$rktres"
-    echo "$rktres" | jq '.'
+    echo "$rktres" | ./jq '.'
     ##CREATE LIVE CHAT AGENT
     rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/livechat/users/agent -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{\"username\": \"$BOT_NAME\"}"`
     echo "$rktres"
-    agent_user_id=`echo "$rktres"| jq -r '.user._id'`
+    agent_user_id=`echo "$rktres"| ./jq -r '.user._id'`
     echo "$agent_user_id"
 
     sha256password=$(echo -n "$ROCKETCHAT_ADMIN_PWD" | sha256sum | awk '{print $1}')
@@ -213,17 +213,17 @@ then
     ##CONFIGURE LIVECHAT and SETTINGS
     rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/settings/Livechat_enabled -H "x-2fa-method:password" -H "x-2fa-code: $sha256password" -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{\"value\": true}"`
     echo "$rktres"
-    echo "$rktres" | jq '.'
+    echo "$rktres" | ./jq '.'
     rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/settings/Livechat_registration_form -H "x-2fa-method:password" -H "x-2fa-code: $sha256password" -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{\"value\": false}"`
-    echo "$rktres" | jq '.'
+    echo "$rktres" | ./jq '.'
     rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/settings/Livechat_title -H "x-2fa-method:password" -H "x-2fa-code: $sha256password" -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{\"value\": \"Micado bot\"}"`
-    echo "$rktres" | jq '.'
+    echo "$rktres" | ./jq '.'
     ##CREATE DEPARTMENT
     rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/livechat/department -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{\"department\":{\"enabled\": true,\"showOnRegistration\": true,\"showOnOfflineForm\":false,\"email\": \"email@email.com\",\"name\": \"micado\",\"description\": \"default department\"},\"agents\": [{\"agentId\": \"$agent_user_id\",\"username\": \"$bot_name\",\"count\": 0,\"order\": 0}]}"`
-    echo "$rktres" | jq '.'
+    echo "$rktres" | ./jq '.'
     ##CREATE WEBHOOK
     rktres=`curl -X POST https://$ROCKETCHAT_HOSTNAME/api/v1/integrations.create -H 'Content-Type: application/json' -H "X-Auth-Token: $rkttk" -H "X-User-Id: $rktuid" -d "{ \"type\": \"webhook-outgoing\", \"name\": \"Rasa\", \"event\": \"sendMessage\", \"enabled\": true, \"username\": \"$bot_name\", \"urls\": [\"http://chatbot:5005/webhooks/rocketchat/webhook\"], \"scriptEnabled\": true, \"channel\":\"all_direct_messages\" }"`
-    echo "$rktres" | jq '.'
+    echo "$rktres" | ./jq '.'
 
     read -n 1 -p $'\e[1;32m Now you have to properly configure the Identity Manager and the API manager and write correctly the env vars; when ready press (Y/n)\e[0m ' continue_install
     if [[ $continue_install =~ ^(y|Y|)$ ]]
