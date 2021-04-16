@@ -268,8 +268,8 @@ services:
     networks:
       micado_net:
         aliases:
-          - api.micadoproject.eu
-          - gateway.micadoproject.eu
+          - ${API_HOSTNAME}
+          - ${GATEWAY_HOSTNAME}
   # IDENTITY
   identity_server:
     image: wso2/wso2is-km:5.9.0
@@ -313,7 +313,7 @@ services:
     networks:
       micado_net:
         aliases:
-          - identity.micadoproject.eu
+          - ${IDENTITY_HOSTNAME}
 
   backend:
     image: micadoproject/backend
