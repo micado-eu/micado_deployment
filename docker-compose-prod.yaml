@@ -199,7 +199,7 @@ services:
     env_file:
       - prod.env
     environment:
-      PGADMIN_DEFAULT_EMAIL: micado@csi.it
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
       - traefik.enable=true
