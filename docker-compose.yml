@@ -31,6 +31,7 @@ services:
       TZ: Europe/Rome
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
+      #      - "traefik.http.middlewares.micado_redirect.redirectscheme.scheme=https"
       - "gioppo.recreate=1"
     ports:
       - target: 80
@@ -40,8 +41,8 @@ services:
       - "443:443" # The HTTPS port
     volumes:
       - ./traefik/traefik.toml:/etc/traefik/traefik.toml
-      #      - ./traefik/dynamic.toml:/etc/traefik/dynamic.toml
-      #      - ./traefik/certs:/etc/certs # SSL Development certificates
+      - ./traefik/dynamic.toml:/etc/traefik/dynamic.toml
+      - ./traefik/certs:/etc/certs # SSL Development certificates
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - $PWD/fail2ban_logs:/var/log
       - ./traefik/traefik-acme/acme.json:/acme.json
@@ -93,8 +94,8 @@ services:
       - "traefik.http.routers.nginx.rule=Host(`${MIGRANTS_HOSTNAME}`)"
       - "traefik.http.routers.nginx.entrypoints=web"
       - "traefik.http.routers.nginx.service=nginx"
-      - "traefik.http.routers.nginx.middlewares=redirect"
-#      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.nginx.middlewares=redirect@file"
+      #      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
       - "traefik.http.services.nginx.loadbalancer.server.port=80"
       - "traefik.http.routers.nginx2.rule=Host(`${MIGRANTS_HOSTNAME}`)"
       - "traefik.http.routers.nginx2.entrypoints=web-secure"
@@ -105,8 +106,8 @@ services:
       - "traefik.http.routers.nginx3.rule=Host(`${PA_HOSTNAME}`)"
       - "traefik.http.routers.nginx3.entrypoints=web"
       - "traefik.http.routers.nginx3.service=nginx3"
-      - "traefik.http.routers.nginx3.middlewares=redirect_pa"
-      - "traefik.http.middlewares.redirect_pa.redirectscheme.scheme=https"
+      - "traefik.http.routers.nginx3.middlewares=redirect@file"
+      #- "traefik.http.middlewares.redirect_pa.redirectscheme.scheme=https"
       - "traefik.http.services.nginx3.loadbalancer.server.port=80"
       - "traefik.http.routers.nginx4.rule=Host(`${PA_HOSTNAME}`)"
       - "traefik.http.routers.nginx4.entrypoints=web-secure"
@@ -117,8 +118,8 @@ services:
       - "traefik.http.routers.nginx5.rule=Host(`${NGO_HOSTNAME}`)"
       - "traefik.http.routers.nginx5.entrypoints=web"
       - "traefik.http.routers.nginx5.service=nginx5"
-      - "traefik.http.routers.nginx5.middlewares=redirect_ngo"
-      - "traefik.http.middlewares.redirect_ngo.redirectscheme.scheme=https"
+      - "traefik.http.routers.nginx5.middlewares=redirect@file"
+      #      - "traefik.http.middlewares.redirect_ngo.redirectscheme.scheme=https"
       - "traefik.http.services.nginx5.loadbalancer.server.port=80"
       - "traefik.http.routers.nginx6.rule=Host(`${NGO_HOSTNAME}`)"
       - "traefik.http.routers.nginx6.entrypoints=web-secure"
@@ -299,10 +300,10 @@ services:
       #      - "traefik.tcp.services.api_gateway_service.loadbalancer.server.port=9443"
       - "traefik.http.routers.api_gateway.rule=Host(`${GATEWAY_HOSTNAME}`)"
       - "traefik.http.routers.api_gateway.entrypoints=web"
-      - "traefik.http.routers.api_gateway.middlewares=micado_redirect,limit"
+      - "traefik.http.routers.api_gateway.middlewares=redirect@file,limit@file"
       - "traefik.http.routers.api_gateway.service=api_gateway_service"
       - "traefik.http.services.api_gateway_service.loadbalancer.server.port=9443"
-#      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
+      #      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.api_gateway_https.rule=Host(`${GATEWAY_HOSTNAME}`)"
       - "traefik.http.routers.api_gateway_https.entrypoints=web-secure"
       - "traefik.http.routers.api_gateway_https.tls=true"
@@ -313,7 +314,7 @@ services:
       #      - traefik.http.services.api_gateway.loadbalancer.server.port=9443
       - "traefik.http.routers.api_gateway_api.rule=Host(`${API_HOSTNAME}`)"
       - "traefik.http.routers.api_gateway_api.entrypoints=web"
-      - "traefik.http.routers.api_gateway_api.middlewares=micado_redirect,limit"
+      - "traefik.http.routers.api_gateway_api.middlewares=redirect@file,limit@file"
       - "traefik.http.routers.api_gateway_api.service=api_gateway_api_service"
       - "traefik.http.services.api_gateway_api_service.loadbalancer.server.port=8243"
       #      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
@@ -324,10 +325,10 @@ services:
       - "traefik.http.routers.api_gateway_api_https.service=api_gateway_api_service_https"
       - "traefik.http.services.api_gateway_api_service_https.loadbalancer.server.port=8243"
       - "traefik.http.services.api_gateway_api_service_https.loadbalancer.server.scheme=https"
-#      - "traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=10737418240"
-#      - "traefik.http.middlewares.limit.buffering.memRequestBodyBytes=200000000"
-#      - "traefik.http.middlewares.limit.buffering.maxResponseBodyBytes=10737418240"
-#      - "traefik.http.middlewares.limit.buffering.memResponseBodyBytes=200000000"
+    #      - "traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=10737418240"
+    #      - "traefik.http.middlewares.limit.buffering.memRequestBodyBytes=200000000"
+    #      - "traefik.http.middlewares.limit.buffering.maxResponseBodyBytes=10737418240"
+    #      - "traefik.http.middlewares.limit.buffering.memResponseBodyBytes=200000000"
     #      - "traefik.two.frontend.rule=Host:apis.micado_dev.eu:"
     #      - "traefik.two.port=8243"
     #      - "traefik.two.docker.network=micado_net"
@@ -383,10 +384,10 @@ services:
       #      - "traefik.tcp.routers.identity_server.entrypoints=web-secure"
       - "traefik.http.routers.identity_server.rule=Host(`${IDENTITY_HOSTNAME}`)"
       - "traefik.http.routers.identity_server.entrypoints=web"
-      - "traefik.http.routers.identity_server.middlewares=redirect"
+      - "traefik.http.routers.identity_server.middlewares=redirect@file"
       - "traefik.http.routers.identity_server.service=identity_server_service"
       - "traefik.http.services.identity_server_service.loadbalancer.server.port=9443"
-      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
+      #      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.identity_server_https.rule=Host(`${IDENTITY_HOSTNAME}`)"
       - "traefik.http.routers.identity_server_https.entrypoints=web-secure"
       - "traefik.http.routers.identity_server_https.tls=true"
@@ -421,10 +422,7 @@ services:
       MICADO_TRANSLATIONS_DIR: ${MICADO_TRANSLATIONS_DIR}
       COUNTLY_MIGRANTS_APP_ID: ${COUNTLY_MIGRANTS_APP_ID}
       COUNTLY_MIGRANTS_API_KEY: ${COUNTLY_MIGRANTS_API_KEY}
-      POSTGRES_DB: ${POSTGRES_DB}
-      MICADO_DB_PWD: ${MICADO_DB_PWD}
-      MICADO_DB_USER: ${MICADO_DB_USER}
-      MICADO_DB_SCHEMA: ${MICADO_DB_SCHEMA}
+      POSTGRES_DB: ${POSTGRES_DB}Of course, if you can confirm that it was not a bug, we'll be happy to know it too smile
       WSO2_IDENTITY_ADMIN_PWD: ${WSO2_IDENTITY_ADMIN_PWD}
       WSO2_IDENTITY_ADMIN_USER: ${WSO2_IDENTITY_ADMIN_USER}
       MICADO_ENV: ${MICADO_ENV}
@@ -701,7 +699,7 @@ services:
       - "traefik.http.routers.weblate.rule=Host(`${TRANSLATION_HOSTNAME}`)"
       - "traefik.http.routers.weblate.entrypoints=web"
       #      - "traefik.http.routers.weblate.service=weblate"
-      - "traefik.http.routers.weblate.middlewares=redirect"
+      - "traefik.http.routers.weblate.middlewares=redirect@file"
       #      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
       #      - "traefik.http.services.weblate.loadbalancer.server.port=8080"
       - "traefik.http.routers.weblate2.rule=Host(`${TRANSLATION_HOSTNAME}`)"

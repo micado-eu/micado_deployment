@@ -14,13 +14,6 @@
     [entryPoints.web-secure.proxyProtocol]
       insecure = true
 
-[http.middlewares]
-  [http.middlewares.limit.buffering]
-    maxRequestBodyBytes = 10000000
-  [http.middlewares.micado_redirect.redirectScheme]
-    scheme = "https"
-    permanent = true
-
 [api]
   insecure = true
 
@@ -29,9 +22,9 @@
     endpoint = "unix:///var/run/docker.sock"
     exposedByDefault = false
 
-#  [providers.file]
-#    filename = "/etc/traefik/dynamic.toml"
-#    watch = true
+  [providers.file]
+    filename = "/etc/traefik/dynamic.toml"
+    watch = true
 
 #[log]
 #  level = "DEBUG"

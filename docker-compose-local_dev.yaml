@@ -46,14 +46,13 @@ services:
     ports:
       - 8081:8081
 
-  chatbot:
+  chatbot_en:
     ports:
       - 5005:5005
 
   rocketchat:
     ports:
       - 3000:3000
-
 
   portainer:
     ports:

@@ -1,5 +1,13 @@
-[tls]
+#[tls]
 
-  [[tls.certificates]]
-    certFile = "/etc/certs/micadoproject.eu+1.pem"
-    keyFile = "/etc/certs/micadoproject.eu+1-key.pem"
+#  [[tls.certificates]]
+#    certFile = "/etc/certs/micadoproject.eu+1.pem"
+#    keyFile = "/etc/certs/micadoproject.eu+1-key.pem"
+
+[http.middlewares]
+  [http.middlewares.limit.buffering]
+    maxRequestBodyBytes = 10000000
+    memRequestBodyBytes = 2000000
+  [http.middlewares.redirect.redirectScheme]
+    scheme = "https"
+    permanent = true
