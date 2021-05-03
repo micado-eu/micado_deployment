@@ -264,6 +264,10 @@ services:
       - "traefik.http.routers.api_gateway_api_https.service=api_gateway_api_service_https"
       - "traefik.http.services.api_gateway_api_service_https.loadbalancer.server.port=8243"
       - "traefik.http.services.api_gateway_api_service_https.loadbalancer.server.scheme=https"
+      - "traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=10737418240"
+      - "traefik.http.middlewares.limit.buffering.memRequestBodyBytes=200000000"
+      - "traefik.http.middlewares.limit.buffering.maxResponseBodyBytes=10737418240"
+      - "traefik.http.middlewares.limit.buffering.memResponseBodyBytes=200000000"
     <<: *generic
     networks:
       micado_net:
