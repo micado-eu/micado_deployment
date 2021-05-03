@@ -344,8 +344,8 @@ services:
     networks:
       micado_net:
         aliases:
-          - api.micadoproject.eu
-          - gateway.micadoproject.eu
+          - ${API_HOSTNAME}
+          - ${GATEWAY_HOSTNAME}
   # IDENTITY
   identity_server:
     image: wso2/wso2is-km:5.9.0
@@ -406,7 +406,7 @@ services:
     networks:
       micado_net:
         aliases:
-          - identity.micadoproject.eu
+          - ${IDENTITY_HOSTNAME}
 
   backend:
     image: micadoproject/backend
@@ -423,6 +423,9 @@ services:
       COUNTLY_MIGRANTS_APP_ID: ${COUNTLY_MIGRANTS_APP_ID}
       COUNTLY_MIGRANTS_API_KEY: ${COUNTLY_MIGRANTS_API_KEY}
       POSTGRES_DB: ${POSTGRES_DB}
+      MICADO_DB_PWD: ${MICADO_DB_PWD}
+      MICADO_DB_USER: ${MICADO_DB_USER}
+      MICADO_DB_SCHEMA: ${MICADO_DB_SCHEMA}
       WSO2_IDENTITY_ADMIN_PWD: ${WSO2_IDENTITY_ADMIN_PWD}
       WSO2_IDENTITY_ADMIN_USER: ${WSO2_IDENTITY_ADMIN_USER}
       MICADO_ENV: ${MICADO_ENV}

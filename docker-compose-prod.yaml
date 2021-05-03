@@ -25,6 +25,7 @@ services:
       - "443:443" # The HTTPS port
     volumes:
       - ./traefik/traefik.toml:/etc/traefik/traefik.toml
+      - ./traefik/dynamic.toml:/etc/traefik/dynamic.toml
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - $PWD/fail2ban_logs:/var/log
       - ./traefik/traefik-acme/acme.json:/acme.json
@@ -74,8 +75,7 @@ services:
       - "traefik.http.routers.nginx.rule=Host(`${MIGRANTS_HOSTNAME}`)"
       - "traefik.http.routers.nginx.entrypoints=web"
       - "traefik.http.routers.nginx.service=nginx"
-      - "traefik.http.routers.nginx.middlewares=redirect"
-      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.nginx.middlewares=redirect@file"
       - "traefik.http.services.nginx.loadbalancer.server.port=80"
       - "traefik.http.routers.nginx2.rule=Host(`${MIGRANTS_HOSTNAME}`)"
       - "traefik.http.routers.nginx2.entrypoints=web-secure"
@@ -86,8 +86,7 @@ services:
       - "traefik.http.routers.nginx3.rule=Host(`${PA_HOSTNAME}`)"
       - "traefik.http.routers.nginx3.entrypoints=web"
       - "traefik.http.routers.nginx3.service=nginx3"
-      - "traefik.http.routers.nginx3.middlewares=redirect_pa"
-      - "traefik.http.middlewares.redirect_pa.redirectscheme.scheme=https"
+      - "traefik.http.routers.nginx3.middlewares=redirect@file"
       - "traefik.http.services.nginx3.loadbalancer.server.port=80"
       - "traefik.http.routers.nginx4.rule=Host(`${PA_HOSTNAME}`)"
       - "traefik.http.routers.nginx4.entrypoints=web-secure"
@@ -98,8 +97,7 @@ services:
       - "traefik.http.routers.nginx5.rule=Host(`${NGO_HOSTNAME}`)"
       - "traefik.http.routers.nginx5.entrypoints=web"
       - "traefik.http.routers.nginx5.service=nginx5"
-      - "traefik.http.routers.nginx5.middlewares=redirect_ngo"
-      - "traefik.http.middlewares.redirect_ngo.redirectscheme.scheme=https"
+      - "traefik.http.routers.nginx5.middlewares=redirect@file"
       - "traefik.http.services.nginx5.loadbalancer.server.port=80"
       - "traefik.http.routers.nginx6.rule=Host(`${NGO_HOSTNAME}`)"
       - "traefik.http.routers.nginx6.entrypoints=web-secure"
@@ -241,10 +239,9 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.api_gateway.rule=Host(`${GATEWAY_HOSTNAME}`)"
       - "traefik.http.routers.api_gateway.entrypoints=web"
-      - "traefik.http.routers.api_gateway.middlewares=redirect"
+      - "traefik.http.routers.api_gateway.middlewares=redirect@file,limit@file"
       - "traefik.http.routers.api_gateway.service=api_gateway_service"
       - "traefik.http.services.api_gateway_service.loadbalancer.server.port=9443"
-      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.api_gateway_https.rule=Host(`${GATEWAY_HOSTNAME}`)"
       - "traefik.http.routers.api_gateway_https.entrypoints=web-secure"
       - "traefik.http.routers.api_gateway_https.tls=true"
@@ -254,7 +251,7 @@ services:
       - "traefik.http.services.api_gateway_service_https.loadbalancer.server.scheme=https"
       - "traefik.http.routers.api_gateway_api.rule=Host(`${API_HOSTNAME}`)"
       - "traefik.http.routers.api_gateway_api.entrypoints=web"
-      - "traefik.http.routers.api_gateway_api.middlewares=redirect"
+      - "traefik.http.routers.api_gateway_api.middlewares=redirect@file,limit@file"
       - "traefik.http.routers.api_gateway_api.service=api_gateway_api_service"
       - "traefik.http.services.api_gateway_api_service.loadbalancer.server.port=8243"
       - "traefik.http.routers.api_gateway_api_https.rule=Host(`${API_HOSTNAME}`)"
@@ -264,10 +261,6 @@ services:
       - "traefik.http.routers.api_gateway_api_https.service=api_gateway_api_service_https"
       - "traefik.http.services.api_gateway_api_service_https.loadbalancer.server.port=8243"
       - "traefik.http.services.api_gateway_api_service_https.loadbalancer.server.scheme=https"
-      - "traefik.http.middlewares.limit.buffering.maxRequestBodyBytes=10737418240"
-      - "traefik.http.middlewares.limit.buffering.memRequestBodyBytes=200000000"
-      - "traefik.http.middlewares.limit.buffering.maxResponseBodyBytes=10737418240"
-      - "traefik.http.middlewares.limit.buffering.memResponseBodyBytes=200000000"
     <<: *generic
     networks:
       micado_net:
@@ -298,10 +291,9 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.identity_server.rule=Host(`${IDENTITY_HOSTNAME}`)"
       - "traefik.http.routers.identity_server.entrypoints=web"
-      - "traefik.http.routers.identity_server.middlewares=redirect"
+      - "traefik.http.routers.identity_server.middlewares=redirect@file"
       - "traefik.http.routers.identity_server.service=identity_server_service"
       - "traefik.http.services.identity_server_service.loadbalancer.server.port=9443"
-      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
       - "traefik.http.routers.identity_server_https.rule=Host(`${IDENTITY_HOSTNAME}`)"
       - "traefik.http.routers.identity_server_https.entrypoints=web-secure"
       - "traefik.http.routers.identity_server_https.tls=true"
@@ -444,10 +436,8 @@ services:
       - "traefik.http.routers.rocketchat.rule=Host(`${ROCKETCHAT_HOSTNAME}`)"
       - "traefik.http.routers.rocketchat.entrypoints=web"
       - "traefik.http.routers.rocketchat.service=rocketchat"
-      - "traefik.http.routers.rocketchat.middlewares=redirect1"
-      - "traefik.http.middlewares.redirect1.redirectscheme.scheme=https"
+      - "traefik.http.routers.rocketchat.middlewares=redirect1,redirect@file"
       - "traefik.http.middlewares.redirect1.headers.customrequestheaders.X-Forwarded-Proto=http"
-      - "traefik.http.middlewares.redirect1.redirectScheme.permanent=true"
       - "traefik.http.services.rocketchat.loadbalancer.server.port=3000"
       - "traefik.http.routers.rocketchat2.rule=Host(`${ROCKETCHAT_HOSTNAME}`)"
       - "traefik.http.routers.rocketchat2.entrypoints=web-secure"
@@ -562,8 +552,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=false"
       - "traefik.http.routers.weblate.rule=Host(`${TRANSLATION_HOSTNAME}`)"
       - "traefik.http.routers.weblate.entrypoints=web"
-      - "traefik.http.routers.weblate.middlewares=redirect"
-      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.weblate.middlewares=redirect@file"
       - "traefik.http.routers.weblate2.rule=Host(`${TRANSLATION_HOSTNAME}`)"
       - "traefik.http.routers.weblate2.entrypoints=web-secure"
       - "traefik.http.routers.weblate2.tls=true"
@@ -588,10 +577,6 @@ services:
     env_file:
       - prod.env
     environment:
-      #      DB_TYPE: postgres
-      #      DB_HOST: micado_db:5432
-      #      DB_NAME: ${POSTGRES_DB}
-      #      DB_USER: ${GITEA_DB_USER}
       GIT_HOSTNAME: ${GIT_HOSTNAME}
       DB_TYPE: postgres
       DB_HOST: micado_db:${POSTGRES_PORT}
@@ -618,6 +603,23 @@ services:
       - /etc/localtime:/etc/localtime:ro
 
   # Environment Management
+
+  watchtower:
+    image: containrrr/watchtower:1.1.6
+    environment:
+      TZ: Europe/Rome
+    #    environment:
+    #      - http_proxy=http://10.138.149.7:3128
+    #      - https_proxy=http://10.138.149.7:3128
+    #      - HTTP_PROXY=http://10.138.149.7:3128
+    #      - HTTPS_PROXY=http://10.138.149.7:3128
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json
+    command: --interval 1600 --debug --cleanup --include-stopped --revive-stopped
+    <<: *generic
 
   portainer:
     image: portainer/portainer-ce:latest
