@@ -1,7 +1,8 @@
 <%  
 String relyingParty = request.getParameter("relyingParty");
+String migrantHostname = System.getProperty(“MIGRANTS_HOSTNAME”)
 
-if (relyingParty.equals("migrants.micadoproject.eu")) {
+if (relyingParty.equals(migrantHostname)) {
     RequestDispatcher dispatcher = request.getRequestDispatcher("migrants_micadoproject.jsp");
     dispatcher.forward(request, response);
 } else {

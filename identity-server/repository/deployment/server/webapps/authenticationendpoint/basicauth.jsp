@@ -257,7 +257,7 @@
                 if (StringUtils.isBlank(identityMgtEndpointContext)) {
                     identityMgtEndpointContext = getServerURL("/accountrecoveryendpoint", true, true);
                 }
-identityMgtEndpointContext = "https://identity.micadoproject.eu/accountrecoveryendpoint";
+identityMgtEndpointContext = "https://"+serverName+"/accountrecoveryendpoint";
                 if (isRecoveryEPAvailable) {
         %>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">

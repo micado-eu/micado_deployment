@@ -203,7 +203,7 @@
     <% } else { %>
             <jsp:directive.include file="includes/header.jsp"/>
     <% } %>
-<div>DEFAULT</div>
+<div>D</div>
     <!-- page content -->
     <div class="container-fluid body-wrapper">
 
