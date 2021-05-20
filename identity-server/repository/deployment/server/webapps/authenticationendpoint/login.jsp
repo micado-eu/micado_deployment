@@ -1,6 +1,6 @@
 <%  
 String relyingParty = request.getParameter("relyingParty");
-String migrantHostname = System.getenv(“MIGRANTS_HOSTNAME”)
+String migrantHostname = System.getenv("MIGRANTS_HOSTNAME")
 
 if (relyingParty.equals(migrantHostname)) {
     RequestDispatcher dispatcher = request.getRequestDispatcher("migrants_micadoproject.jsp");
