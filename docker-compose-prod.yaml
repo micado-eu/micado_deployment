@@ -355,7 +355,7 @@ services:
     <<: *generic
 
   chatbot_en:
-    image: rasa/rasa:2.3.1-full
+    image: rasa/rasa:2.5.1-full
     user: 1000:1000
     container_name: chatbot_en
     env_file:
