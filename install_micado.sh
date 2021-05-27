@@ -121,7 +121,7 @@ then
     (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d git)
     sleep 15
     (set -a; source prod.env; source .env; set +a; docker-compose -f docker-compose-prod.yaml exec git curl -X POST "http://$GITEA_USERNAME:$GITEA_PASSWORD@git:3000/api/v1/user/repos" -H "Content-Type: application/json" -d "{\"name\": \"$GITEA_REPO\", \"auto_init\": true }")
-    (set -a; source prod.env; source .env; set +a; docker-compose -f docker-compose-prod.yaml exec git curl -X POST "http://$GITEA_USERNAME:$GITEA_PASSWORD@git:3000/api/v1/repos/$GITEA_USERNAME/$GITEA_REPO/hooks" -H "Content-Type: application/json" -d '{"active": true,"branch_filter": "*","config": {"content_type": "json","url": "http://weblate/hooks/gitea/","http_method": "post"},"events": ["push"],"type": "gitea"}')
+    (set -a; source prod.env; source .env; set +a; docker-compose -f docker-compose-prod.yaml exec git curl -X POST "http://$GITEA_USERNAME:$GITEA_PASSWORD@git:3000/api/v1/repos/$GITEA_USERNAME/$GITEA_REPO/hooks" -H "Content-Type: application/json" -d '{"active": true,"branch_filter": "*","config": {"content_type": "json","url": "http://weblate:8080/hooks/gitea/","http_method": "post"},"events": ["push"],"type": "gitea"}')
 
     (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d weblate)
     sleep 25
