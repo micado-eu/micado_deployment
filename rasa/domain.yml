@@ -1,88 +1,78 @@
+session_config:
+  session_expiration_time: 3
+  carry_over_slots_to_new_session: true
 intents:
   - chitchat:
       use_entities: []
-  - request_document:
-      use_entities:
-        - document
+  - request_document
   - affirm
   - deny
   - stop
   - thankyou
   - greet
   - bot_challenge
-
 entities:
   - document
-
 slots:
   document:
-    type: unfeaturized
+    type: text
     auto_fill: false
+    influence_conversation: false
   requested_slot:
     type: unfeaturized
-
-#actions:
-#- utter_greet
-#- utter_cheer_up
-#- utter_did_that_help
-#- utter_happy
-#- utter_goodbye
-
-
+    influence_conversation: false
 responses:
   utter_ask_preferences:
-    - text: "please provide additional preferences"
+    - text: please provide additional preferences
   utter_ask_feedback:
-    - text: "please give your feedback on your experience so far"
+    - text: please give your feedback on your experience so far
   utter_submit:
-    - text: "All done!"
+    - text: All done!
   utter_ask_document_form:
-    - text: "You need to tell me what document you need"
+    - text: You need to tell me what document you need
   utter_ask_document:
-    - text: "what document do you need?"
-  utter_slots_values_document:
-    - text: "you need to follow the process for the document:\n
-             - document: {document}"
+    - text: what document do you need?
+  utter_slots_values:
+    - text: "you need to follow the process for the document:\n - document: {document}"
   utter_noworries:
-    - text: "you are welcome :)"
+    - text: you are welcome :)
   utter_chitchat:
-    - text: "chitchat"
+    - text: chitchat
   utter_ask_continue:
-    - text: "do you want to continue?"
+    - text: do you want to continue?
   utter_wrong_cuisine:
-    - text: "cuisine type is not in the database, please try again"
+    - text: cuisine type is not in the database, please try again
   utter_wrong_document:
-    - text: "I cannot help you with that document"
+    - text: I cannot help you with that document
   utter_wrong_num_people:
-    - text: "number of people should be a positive integer, please try again"
+    - text: number of people should be a positive integer, please try again
   utter_wrong_outdoor_seating:
-    - text: "could not convert input to boolean value, please try again"
+    - text: could not convert input to boolean value, please try again
   utter_default:
-    - text: "sorry, I didn't understand you, please try input something else"
+    - text: sorry, I didn't understand you, please try input something else
   utter_greet:
     - custom:
         data:
-        - type: section
-          text:
-            text: "Make a bet on when the world will end:"
-            type: mrkdwn
-          accessory:
-            type: datepicker
-            initial_date: '2019-05-21'
-            placeholder:
-              type: plain_text
-              text: Select a date
+          - accessory:
+              initial_date: "2019-05-21"
+              placeholder:
+                text: Select a date
+                type: plain_text
+              type: datepicker
+            text:
+              text: "Make a bet on when the world will end:"
+              type: mrkdwn
+            type: section
+      text: salutoni
   utter_iamabot:
-    - text: "I am a bot, powered by Rasa."
+    - text: I am a bot, powered by Rasa.
   utter_restart:
-    - text: "restarted"
-
+    - text: restarted
+actions:
+  - action_submit_document_form
 forms:
   document_form:
     document:
-      - type: from_entity
-        entity: document
-
-session_config:
-  session_expiration_time: 5  # value in minutes
-  carry_over_slots_to_new_session: false
+      - entity: document
+        not_intent: chitchat
+        type: from_entity

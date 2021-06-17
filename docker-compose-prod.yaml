@@ -44,6 +44,7 @@ services:
     command: ["/run.sh"]
     volumes:
       - $PWD/nginx/run.sh:/run.sh
+      - $PWD/nginx/customcss:/usr/share/nginx/html/customcss
       - $PWD/nginx/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf.template
       - type: volume
         source: data_site_migrant
