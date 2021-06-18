@@ -14,8 +14,9 @@ then
     echo -e "\033[0;34m\nI'm starting the deployment\e[0m "
 
     echo -e "\033[0;34m\nCreating folders\e[0m "
-    mkdir -p db_data weblate_data redis_data identity-server_data/deployment identity-server_data/tenants shared_images identity-server/repository/resources/security/
+    mkdir -p translations_dir db_data weblate_data redis_data identity-server_data/deployment identity-server_data/tenants shared_images identity-server/repository/resources/security/
     chmod 777 shared_images
+    chmod 777 translations_dir
     touch traefik/traefik-acme/acme.json
     chmod 600 traefik/traefik-acme/acme.json
 
