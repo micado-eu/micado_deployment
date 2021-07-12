@@ -353,6 +353,9 @@ services:
       - type: volume
         source: shared_images
         target: /images
+      - type: volume
+        source: translations_dir
+        target: ${MICADO_TRANSLATIONS_DIR}
     <<: *generic
 
   chatbot_en:
@@ -743,6 +746,11 @@ volumes:
     driver_opts:
       type: none
       device: $PWD/shared_images
+      o: bind
+  translations_dir:
+    driver_opts:
+      type: none
+      device: $PWD/translations_dir
       o: bind
 
 networks:
