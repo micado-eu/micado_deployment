@@ -7405,6 +7405,8 @@ ALTER TABLE ONLY user_types_translation
 ALTER TABLE ONLY user_types_translation
     ADD CONSTRAINT user_types_translation_lang_fkey FOREIGN KEY (lang) REFERENCES languages(lang) ON UPDATE CASCADE ON DELETE CASCADE;
 
+ALTER TABLE ONLY micadoapp.t_settings_translation ADD CONSTRAINT t_settings_translation_id_lang_unique UNIQUE (id, lang);
+ALTER TABLE ONLY micadoapp.t_settings_translation_prod ADD CONSTRAINT t_settings_translation_prod_id_lang_unique UNIQUE (id, lang);
 
 --
 -- PostgreSQL database dump complete
