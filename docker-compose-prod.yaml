@@ -421,6 +421,10 @@ services:
       - "traefik.http.routers.backend_https.service=backend_service_https"
       - "traefik.http.services.backend_service_https.loadbalancer.server.port=3000"
       - "traefik.http.services.backend_service_https.loadbalancer.server.scheme=http"
+      - "traefik.http.middlewares.backend_https.headers.accesscontrolallowmethods=GET,POST,OPTIONS,PUT"
+      - "traefik.http.middlewares.backend_https.headers.accesscontrolalloworiginlist=*"
+      - "traefik.http.middlewares.backend_https.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.backend_https.headers.addvaryheader=true"
     <<: *generic
 
   chatbot_en:
