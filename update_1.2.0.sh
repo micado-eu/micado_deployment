@@ -31,10 +31,10 @@ echo "cleaning docker old containers"
 echo "yes" | docker container prune
 
 echo "getting updated images of frontent and backend"
-docker pull micadoproject/ngo_app_site:latest
-docker pull micadoproject/pa_app_site:latest
-docker pull micadoproject/backend:latest
-docker pull micadoproject/migrant_app_site:latest
+docker pull micadoproject/ngo_app_site:1.2
+docker pull micadoproject/pa_app_site:1.2
+docker pull micadoproject/backend:1.2
+docker pull micadoproject/migrant_app_site:1.2
 
 
 
