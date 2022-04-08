@@ -12,7 +12,7 @@ services:
   # FRONTEND
 
   balancer:
-    image: traefik:v2.1.4
+    image: traefik:v2.7
     environment:
       TZ: Europe/Rome
     labels:
