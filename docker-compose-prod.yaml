@@ -318,7 +318,7 @@ services:
     env_file:
       - .env
       - prod.env
-    command: ["-b","0.0.0.0","-Djboss.http.port=8100"]
+    command: ["-b","0.0.0.0"]
     environment:
       DB_VENDOR: POSTGRES
       DB_USER: ${KEYCLOAK_DB_USER}
@@ -330,7 +330,7 @@ services:
       DB_ADDR: micado_db
       DB_DATABASE: ${POSTGRES_DB}
       KEYCLOAK_LOGLEVEL: DEBUG
-      KEYCLOAK_HTTP_PORT: 8100
+ #     KEYCLOAK_HTTP_PORT: 8100
  #     KEYCLOAK_FRONTEND_URL: keycloak.micado.csi.it
       PROXY_ADDRESS_FORWARDING: "true"
       KEYCLOAK_HOSTNAME: ${IDENTITY_HOSTNAME}
@@ -348,13 +348,13 @@ services:
       - "traefik.http.routers.keycloak.entrypoints=web"
       - "traefik.http.routers.keycloak.middlewares=redirect@file"
       - "traefik.http.routers.keycloak.service=keycloak_service"
-      - "traefik.http.services.keycloak_service.loadbalancer.server.port=8100"
+      - "traefik.http.services.keycloak_service.loadbalancer.server.port=8080"
       - "traefik.http.routers.keycloak_https.rule=Host(`${IDENTITY_HOSTNAME}`)"
       - "traefik.http.routers.keycloak_https.entrypoints=web-secure"
       - "traefik.http.routers.keycloak_https.tls=true"
       - "traefik.http.routers.keycloak_https.tls.certresolver=myresolver"
       - "traefik.http.routers.keycloak_https.service=keycloak_service_https"
-      - "traefik.http.services.keycloak_service_https.loadbalancer.server.port=8100"
+      - "traefik.http.services.keycloak_service_https.loadbalancer.server.port=8443"
       - "traefik.http.services.keycloak_service_https.loadbalancer.server.scheme=https"
     ports:
       - 8100:8100
