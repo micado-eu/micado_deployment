@@ -406,6 +406,21 @@ services:
       - type: volume
         source: translations_dir
         target: ${MICADO_TRANSLATIONS_DIR}
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`${API_HOSTNAME}`)"
+      - "traefik.http.routers.backend.entrypoints=web"
+      - "traefik.http.routers.backend.middlewares=redirect@file,limit@file"
+      - "traefik.http.routers.backend.service=backend_service"
+      - "traefik.http.services.backend_service.loadbalancer.server.port=3000"
+      - "traefik.http.routers.backend_https.rule=Host(`${API_HOSTNAME}`)"
+      - "traefik.http.routers.backend_https.entrypoints=web-secure"
+      - "traefik.http.routers.backend_https.tls=true"
+      - "traefik.http.routers.backend_https.tls.certresolver=myresolver"
+      - "traefik.http.routers.backend_https.service=backend_service_https"
+      - "traefik.http.services.backend_service_https.loadbalancer.server.port=3000"
+      - "traefik.http.services.backend_service_https.loadbalancer.server.scheme=https"
     <<: *generic
 
   chatbot_en:
