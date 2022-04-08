@@ -318,7 +318,7 @@ services:
     env_file:
       - .env
       - prod.env
-    command: ["-Djboss.http.port=8100","-b 0.0.0.0"]
+    command: ["-b","0.0.0.0","-Djboss.http.port=8100"]
     environment:
       DB_VENDOR: POSTGRES
       DB_USER: ${KEYCLOAK_DB_USER}
