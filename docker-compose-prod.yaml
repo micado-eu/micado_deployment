@@ -314,7 +314,7 @@ services:
 
   keycloak:
     image: jboss/keycloak:latest
-    domainname: ${IDENTITY_HOSTNAME}
+    domainname: micadoproject.eu
     env_file:
       - .env
       - prod.env
@@ -352,7 +352,7 @@ services:
       - "traefik.http.routers.keycloak_https.entrypoints=web-secure"
       - "traefik.http.routers.keycloak_https.tls=true"
       - "traefik.http.routers.keycloak_https.tls.certresolver=myresolver"
-      - "traefik.http.routers.keycloak_https.service=identity_server_service_https"
+      - "traefik.http.routers.keycloak_https.service=keycloak_service_https"
       - "traefik.http.services.keycloak_service_https.loadbalancer.server.port=8100"
       - "traefik.http.services.keycloak_service_https.loadbalancer.server.scheme=https"
     ports:
