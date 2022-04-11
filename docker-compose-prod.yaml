@@ -428,7 +428,7 @@ services:
       - "traefik.http.middlewares.backend_https.headers.addvaryheader=true"
       - "traefik.http.middlewares.backend_https.headers.isdevelopment=true"
       - "traefik.http.middlewares.backend_https.headers.accesscontrolallowcredentials=true"
-      - "traefik.http.middlewares.backend_https.headers.accesscontrolallowheaders=Content-Type,Authorization"
+      - "traefik.http.middlewares.backend_https.headers.accesscontrolallowheaders=authorization"
        
     <<: *generic
 
