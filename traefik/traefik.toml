@@ -26,8 +26,8 @@
     filename = "/etc/traefik/dynamic.toml"
     watch = true
 
-[log]
-  level = "DEBUG"
+#[log]
+#  level = "DEBUG"
 
 [accessLog]
   filePath = "/var/log/access.log"
