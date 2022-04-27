@@ -358,6 +358,9 @@ services:
       - "traefik.http.services.keycloak_service_https.loadbalancer.server.scheme=https"
     ports:
       - 8100:8100
+    volumes:
+      - ./keycloak/keycloak-config/standalone.xml:/opt/jboss/keycloak/standalone/configuration/standalone.xml
+      - ./keycloak/keycloak-extensions/event-listener-http-jar-with-dependencies.jar:/opt/jboss/keycloak/standalone/deployments/event-listener-http-jar-with-dependencies.jar
     networks:
       micado_net:
         aliases:
