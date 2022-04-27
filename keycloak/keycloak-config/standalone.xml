@@ -402,7 +402,6 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:keycloak-server:1.1">
             <web-context>auth</web-context>
-            
             <providers>
                 <provider>
                     classpath:${jboss.home.dir}/providers/*
@@ -416,14 +415,14 @@
                 <cacheTemplates>false</cacheTemplates>
                 <dir>${jboss.home.dir}/themes</dir>
             </theme>
-	    <spi name="eventsListener">
-	    	<provider name="mqtt" enabled="true">
-		    <properties>
-		        <property name="serverUri" value="http://backend:3000/users/webhook"/>
-		        <property name="event" value="my_event"/>
-		    </properties>
-	    	</provider>
-	    </spi>
+            <spi name="eventsListener">
+                <provider name="mqtt" enabled="true">
+                <properties>
+                    <property name="serverUri" value="https://api.micadoproject.eu/users/webhook"/>
+                    <property name="event" value="my_event"/>
+                </properties>
+                </provider>
+            </spi>
             <spi name="eventsStore">
                 <provider name="jpa" enabled="true">
                     <properties>
