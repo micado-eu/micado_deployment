@@ -418,7 +418,7 @@
             <spi name="eventsListener">
                 <provider name="mqtt" enabled="true">
                 <properties>
-                    <property name="serverUri" value="https://api.micadoproject.eu/users/webhook"/>
+                    <property name="serverUri" value="http://backend:3000/users/webhook"/>
                     <property name="event" value="my_event"/>
                 </properties>
                 </provider>
