@@ -419,7 +419,7 @@
                 <provider name="mqtt" enabled="true">
                 <properties>
                     <property name="serverUri" value="http://backend:3000/users/webhook"/>
-                    <property name="event" value="my_event"/>
+                    <property name="topic" value="my_topic"/>
                 </properties>
                 </provider>
             </spi>
