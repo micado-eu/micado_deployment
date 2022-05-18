@@ -168,17 +168,6 @@
                     <realm name="local" role-mapper="super-user-mapper"/>
                 </security-domain>
             </security-domains>
-            <security-realms>
-                <identity-realm name="local" identity="$local"/>
-                <properties-realm name="ApplicationRealm">
-                    <users-properties path="application-users.properties" relative-to="jboss.server.config.dir" digest-realm-name="ApplicationRealm"/>
-                    <groups-properties path="application-roles.properties" relative-to="jboss.server.config.dir"/>
-                </properties-realm>
-                <properties-realm name="ManagementRealm">
-                    <users-properties path="mgmt-users.properties" relative-to="jboss.server.config.dir" digest-realm-name="ManagementRealm"/>
-                    <groups-properties path="mgmt-groups.properties" relative-to="jboss.server.config.dir"/>
-                </properties-realm>
-            </security-realms>
             <mappers>
                 <simple-permission-mapper name="default-permission-mapper" mapping-mode="first">
                     <permission-mapping>
@@ -442,9 +431,6 @@
         <subsystem xmlns="urn:jboss:domain:naming:2.0">
             <remote-naming/>
         </subsystem>
-        <subsystem xmlns="urn:jboss:domain:remoting:4.0">
-            <http-connector name="http-remoting-connector" connector-ref="default" security-realm="ApplicationRealm"/>
-        </subsystem>
         <subsystem xmlns="urn:jboss:domain:request-controller:1.0"/>
         <subsystem xmlns="urn:jboss:domain:security:2.0">
             <security-domains>
@@ -498,10 +484,8 @@
             <buffer-cache name="default"/>
             <server name="default-server">
                 <http-listener name="default" socket-binding="http" redirect-socket="https" proxy-address-forwarding="${env.PROXY_ADDRESS_FORWARDING:false}" enable-http2="true"/>
-                <https-listener name="https" socket-binding="https" proxy-address-forwarding="${env.PROXY_ADDRESS_FORWARDING:false}" security-realm="ApplicationRealm" enable-http2="true"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
-                    <http-invoker security-realm="ApplicationRealm"/>
                 </host>
             </server>
             <servlet-container name="default">
