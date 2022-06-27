@@ -24,34 +24,6 @@ then
     set -a; source prod.env; set +a;
     set -a; source .env; set +a;
 
-    echo -e "\033[0;34m\nPreparing certificates for the Identity Server\e[0m "
-    cp templates/*.jks deployment/
-    docker run -v "$PWD"/deployment:/deployment --rm -u "$UID" jboss/base-jdk:11 keytool -genkey -alias micado -keyalg RSA -keysize 2048 -keystore /deployment/wso2carbon.jks -storepass wso2carbon -keypass wso2carbon -validity 3650 -dname "CN=$IDENTITY_HOSTNAME, OU=micado, O=Micado, L=TO, ST=TO, C=EU"
-    docker run -v "$PWD"/deployment:/deployment --rm -u "$UID" jboss/base-jdk:11 keytool -list -v -storepass wso2carbon -keystore /deployment/wso2carbon.jks|grep "micado"
-    docker run -v "$PWD"/deployment:/deployment --rm -u "$UID" jboss/base-jdk:11 keytool -export -alias micado -storepass wso2carbon -keystore /deployment/wso2carbon.jks -file /deployment/micado.pem
-    docker run -v "$PWD"/deployment:/deployment --rm -u "$UID" jboss/base-jdk:11 keytool -import -alias micado -storepass wso2carbon -file /deployment/micado.pem -keystore /deployment/client-truststore.jks -noprompt
-    sed -ir "s/^[#]*\s*WSO2_IDENTITY_KEYSTORE_PWD=.*/WSO2_IDENTITY_KEYSTORE_PWD=wso2carbon/" prod.env
-    sed -ir "s/^[#]*\s*WSO2_IDENTITY_TRUSTSTORE_PWD=.*/WSO2_IDENTITY_TRUSTSTORE_PWD=wso2carbon/" prod.env
-    sed -ir "s/^[#]*\s*WSO2_IDENTITY_CERTIFICATE_PWD=.*/WSO2_IDENTITY_CERTIFICATE_PWD=wso2carbon/" prod.env
-    sed -ir "s/^[#]*\s*WSO2_IDENTITY_CERTIFICATE_ALIAS=.*/WSO2_IDENTITY_CERTIFICATE_ALIAS=micado/" prod.env
-    set -a; source prod.env; set +a;
-
-    cp "$PWD"/deployment/*.jks "$PWD"/identity-server/repository/resources/security/
-
-    echo -e "\033[0;34m\nPreparing service provider files\e[0m "
-    export NEW_MIGRANT_UUID=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-    export NEW_PA_UUID=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-    export NEW_NGO_UUID=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-    envsubst < templates/migrants_sp.xml.templates > deployment/migrants_sp.xml
-    envsubst < templates/pa_sp.xml.templates > deployment/pa_sp.xml
-    envsubst < templates/ngo_sp.xml.templates > deployment/ngo_sp.xml
-    # Now we copy the UUID to the prod.env
-    sed -ir "s/^[#]*\s*IDENTITY_SP_MIGRANTS_CLIENT_ID=.*/IDENTITY_SP_MIGRANTS_CLIENT_ID=$NEW_MIGRANT_UUID/" prod.env
-    sed -ir "s/^[#]*\s*IDENTITY_SP_PA_CLIENT_ID=.*/IDENTITY_SP_PA_CLIENT_ID=$NEW_PA_UUID/" prod.env
-    sed -ir "s/^[#]*\s*IDENTITY_SP_NGO_CLIENT_ID=.*/IDENTITY_SP_NGO_CLIENT_ID=$NEW_NGO_UUID/" prod.env
-    set -a; source prod.env; set +a;
-
-
     echo -e "\033[0;36m\nStarting PostgreSQL container deployment\e[0m "
     (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d micado_db)
 
@@ -91,15 +63,13 @@ then
 
     sleep 15
 
-    # IDENTITY SERVER
-    echo -e "\033[0;36m\nStarting Identity Server container deployment\e[0m "
-    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d identity_server)
+    # KEYCLOAK
+    echo -e "\033[0;36m\nStarting Identity Server KEYCLOAK deployment\e[0m "
+    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d keycloak)
     sleep 25
-    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml logs identity_server)
+    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml logs keycloak)
     echo -e "\033[0;36m\nStarted Identity Server\e[0m "
 
-# Configure IDENTITY SERVER
-#curl --write-out "%{http_code}\n" -X POST https://identity.micadoproject.eu/services/RemoteAuthorizationManagerService.RemoteAuthorizationManagerServiceHttpsSoap11Endpoint/   -H 'Content-Type: text/xml'   -H 'Authorization: Basic YWRtaW5AcGEubWljYWRvLmV1Om1pY2Fkb2FkbTIwMjA='   -H 'SOAPAction: urn:authorizeRole'   -d '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.ws.um.carbon.wso2.org"><soapenv:Header/><soapenv:Body><ser:authorizeRole><ser:roleName>Application/pa_sp</ser:roleName><ser:resourceId>/permission/admin/login</ser:resourceId><ser:action>ui.execute</ser:action></ser:authorizeRole></soapenv:Body></soapenv:Envelope>'
 
     # WEBLATE
     echo -e "\033[0;36m\nStarting WEBLATE containers deployment\e[0m "
@@ -144,12 +114,6 @@ then
     (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml logs backend)
     echo -e "\033[0;36m\nStarted backend\e[0m "
 
-    # API GATEWAY
-    echo -e "\033[0;36m\nStarting API container deployment\e[0m "
-    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d api_gateway)
-    sleep 25
-    (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml logs api_gateway)
-    echo -e "\033[0;36m\nStarted API\e[0m "
 
     # COUNTLY
     echo -e "\033[0;36m\nStarting Countly containers deployment\e[0m "

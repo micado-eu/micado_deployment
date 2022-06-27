@@ -13,9 +13,6 @@ sleep 15
 (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d balancer)
 sleep 15
 
-(set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d identity_server)
-sleep 25
-(set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml logs identity_server)
 
 (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d cache)
 sleep 15
@@ -29,11 +26,11 @@ sleep 15
 (set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml logs backend)
 echo -e "\033[0;36m\nStarted backend\e[0m "
 
-# API GATEWAY
-echo -e "\033[0;36m\nStarting API container deployment\e[0m "
-(set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d api_gateway)
+# KEYCLOAK
+echo -e "\033[0;36m\nStarting KEYCLOAK container deployment\e[0m "
+(set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml up -d keycloak)
 sleep 25
-(set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml logs api_gateway)
+(set -a; source prod.env; set +a; docker-compose -f docker-compose-prod.yaml logs keycloak)
 echo -e "\033[0;36m\nStarted API\e[0m "
 
 # COUNTLY
