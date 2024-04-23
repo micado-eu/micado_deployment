@@ -1,0 +1,574 @@
+version: "3.9"
+x-generic: &generic
+  networks:
+    - micado_net
+  logging:
+    options:
+      max-size: "12m"
+      max-file: "5"
+    driver: json-file
+
+services:
+  # DATABASE STUFF
+  micado_db:    # MICADO DB
+    image: groonga/pgroonga:3.2.0-alpine-16-slim
+#    user: postgres
+    env_file:
+      - .env
+#      - prod.env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - type: volume
+        source: postgres_data
+        target: /var/lib/postgresql/data
+      - type: volume
+        source: postgres_init
+        target: /docker-entrypoint-initdb.d
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+#    secrets:
+#      - db_root_password
+#      - db_password
+    <<: *generic
+
+
+  keycloak:     # IDENTITY SERVER
+    image: quay.io/keycloak/keycloak:23.0.0
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_DB: postgres
+      KC_DB_USERNAME: ${POSTGRES_USER}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KC_DB_URL: "jdbc:postgresql://micado_db:5432/${POSTGRES_DB}"
+      KC_DB_SCHEMA: keycloak
+      KC_METRICS_ENABLED: true
+      KC_LOG_LEVEL: ${KC_LOG_LEVEL}
+      KC_REALM_NAME: ${KC_REALM_NAME}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      GF_URL: ${GF_HOSTNAME}:${GF_SERVER_HTTP_PORT}
+      GF_ADMIN_USERNAME: ${GF_ADMIN_USERNAME}
+      GF_ADMIN_PASSWORD: ${GF_ADMIN_PASSWORD}
+      #KEYCLOAK_ADMIN_USER: ${KEYCLOAK_ADMIN_USERNAME}
+      KEYCLOAK_ENABLE_HEALTH_ENDPOINTS: 'true'
+      KEYCLOAK_ENABLE_STATISTICS: 'true'
+      KC_HOSTNAME: ${KEYCLOAK_HOSTNAME}
+      KC_PROXY: edge
+      KC_PROXY_ADDRESS_FORWARDING: 'true'
+      KC_HTTP_ENABLED: 'true'
+    healthcheck:
+      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.rule=Host(`${KEYCLOAK_HOSTNAME}`)"
+      - "traefik.http.routers.keycloak.service=keycloak"
+      - "traefik.http.routers.keycloak.entrypoints=web,websecure"
+      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+      - "traefik.http.routers.keycloak.tls=true"
+      - "traefik.http.routers.keycloak.tls.certresolver=letsencrypt"
+      - "traefik.http.services.keycloak.loadbalancer.passhostheader=true"
+#      - "traefik.http.routers.keycloak.middlewares=compresstraefik"
+#      - "traefik.http.middlewares.compresstraefik.compress=true"
+#      - "traefik.docker.network=micado_net"
+    restart: unless-stopped
+    volumes:
+      - ./keycloak/realm.json:/opt/keycloak/data/import/realm.json:ro
+#    secrets:
+#      - db_password
+    depends_on:
+      micado_db:
+        condition: service_healthy
+        restart: true
+      traefik:
+        condition: service_healthy
+        restart: true
+    <<: *generic
+
+
+  nginx:
+    image: openresty/openresty:1.25.3.1-3-buster-fat
+    environment:
+      - MIGRANTS_HOSTNAME=${MIGRANTS_HOSTNAME}
+      - PA_HOSTNAME=${PA_HOSTNAME}
+      - NGO_HOSTNAME=${NGO_HOSTNAME}
+      - ANALYTIC_HOSTNAME=${ANALYTIC_HOSTNAME}
+      - RASA_HOSTNAME=${RASA_HOSTNAME}
+      - BOT_NAME=${BOT_NAME}
+      - NGINX_PORT=80
+    command: ["/run.sh"]
+    volumes:
+      #      - $PWD/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - $PWD/nginx/run.sh:/run.sh
+      - $PWD/nginx/customcss:/usr/share/nginx/html/customcss
+      - $PWD/nginx/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf.template
+      #      - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template
+      - type: volume
+        source: data_site_migrant
+        target: /usr/share/nginx/html/migrants
+        read_only: true
+        volume:
+          nocopy: true
+      - type: volume
+        source: data_site_pa
+        target: /usr/share/nginx/html/pa
+        read_only: true
+        volume:
+          nocopy: true
+      - type: volume
+        source: data_site_ngo
+        target: /usr/share/nginx/html/ngo
+        read_only: true
+        volume:
+          nocopy: true
+      - type: volume
+        source: shared_images
+        target: /usr/share/nginx/html/images
+        read_only: true
+        volume:
+          nocopy: true
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx.rule=Host(`${MIGRANTS_HOSTNAME}`)"
+      - "traefik.http.routers.nginx.entrypoints=web"
+      - "traefik.http.routers.nginx.service=nginx"
+      - "traefik.http.routers.nginx.middlewares=redirect@file"
+      #      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
+      - "traefik.http.services.nginx.loadbalancer.server.port=80"
+      - "traefik.http.routers.nginx2.rule=Host(`${MIGRANTS_HOSTNAME}`)"
+      - "traefik.http.routers.nginx2.entrypoints=websecure"
+      - "traefik.http.routers.nginx2.tls=true"
+      - "traefik.http.routers.nginx2.tls.certresolver=myresolver"
+      - "traefik.http.routers.nginx2.service=nginx2"
+      - "traefik.http.services.nginx2.loadbalancer.server.port=80"
+      - "traefik.http.routers.nginx3.rule=Host(`${PA_HOSTNAME}`)"
+      - "traefik.http.routers.nginx3.entrypoints=web"
+      - "traefik.http.routers.nginx3.service=nginx3"
+      - "traefik.http.routers.nginx3.middlewares=redirect@file"
+      #- "traefik.http.middlewares.redirect_pa.redirectscheme.scheme=https"
+      - "traefik.http.services.nginx3.loadbalancer.server.port=80"
+      - "traefik.http.routers.nginx4.rule=Host(`${PA_HOSTNAME}`)"
+      - "traefik.http.routers.nginx4.entrypoints=websecure"
+      - "traefik.http.routers.nginx4.tls=true"
+      - "traefik.http.routers.nginx4.tls.certresolver=myresolver"
+      - "traefik.http.routers.nginx4.service=nginx4"
+      - "traefik.http.services.nginx4.loadbalancer.server.port=80"
+      - "traefik.http.routers.nginx5.rule=Host(`${NGO_HOSTNAME}`)"
+      - "traefik.http.routers.nginx5.entrypoints=web"
+      - "traefik.http.routers.nginx5.service=nginx5"
+      - "traefik.http.routers.nginx5.middlewares=redirect@file"
+      #      - "traefik.http.middlewares.redirect_ngo.redirectscheme.scheme=https"
+      - "traefik.http.services.nginx5.loadbalancer.server.port=80"
+      - "traefik.http.routers.nginx6.rule=Host(`${NGO_HOSTNAME}`)"
+      - "traefik.http.routers.nginx6.entrypoints=websecure"
+      - "traefik.http.routers.nginx6.tls=true"
+      - "traefik.http.routers.nginx6.tls.certresolver=myresolver"
+      - "traefik.http.routers.nginx6.service=nginx6"
+      - "traefik.http.services.nginx6.loadbalancer.server.port=80"
+      - "traefik.http.routers.countly.rule=Host(`${ANALYTIC_HOSTNAME}`)"
+      - "traefik.http.routers.countly.entrypoints=websecure"
+      - "traefik.http.routers.countly.service=countly_service"
+      - "traefik.http.routers.countly.tls=true"
+      - "traefik.http.routers.countly.tls.certresolver=myresolver"
+      - "traefik.http.services.countly_service.loadbalancer.server.port=80"
+    #      - "traefik.http.routers.countly_api.rule=Host(`${ANALYTIC_HOSTNAME}`) && PathPrefix(`/i`)"
+    #      - "traefik.http.routers.countly_api.entrypoints=web"
+    #      - "traefik.http.routers.countly_api.service=countly_api_service"
+    #      - "traefik.http.services.countly_api_service.loadbalancer.server.port=3001"
+    #      - "traefik.http.routers.countly_api2.rule=Host(`${ANALYTIC_HOSTNAME}`) && PathPrefix(`/o`)"
+    #      - "traefik.http.routers.countly_api2.entrypoints=web"
+    #      - "traefik.http.routers.countly_api2.service=countly_api_service2"
+    #      - "traefik.http.services.countly_api_service2.loadbalancer.server.port=3001"
+    #      - "traefik.http.routers.countly_frontend.rule=Host(`${ANALYTIC_HOSTNAME}`)"
+    #      - "traefik.http.routers.countly_frontend.entrypoints=web"
+    #      - "traefik.http.routers.countly_frontend.service=countly_frontend_service"
+    #      - "traefik.http.services.countly_frontend_service.loadbalancer.server.port=6001"
+    <<: *generic
+    depends_on:
+      traefik:
+        condition: service_healthy
+        restart: true
+
+  keycloak-orig:
+    image: jboss/keycloak:latest
+    domainname: micadoproject.eu
+    env_file:
+      - .env
+#      - prod.env
+    command: ["-b","0.0.0.0"]
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_USER: ${KEYCLOAK_DB_USER}
+      DB_SCHEMA: ${KEYCLOAK_DB_SCHEMA}
+      DB_PASSWORD: ${KEYCLOAK_DB_PWD}
+      KEYCLOAK_USER: ${WSO2_IDENTITY_ADMIN_USER}
+      KEYCLOAK_PASSWORD: ${WSO2_IDENTITY_ADMIN_PWD}
+      IDENTITY_HOSTNAME: ${IDENTITY_HOSTNAME}
+      DB_ADDR: micado_db
+      DB_DATABASE: ${POSTGRES_DB}
+      KEYCLOAK_LOGLEVEL: DEBUG
+      PROXY_ADDRESS_FORWARDING: "true"
+      KEYCLOAK_HOSTNAME: ${IDENTITY_HOSTNAME}
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+      - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.rule=Host(`${IDENTITY_HOSTNAME}`)"
+      - "traefik.http.routers.keycloak.entrypoints=web"
+#      - "traefik.http.routers.keycloak.middlewares=redirect@file"
+      - "traefik.http.routers.keycloak.service=keycloak_service"
+      - "traefik.http.services.keycloak_service.loadbalancer.server.port=8080"
+      - "traefik.http.routers.keycloak_https.rule=Host(`${IDENTITY_HOSTNAME}`)"
+      - "traefik.http.routers.keycloak_https.entrypoints=web-secure"
+      - "traefik.http.routers.keycloak_https.tls=true"
+      - "traefik.http.routers.keycloak_https.tls.certresolver=myresolver"
+      - "traefik.http.routers.keycloak_https.service=keycloak_service_https"
+      - "traefik.http.services.keycloak_service_https.loadbalancer.server.port=8443"
+      - "traefik.http.services.keycloak_service_https.loadbalancer.server.scheme=https"
+    ports:
+      - 8100:8100
+    volumes:
+      - ./keycloak/keycloak-config/standalone.xml:/opt/jboss/keycloak/standalone/configuration/standalone.xml
+      - ./keycloak/keycloak-extensions/event-listener-http-jar-with-dependencies.jar:/opt/jboss/keycloak/standalone/deployments/event-listener-http-jar-with-dependencies.jar
+      - ./keycloak/themes/micado:/opt/jboss/keycloak/themes/micado
+    depends_on:
+      micado_db:
+        condition: service_healthy
+        restart: true
+    <<: *generic
+
+
+
+  # postgres:
+  #   image: ${KEYCLOAK_POSTGRES_IMAGE_TAG}
+  #   volumes:
+  #     - keycloak-postgres:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_DB: ${KEYCLOAK_DB_NAME}
+  #     POSTGRES_USER: ${KEYCLOAK_DB_USER}
+  #     POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+  #   networks:
+  #     - keycloak-network
+  #   healthcheck:
+  #     test: [ "CMD", "pg_isready", "-q", "-d", "${KEYCLOAK_DB_NAME}", "-U", "${KEYCLOAK_DB_USER}" ]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 3
+  #     start_period: 60s
+  #   restart: unless-stopped
+
+  # keycloak-traefik:
+  #   image: ${KEYCLOAK_IMAGE_TAG}
+  #   environment:
+  #     KEYCLOAK_DATABASE_VENDOR: ${KEYCLOAK_DB_TYPE}
+  #     KEYCLOAK_DATABASE_HOST: postgres
+  #     KEYCLOAK_DATABASE_PORT: 5432
+  #     KEYCLOAK_DATABASE_NAME: ${KEYCLOAK_DB_NAME}
+  #     KEYCLOAK_DATABASE_USER: ${KEYCLOAK_DB_USER}
+  #     KEYCLOAK_DATABASE_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+  #     KEYCLOAK_DATABASE_SCHEMA: public
+  #     KEYCLOAK_ADMIN_USER: ${KEYCLOAK_ADMIN_USERNAME}
+  #     KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+  #     KEYCLOAK_ENABLE_HEALTH_ENDPOINTS: 'true'
+  #     KEYCLOAK_ENABLE_STATISTICS: 'true'
+  #     KC_HOSTNAME: ${KEYCLOAK_HOSTNAME}
+  #     KC_PROXY: edge
+  #     KC_PROXY_ADDRESS_FORWARDING: 'true'
+  #     KC_HTTP_ENABLED: 'true'
+  #   networks:
+  #     - keycloak-network
+  #     - traefik-network
+  #   healthcheck:
+  #     test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 3
+  #     start_period: 90s
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.keycloak.rule=Host(`${KEYCLOAK_HOSTNAME}`)"
+  #     - "traefik.http.routers.keycloak.service=keycloak"
+  #     - "traefik.http.routers.keycloak.entrypoints=websecure"
+  #     - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+  #     - "traefik.http.routers.keycloak.tls=true"
+  #     - "traefik.http.routers.keycloak.tls.certresolver=letsencrypt"
+  #     - "traefik.http.services.keycloak.loadbalancer.passhostheader=true"
+  #     - "traefik.http.routers.keycloak.middlewares=compresstraefik"
+  #     - "traefik.http.middlewares.compresstraefik.compress=true"
+  #     - "traefik.docker.network=traefik-network"
+  #   restart: unless-stopped
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+
+  traefik:
+    image: traefik:v2.11.2
+    command:
+      - "--log.level=${TRAEFIK_LOG_LEVEL}"
+      - "--accesslog=true"
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--ping=true"
+      - "--ping.entrypoint=ping"
+      - "--entryPoints.ping.address=:8082"
+      - "--entryPoints.web.address=:80"
+      - "--entryPoints.websecure.address=:443"
+      - "--providers.docker=true"
+      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+      - "--providers.docker.exposedByDefault=false"
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.email=${TRAEFIK_ACME_EMAIL}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme/acme.json"
+#      - "--metrics.prometheus=true"
+#      - "--metrics.prometheus.buckets=0.1,0.3,1.2,5.0"
+      - "--global.checkNewVersion=true"
+      - "--global.sendAnonymousUsage=false"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - traefik-certificates:/etc/traefik/acme
+    ports:
+      - "80:80"
+      - "443:443"
+    healthcheck:
+      test: ["CMD", "wget", "http://localhost:8082/ping","--spider"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`${TRAEFIK_HOSTNAME}`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.entrypoints=web,websecure"
+      - "traefik.http.services.dashboard.loadbalancer.server.port=8080"
+ #     - "traefik.http.routers.dashboard.tls=true"
+ #     - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+ #     - "traefik.http.services.dashboard.loadbalancer.passhostheader=true"
+#      - "traefik.http.routers.dashboard.middlewares=authtraefik"
+#      - "traefik.http.middlewares.authtraefik.basicauth.users=${TRAEFIK_BASIC_AUTH}"
+#      - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
+#      - "traefik.http.routers.http-catchall.entrypoints=web"
+ #     - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+ #     - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+    restart: unless-stopped
+    <<: *generic
+
+
+  git:
+    image: gitea/gitea:1.21.11
+    <<: *generic
+#    env_file:
+#      - prod.env
+    environment:
+      #      DB_TYPE: postgres
+      #      DB_HOST: micado_db:5432
+      #      DB_NAME: ${POSTGRES_DB}
+      #      DB_USER: ${GITEA_DB_USER}
+      GIT_HOSTNAME: ${GIT_HOSTNAME}
+#      DB_TYPE: postgres
+#      DB_HOST: micado_db:${POSTGRES_PORT}
+#      DB_NAME: ${POSTGRES_DB}
+#      DB_USER: ${GITEA_DB_USER}
+#      DB_PASSWD: ${GITEA_DB_PWD}
+#      DISABLE_REGISTRATION: "true"
+      GITEA__database__DB_TYPE: postgres
+      GITEA__database__HOST: micado_db:5432
+      GITEA__database__NAME: ${POSTGRES_DB}
+      GITEA__database__USER: ${GITEA_DB_USER}
+      GITEA__database__PASSWD: ${GITEA_DB_PWD}
+      GITEA__database__SCHEMA: gitea
+      GITEA__sacurity__INSTALL_LOCK: "true"
+      GITEA__service__DISABLE_REGISTRATION: "true"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+      - "traefik.enable=true"
+      - "traefik.http.routers.git1.rule=Host(`${GIT_HOSTNAME}`)"
+      - "traefik.http.routers.git1.entrypoints=web"
+      - "traefik.http.routers.git1.service=git1"
+      - "traefik.http.services.git1.loadbalancer.server.port=3000"
+      - "traefik.http.routers.git2.rule=Host(`${GIT_HOSTNAME}`)"
+      - "traefik.http.routers.git2.entrypoints=websecure"
+      - "traefik.http.routers.git2.tls=true"
+      - "traefik.http.routers.git2.tls.certresolver=myresolver"
+      - "traefik.http.routers.git2.service=git2"
+      - "traefik.http.services.git2.loadbalancer.server.port=3000"
+    volumes:
+      - git_data:/data
+ #     - ./config:/etc/gitea
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      micado_db:
+        condition: service_healthy
+        restart: true
+
+
+
+  web:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+      redis:
+        condition: service_started
+  redis:
+    image: redis
+  db:
+    image: postgres
+
+
+#secrets:
+#   db_password:
+#     external: true
+#   db_root_password:
+#     external: true
+
+volumes:
+  postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      # device is the path in the host that has to be absolute
+      device: $PWD/db_data
+      o: bind
+  postgres_init:
+    driver: local
+    driver_opts:
+      type: none
+      # device is the path in the host that has to be absolute
+      device: $PWD/db_init
+      o: bind
+  # chatbot_action:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/rasa/actions
+  #     o: bind
+  # chatbot_data:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/rasa
+  #     o: bind
+  # metabase_data:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/metabase
+  #     o: bind
+  # tusd_data:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/tusd_data
+  #     o: bind
+  # tusd_hooks:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/tusd_config/hooks
+  #     o: bind
+  # fail2ban_data:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/fail2ban
+  #     o: bind
+  data_site_migrant:
+    driver: local
+  data_site_pa:
+    driver: local
+  data_site_ngo:
+    driver: local
+  # mongo_data:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/mongo_data
+  #     o: bind
+  # weblate_data:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/weblate_data
+  #     o: bind
+  # redis_data:
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/redis_data
+  #     o: bind
+  git_data:
+    driver_opts:
+      type: none
+      device: $PWD/git_data
+      o: bind
+
+  # api_sinapse:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/api_manager_data/synapse-configs
+  #     o: bind
+  # api_executionplans:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/api_manager_data/executionplans
+  #     o: bind
+  # api_tenants:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/api_manager_data/tenants
+  #     o: bind
+  # api_database:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/api_manager_data/database
+  #     o: bind
+  # identity_server_vol:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/identity-server_data/deployment
+  #     o: bind
+  # is_tenants:
+  #   driver: local
+  #   driver_opts:
+  #     type: none
+  #     device: $PWD/identity-server_data/tenants
+  #     o: bind
+  shared_images:
+    driver: local
+    driver_opts:
+      type: none
+      device: $PWD/shared_images
+      o: bind
+  traefik-certificates:
+    driver: local
+    driver_opts:
+      type: none
+      device: $PWD/traefik/traefik-acme
+      o: bind
+
+
+networks:
+  micado_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.24.0.0/16

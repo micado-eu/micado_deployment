@@ -1,0 +1,9 @@
+services:
+  # DATABASE STUFF
+  micado_db: 
+    ports:
+      - 5432:5432
+  keycloak:  
+    ports:
+      - 8080:8080
+
