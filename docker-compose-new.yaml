@@ -11,11 +11,10 @@ x-generic: &generic
 services:
   # DATABASE STUFF
   micado_db:    # MICADO DB
-    image: groonga/pgroonga:3.2.0-alpine-16-slim
+    image: groonga/pgroonga:${PGROONGA_IMAGE_TAG}
 #    user: postgres
     env_file:
       - .env
-#      - prod.env
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -34,21 +33,18 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-#    secrets:
-#      - db_root_password
-#      - db_password
     <<: *generic
 
-
+  # Identity management
   keycloak:     # IDENTITY SERVER
-    image: quay.io/keycloak/keycloak:23.0.0
+    image: quay.io/keycloak/keycloak:${KEYCLOAK_IMAGE_TAG}
     command: ["start-dev", "--import-realm"]
     environment:
       KC_DB: postgres
-      KC_DB_USERNAME: ${POSTGRES_USER}
+      KC_DB_USERNAME: ${KEYCLOAK_DB_USER}
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
       KC_DB_URL: "jdbc:postgresql://micado_db:5432/${POSTGRES_DB}"
-      KC_DB_SCHEMA: keycloak
+      KC_DB_SCHEMA: ${KEYCLOAK_DB_SCHEMA}
       KC_METRICS_ENABLED: true
       KC_LOG_LEVEL: ${KC_LOG_LEVEL}
       KC_REALM_NAME: ${KC_REALM_NAME}
@@ -57,10 +53,9 @@ services:
       GF_URL: ${GF_HOSTNAME}:${GF_SERVER_HTTP_PORT}
       GF_ADMIN_USERNAME: ${GF_ADMIN_USERNAME}
       GF_ADMIN_PASSWORD: ${GF_ADMIN_PASSWORD}
-      #KEYCLOAK_ADMIN_USER: ${KEYCLOAK_ADMIN_USERNAME}
       KEYCLOAK_ENABLE_HEALTH_ENDPOINTS: 'true'
       KEYCLOAK_ENABLE_STATISTICS: 'true'
-      KC_HOSTNAME: ${KEYCLOAK_HOSTNAME}
+      KC_HOSTNAME: ${IDENTITY_HOSTNAME}
       KC_PROXY: edge
       KC_PROXY_ADDRESS_FORWARDING: 'true'
       KC_HTTP_ENABLED: 'true'
@@ -72,21 +67,16 @@ services:
       start_period: 90s
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.keycloak.rule=Host(`${KEYCLOAK_HOSTNAME}`)"
+      - "traefik.http.routers.keycloak.rule=Host(`${IDENTITY_HOSTNAME}`)"
       - "traefik.http.routers.keycloak.service=keycloak"
       - "traefik.http.routers.keycloak.entrypoints=web,websecure"
       - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
       - "traefik.http.routers.keycloak.tls=true"
       - "traefik.http.routers.keycloak.tls.certresolver=letsencrypt"
       - "traefik.http.services.keycloak.loadbalancer.passhostheader=true"
-#      - "traefik.http.routers.keycloak.middlewares=compresstraefik"
-#      - "traefik.http.middlewares.compresstraefik.compress=true"
-#      - "traefik.docker.network=micado_net"
     restart: unless-stopped
     volumes:
       - ./keycloak/realm.json:/opt/keycloak/data/import/realm.json:ro
-#    secrets:
-#      - db_password
     depends_on:
       micado_db:
         condition: service_healthy
@@ -96,9 +86,9 @@ services:
         restart: true
     <<: *generic
 
-
-  nginx:
-    image: openresty/openresty:1.25.3.1-3-buster-fat
+  ## Web components
+  nginx:         # WEB SERVER
+    image: openresty/openresty:${NGINX_IMAGE_TAG}
     environment:
       - MIGRANTS_HOSTNAME=${MIGRANTS_HOSTNAME}
       - PA_HOSTNAME=${PA_HOSTNAME}
@@ -195,125 +185,19 @@ services:
     #      - "traefik.http.routers.countly_frontend.entrypoints=web"
     #      - "traefik.http.routers.countly_frontend.service=countly_frontend_service"
     #      - "traefik.http.services.countly_frontend_service.loadbalancer.server.port=6001"
-    <<: *generic
     depends_on:
       traefik:
         condition: service_healthy
         restart: true
-
-  keycloak-orig:
-    image: jboss/keycloak:latest
-    domainname: micadoproject.eu
-    env_file:
-      - .env
-#      - prod.env
-    command: ["-b","0.0.0.0"]
-    environment:
-      DB_VENDOR: POSTGRES
-      DB_USER: ${KEYCLOAK_DB_USER}
-      DB_SCHEMA: ${KEYCLOAK_DB_SCHEMA}
-      DB_PASSWORD: ${KEYCLOAK_DB_PWD}
-      KEYCLOAK_USER: ${WSO2_IDENTITY_ADMIN_USER}
-      KEYCLOAK_PASSWORD: ${WSO2_IDENTITY_ADMIN_PWD}
-      IDENTITY_HOSTNAME: ${IDENTITY_HOSTNAME}
-      DB_ADDR: micado_db
-      DB_DATABASE: ${POSTGRES_DB}
-      KEYCLOAK_LOGLEVEL: DEBUG
-      PROXY_ADDRESS_FORWARDING: "true"
-      KEYCLOAK_HOSTNAME: ${IDENTITY_HOSTNAME}
-    labels:
-      - "com.centurylinklabs.watchtower.enable=false"
-      - "traefik.enable=true"
-      - "traefik.http.routers.keycloak.rule=Host(`${IDENTITY_HOSTNAME}`)"
-      - "traefik.http.routers.keycloak.entrypoints=web"
-#      - "traefik.http.routers.keycloak.middlewares=redirect@file"
-      - "traefik.http.routers.keycloak.service=keycloak_service"
-      - "traefik.http.services.keycloak_service.loadbalancer.server.port=8080"
-      - "traefik.http.routers.keycloak_https.rule=Host(`${IDENTITY_HOSTNAME}`)"
-      - "traefik.http.routers.keycloak_https.entrypoints=web-secure"
-      - "traefik.http.routers.keycloak_https.tls=true"
-      - "traefik.http.routers.keycloak_https.tls.certresolver=myresolver"
-      - "traefik.http.routers.keycloak_https.service=keycloak_service_https"
-      - "traefik.http.services.keycloak_service_https.loadbalancer.server.port=8443"
-      - "traefik.http.services.keycloak_service_https.loadbalancer.server.scheme=https"
-    ports:
-      - 8100:8100
-    volumes:
-      - ./keycloak/keycloak-config/standalone.xml:/opt/jboss/keycloak/standalone/configuration/standalone.xml
-      - ./keycloak/keycloak-extensions/event-listener-http-jar-with-dependencies.jar:/opt/jboss/keycloak/standalone/deployments/event-listener-http-jar-with-dependencies.jar
-      - ./keycloak/themes/micado:/opt/jboss/keycloak/themes/micado
-    depends_on:
-      micado_db:
-        condition: service_healthy
-        restart: true
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://${MIGRANTS_HOSTNAME}"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
     <<: *generic
 
-
-
-  # postgres:
-  #   image: ${KEYCLOAK_POSTGRES_IMAGE_TAG}
-  #   volumes:
-  #     - keycloak-postgres:/var/lib/postgresql/data
-  #   environment:
-  #     POSTGRES_DB: ${KEYCLOAK_DB_NAME}
-  #     POSTGRES_USER: ${KEYCLOAK_DB_USER}
-  #     POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
-  #   networks:
-  #     - keycloak-network
-  #   healthcheck:
-  #     test: [ "CMD", "pg_isready", "-q", "-d", "${KEYCLOAK_DB_NAME}", "-U", "${KEYCLOAK_DB_USER}" ]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 3
-  #     start_period: 60s
-  #   restart: unless-stopped
-
-  # keycloak-traefik:
-  #   image: ${KEYCLOAK_IMAGE_TAG}
-  #   environment:
-  #     KEYCLOAK_DATABASE_VENDOR: ${KEYCLOAK_DB_TYPE}
-  #     KEYCLOAK_DATABASE_HOST: postgres
-  #     KEYCLOAK_DATABASE_PORT: 5432
-  #     KEYCLOAK_DATABASE_NAME: ${KEYCLOAK_DB_NAME}
-  #     KEYCLOAK_DATABASE_USER: ${KEYCLOAK_DB_USER}
-  #     KEYCLOAK_DATABASE_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
-  #     KEYCLOAK_DATABASE_SCHEMA: public
-  #     KEYCLOAK_ADMIN_USER: ${KEYCLOAK_ADMIN_USERNAME}
-  #     KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-  #     KEYCLOAK_ENABLE_HEALTH_ENDPOINTS: 'true'
-  #     KEYCLOAK_ENABLE_STATISTICS: 'true'
-  #     KC_HOSTNAME: ${KEYCLOAK_HOSTNAME}
-  #     KC_PROXY: edge
-  #     KC_PROXY_ADDRESS_FORWARDING: 'true'
-  #     KC_HTTP_ENABLED: 'true'
-  #   networks:
-  #     - keycloak-network
-  #     - traefik-network
-  #   healthcheck:
-  #     test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 3
-  #     start_period: 90s
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.keycloak.rule=Host(`${KEYCLOAK_HOSTNAME}`)"
-  #     - "traefik.http.routers.keycloak.service=keycloak"
-  #     - "traefik.http.routers.keycloak.entrypoints=websecure"
-  #     - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
-  #     - "traefik.http.routers.keycloak.tls=true"
-  #     - "traefik.http.routers.keycloak.tls.certresolver=letsencrypt"
-  #     - "traefik.http.services.keycloak.loadbalancer.passhostheader=true"
-  #     - "traefik.http.routers.keycloak.middlewares=compresstraefik"
-  #     - "traefik.http.middlewares.compresstraefik.compress=true"
-  #     - "traefik.docker.network=traefik-network"
-  #   restart: unless-stopped
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-
-  traefik:
-    image: traefik:v2.11.2
+  traefik:              # LOAD BALANCER
+    image: traefik:${TRAEFIK_IMAGE_TAG}
     command:
       - "--log.level=${TRAEFIK_LOG_LEVEL}"
       - "--accesslog=true"
@@ -330,8 +214,6 @@ services:
       - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
       - "--certificatesresolvers.letsencrypt.acme.email=${TRAEFIK_ACME_EMAIL}"
       - "--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme/acme.json"
-#      - "--metrics.prometheus=true"
-#      - "--metrics.prometheus.buckets=0.1,0.3,1.2,5.0"
       - "--global.checkNewVersion=true"
       - "--global.sendAnonymousUsage=false"
     volumes:
@@ -365,29 +247,132 @@ services:
     <<: *generic
 
 
-  git:
-    image: gitea/gitea:1.21.11
+  data_migrants:
+    env_file:
+      - .env
+    environment:
+      MICADO_API_KEY: ${MICADO_API_KEY}
+      API_HOSTNAME: ${API_HOSTNAME}
+      ANALYTIC_HOSTNAME: ${ANALYTIC_HOSTNAME}
+      IDENTITY_HOSTNAME: ${IDENTITY_HOSTNAME}
+      COUNTLY_MIGRANTS_APP_KEY: ${COUNTLY_MIGRANTS_APP_KEY}
+      COUNTLY_MIGRANTS_APP_ID: ${COUNTLY_MIGRANTS_APP_ID}
+      IDENTITY_SP_MIGRANTS_CLIENT_ID: ${IDENTITY_SP_MIGRANTS_CLIENT_ID}
+      MIGRANTS_HOSTNAME: ${MIGRANTS_HOSTNAME}
+      ROCKETCHAT_HOSTNAME: ${ROCKETCHAT_HOSTNAME}
+      BOT_NAME: ${BOT_NAME}
+    #command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
+    #TODO more elegant copy like copy with mv
+    image: micadoproject/migrant_app_site:latest
+    volumes:
+      - data_site_migrant:/var/www/html
+    depends_on:
+      nginx:
+        condition: service_healthy
+        restart: true
+    <<: *generic
+
+  data_pa:
+    env_file:
+      - .env
+    environment:
+      MICADO_API_KEY: ${MICADO_API_KEY}
+      API_HOSTNAME: ${API_HOSTNAME}
+      ANALYTIC_HOSTNAME: ${ANALYTIC_HOSTNAME}
+      IDENTITY_HOSTNAME: ${IDENTITY_HOSTNAME}
+      COUNTLY_PA_APP_KEY: ${COUNTLY_PA_APP_KEY}
+      IDENTITY_SP_PA_CLIENT_ID: ${IDENTITY_SP_PA_CLIENT_ID}
+      PA_HOSTNAME: ${PA_HOSTNAME}
+    #command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
+    #TODO more elegant copy like copy with mv
+    image: micadoproject/pa_app_site:latest
+    volumes:
+      - data_site_pa:/var/www/html
+    depends_on:
+      nginx:
+        condition: service_healthy
+        restart: true
+    <<: *generic
+
+  data_ngo:
+    env_file:
+      - .env
+    environment:
+      MICADO_API_KEY: ${MICADO_API_KEY}
+      API_HOSTNAME: ${API_HOSTNAME}
+      ANALYTIC_HOSTNAME: ${ANALYTIC_HOSTNAME}
+      IDENTITY_HOSTNAME: ${IDENTITY_HOSTNAME}
+      COUNTLY_NGO_APP_KEY: ${COUNTLY_NGO_APP_KEY}
+      IDENTITY_SP_NGO_CLIENT_ID: ${IDENTITY_SP_NGO_CLIENT_ID}
+      NGO_HOSTNAME: ${NGO_HOSTNAME}
+    #command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
+    #TODO more elegant copy like copy with mv
+    image: micadoproject/ngo_app_site:latest
+    volumes:
+      - data_site_ngo:/var/www/html
+    depends_on:
+      nginx:
+        condition: service_healthy
+        restart: true
+    <<: *generic
+
+
+  # BACKEND COMPONENTS
+  backend:
+    image: micadoproject/backend
+    env_file:
+      - .env
+    environment:
+      HOST: backend
+      MICADO_GIT_URL: ${MICADO_GIT_URL}
+      ROCKETCHAT_HOSTNAME: ${ROCKETCHAT_HOSTNAME}
+      ROCKETCHAT_ADMIN: ${ROCKETCHAT_ADMIN}
+      ROCKETCHAT_ADMIN_PWD: ${ROCKETCHAT_ADMIN_PWD}
+      MICADO_TRANSLATIONS_DIR: ${MICADO_TRANSLATIONS_DIR}
+      COUNTLY_MIGRANTS_APP_ID: ${COUNTLY_MIGRANTS_APP_ID}
+      COUNTLY_MIGRANTS_API_KEY: ${COUNTLY_MIGRANTS_API_KEY}
+      POSTGRES_DB: ${POSTGRES_DB}
+      MICADO_DB_PWD: ${MICADO_DB_PWD}
+      MICADO_DB_USER: ${MICADO_DB_USER}
+      MICADO_DB_SCHEMA: ${MICADO_DB_SCHEMA}
+      MICADO_ENV: ${MICADO_ENV}
+      IDENTITY_HOSTNAME: ${IDENTITY_HOSTNAME}
+      WEBLATE_EMAIL_HOST: ${WEBLATE_EMAIL_HOST}
+      WEBLATE_EMAIL_HOST_USER: ${WEBLATE_EMAIL_HOST_USER}
+      WEBLATE_EMAIL_HOST_SSL: ${WEBLATE_EMAIL_HOST_SSL}
+      WEBLATE_EMAIL_HOST_PASSWORD: ${WEBLATE_EMAIL_HOST_PASSWORD}
+      ANALYTIC_HOSTNAME: ${ANALYTIC_HOSTNAME}
+      COUNTLY_ADMIN: ${COUNTLY_ADMIN}
+      COUNTLY_ADMIN_PWD: ${COUNTLY_ADMIN_PWD}
+      ALGORITHM: ${ALGORITHM}
+      SALT: ${SALT}
+      KEY_LENGTH: ${KEY_LENGTH}
+      BUFFER_0: ${BUFFER_0}
+      BUFFER_1: ${BUFFER_1}
+      ALGORITHM_PASSWORD: ${ALGORITHM_PASSWORD}
+      MICADO_WEBLATE_KEY: ${MICADO_WEBLATE_KEY}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - type: volume
+        source: shared_images
+        target: /images
+    #    ports:
+    #      - "3001:3000"
+    <<: *generic
+
+  git:               # GIT SERVER
+    image: gitea/gitea:${GITEA_IMAGE_TAG}
     <<: *generic
 #    env_file:
 #      - prod.env
     environment:
-      #      DB_TYPE: postgres
-      #      DB_HOST: micado_db:5432
-      #      DB_NAME: ${POSTGRES_DB}
-      #      DB_USER: ${GITEA_DB_USER}
       GIT_HOSTNAME: ${GIT_HOSTNAME}
-#      DB_TYPE: postgres
-#      DB_HOST: micado_db:${POSTGRES_PORT}
-#      DB_NAME: ${POSTGRES_DB}
-#      DB_USER: ${GITEA_DB_USER}
-#      DB_PASSWD: ${GITEA_DB_PWD}
-#      DISABLE_REGISTRATION: "true"
       GITEA__database__DB_TYPE: postgres
       GITEA__database__HOST: micado_db:5432
       GITEA__database__NAME: ${POSTGRES_DB}
       GITEA__database__USER: ${GITEA_DB_USER}
       GITEA__database__PASSWD: ${GITEA_DB_PWD}
-      GITEA__database__SCHEMA: gitea
+      GITEA__database__SCHEMA: ${GITEA_DB_SCHEMA}
       GITEA__sacurity__INSTALL_LOCK: "true"
       GITEA__service__DISABLE_REGISTRATION: "true"
     labels:
@@ -413,27 +398,82 @@ services:
         condition: service_healthy
         restart: true
 
-
-
-  web:
-    build: .
+  #      
+  weblate:
+    image: weblate/weblate:${WEBLATE_IMAGE_TAG}
+    volumes:
+      - weblate_data:/app/data
+      - ./weblate/0007_use_trigram.py:/usr/local/lib/python3.7/dist-packages/weblate/memory/migrations/0007_use_trigram.py
+      - ./weblate/0008_adjust_similarity.py:/usr/local/lib/python3.7/dist-packages/weblate/memory/migrations/0008_adjust_similarity.py
+    env_file:
+      - prod.env
+    environment:
+      WEBLATE_EMAIL_HOST: ${WEBLATE_EMAIL_HOST}
+      WEBLATE_EMAIL_HOST_USER: ${WEBLATE_EMAIL_HOST_USER}
+      #      WEBLATE_EMAIL_HOST_PASSWORD: ${WEBLATE_EMAIL_HOST_PASSWORD}
+      WEBLATE_SERVER_EMAIL: ${WEBLATE_SERVER_EMAIL}
+      WEBLATE_DEFAULT_FROM_EMAIL: ${WEBLATE_DEFAULT_FROM_EMAIL}
+      WEBLATE_ALLOWED_HOSTS: ${WEBLATE_ALLOWED_HOSTS}
+      WEBLATE_ADMIN_PASSWORD: ${WEBLATE_ADMIN_PASSWORD}
+      WEBLATE_ADMIN_NAME: ${WEBLATE_ADMIN_NAME}
+      WEBLATE_ADMIN_EMAIL: ${WEBLATE_ADMIN_EMAIL}
+      WEBLATE_SITE_TITLE: ${WEBLATE_SITE_TITLE}
+      WEBLATE_REGISTRATION_OPEN: ${WEBLATE_REGISTRATION_OPEN}
+      POSTGRES_PASSWORD: ${WEBLATE_POSTGRES_PASSWORD}
+      POSTGRES_USER: ${WEBLATE_POSTGRES_USER}
+      POSTGRES_DATABASE: ${POSTGRES_DB}
+      POSTGRES_HOST: ${WEBLATE_POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      WEBLATE_WORKERS: 2
+      WEBLATE_TIME_ZONE: ${TZ}
+    labels:
+      - "traefik.enable=true"
+      - "com.centurylinklabs.watchtower.enable=false"
+      - "traefik.http.routers.weblate.rule=Host(`${TRANSLATION_HOSTNAME}`)"
+      - "traefik.http.routers.weblate.entrypoints=web"
+      #      - "traefik.http.routers.weblate.service=weblate"
+      - "traefik.http.routers.weblate.middlewares=redirect@file"
+      #      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
+      #      - "traefik.http.services.weblate.loadbalancer.server.port=8080"
+      - "traefik.http.routers.weblate2.rule=Host(`${TRANSLATION_HOSTNAME}`)"
+      - "traefik.http.routers.weblate2.entrypoints=websecure"
+      - "traefik.http.routers.weblate2.tls=true"
+      - "traefik.http.routers.weblate2.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.weblate2.service=weblate2"
+      - "traefik.http.services.weblate2.loadbalancer.server.port=8080"
     depends_on:
-      db:
+      micado_db:
         condition: service_healthy
         restart: true
-      redis:
-        condition: service_started
-  redis:
-    image: redis
-  db:
-    image: postgres
+    <<: *generic
 
+# ADMIN COMPONENTS
+  portainer:
+    image: portainer/portainer-ce:${PORTAINER_IMAGE_TAG}
+    container_name: portainer
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./portainer-data:/data
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.entrypoints=web"
+      - "traefik.http.routers.portainer.rule=Host(`${PORTAINER_HOSTNAME}`)"
+      - "traefik.http.middlewares.portainer-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.portainer.middlewares=portainer-https-redirect"
+      - "traefik.http.routers.portainer-secure.entrypoints=websecure"
+      - "traefik.http.routers.portainer-secure.rule=Host(`${PORTAINER_HOSTNAME}`)"
+      - "traefik.http.routers.portainer-secure.tls=true"
+      - "traefik.http.routers.portainer-secure.tls.certresolver=myresolver"
+      - "traefik.http.routers.portainer-secure.service=portainer"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+    ports:
+      - "9443:9443"
+    <<: *generic
 
-#secrets:
-#   db_password:
-#     external: true
-#   db_root_password:
-#     external: true
 
 volumes:
   postgres_data:
@@ -498,12 +538,12 @@ volumes:
   #     type: none
   #     device: $PWD/mongo_data
   #     o: bind
-  # weblate_data:
-  #   driver: local
-  #   driver_opts:
-  #     type: none
-  #     device: $PWD/weblate_data
-  #     o: bind
+  weblate_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: $PWD/weblate_data
+      o: bind
   # redis_data:
   #   driver_opts:
   #     type: none
@@ -513,6 +553,13 @@ volumes:
     driver_opts:
       type: none
       device: $PWD/git_data
+      o: bind
+  portainer-data:
+    driver: local
+    driver_opts:
+      type: none
+      # device is the path in the host that has to be absolute
+      device: $PWD/portainer-data
       o: bind
 
   # api_sinapse:
