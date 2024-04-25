@@ -319,7 +319,7 @@ services:
 
   # BACKEND COMPONENTS
   backend:
-    image: micadoproject/backend
+    image: ghcr.io/micado-eu/backend:${MICADO_BACKEND_IMAGE_TAG}
     env_file:
       - .env
     environment:
@@ -405,8 +405,6 @@ services:
       - weblate_data:/app/data
       - ./weblate/0007_use_trigram.py:/usr/local/lib/python3.7/dist-packages/weblate/memory/migrations/0007_use_trigram.py
       - ./weblate/0008_adjust_similarity.py:/usr/local/lib/python3.7/dist-packages/weblate/memory/migrations/0008_adjust_similarity.py
-    env_file:
-      - prod.env
     environment:
       WEBLATE_EMAIL_HOST: ${WEBLATE_EMAIL_HOST}
       WEBLATE_EMAIL_HOST_USER: ${WEBLATE_EMAIL_HOST_USER}
@@ -418,6 +416,7 @@ services:
       WEBLATE_ADMIN_NAME: ${WEBLATE_ADMIN_NAME}
       WEBLATE_ADMIN_EMAIL: ${WEBLATE_ADMIN_EMAIL}
       WEBLATE_SITE_TITLE: ${WEBLATE_SITE_TITLE}
+      WEBLATE_SITE_DOMAIN: ${TRANSLATION_HOSTNAME}
       WEBLATE_REGISTRATION_OPEN: ${WEBLATE_REGISTRATION_OPEN}
       POSTGRES_PASSWORD: ${WEBLATE_POSTGRES_PASSWORD}
       POSTGRES_USER: ${WEBLATE_POSTGRES_USER}
@@ -432,7 +431,7 @@ services:
       - "traefik.http.routers.weblate.rule=Host(`${TRANSLATION_HOSTNAME}`)"
       - "traefik.http.routers.weblate.entrypoints=web"
       #      - "traefik.http.routers.weblate.service=weblate"
-      - "traefik.http.routers.weblate.middlewares=redirect@file"
+     # - "traefik.http.routers.weblate.middlewares=redirect@file"
       #      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
       #      - "traefik.http.services.weblate.loadbalancer.server.port=8080"
       - "traefik.http.routers.weblate2.rule=Host(`${TRANSLATION_HOSTNAME}`)"
@@ -445,6 +444,14 @@ services:
       micado_db:
         condition: service_healthy
         restart: true
+    <<: *generic
+
+  cache:
+    image: redis:${REDIS_IMAGE_TAG}
+    restart: always
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
     <<: *generic
 
 # ADMIN COMPONENTS
