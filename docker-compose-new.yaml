@@ -560,11 +560,11 @@ volumes:
       type: none
       device: $PWD/weblate_data
       o: bind
-  # redis_data:
-  #   driver_opts:
-  #     type: none
-  #     device: $PWD/redis_data
-  #     o: bind
+  redis_data:
+    driver_opts:
+      type: none
+      device: $PWD/redis_data
+      o: bind
   git_data:
     driver_opts:
       type: none
