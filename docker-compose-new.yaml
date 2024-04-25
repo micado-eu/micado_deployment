@@ -444,6 +444,9 @@ services:
       micado_db:
         condition: service_healthy
         restart: true
+      cache:
+        condition: service_healthy
+        restart: true
     <<: *generic
 
   cache:
@@ -452,6 +455,12 @@ services:
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
       - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
     <<: *generic
 
 # ADMIN COMPONENTS
