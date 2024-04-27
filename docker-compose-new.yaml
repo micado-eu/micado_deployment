@@ -59,6 +59,9 @@ services:
       KC_PROXY: edge
       KC_PROXY_ADDRESS_FORWARDING: 'true'
       KC_HTTP_ENABLED: 'true'
+      MIGRANTS_HOSTNAME: ${MIGRANTS_HOSTNAME}
+      PA_HOSTNAME: ${PA_HOSTNAME}
+      NGO_HOSTNAME: ${NGO_HOSTNAME}
     healthcheck:
       test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
       interval: 10s
@@ -135,12 +138,12 @@ services:
       - "traefik.http.routers.nginx.entrypoints=web"
       - "traefik.http.routers.nginx.service=nginx"
       - "traefik.http.routers.nginx.middlewares=redirect@file"
-      #      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
       - "traefik.http.services.nginx.loadbalancer.server.port=80"
       - "traefik.http.routers.nginx2.rule=Host(`${MIGRANTS_HOSTNAME}`)"
       - "traefik.http.routers.nginx2.entrypoints=websecure"
       - "traefik.http.routers.nginx2.tls=true"
-      - "traefik.http.routers.nginx2.tls.certresolver=myresolver"
+      - "traefik.http.routers.nginx2.tls.certresolver=letsencrypt"
       - "traefik.http.routers.nginx2.service=nginx2"
       - "traefik.http.services.nginx2.loadbalancer.server.port=80"
       - "traefik.http.routers.nginx3.rule=Host(`${PA_HOSTNAME}`)"
@@ -190,7 +193,7 @@ services:
         condition: service_healthy
         restart: true
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://${MIGRANTS_HOSTNAME}"]
+      test: ["CMD", "curl", "--fail", "-v", "http://nginx/healthcheck.html"]
       interval: 1m
       timeout: 10s
       retries: 3
@@ -264,12 +267,9 @@ services:
     #command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
     #TODO more elegant copy like copy with mv
     image: ghcr.io/micado-eu/migrant_application:${MIGRANTS_IMAGE_TAG}
+    pull_policy: always
     volumes:
       - data_site_migrant:/var/www/html
-    depends_on:
-      nginx:
-        condition: service_healthy
-        restart: true
     <<: *generic
 
   data_pa:
@@ -286,6 +286,7 @@ services:
     #command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
     #TODO more elegant copy like copy with mv
     image: micadoproject/pa_app_site:latest
+    pull_policy: always
     volumes:
       - data_site_pa:/var/www/html
     depends_on:
@@ -308,6 +309,7 @@ services:
     #command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
     #TODO more elegant copy like copy with mv
     image: micadoproject/ngo_app_site:latest
+    pull_policy: always
     volumes:
       - data_site_ngo:/var/www/html
     depends_on:
