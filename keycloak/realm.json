@@ -5415,8 +5415,8 @@
       "clientId": "pa_app",
       "name": "",
       "description": "",
-      "rootUrl": "http://pa.csi.it",
-      "adminUrl": "http://pa.csi.it:8080/*",
+      "rootUrl": "http://${PA_HOSTNAME}",
+      "adminUrl": "http://${PA_HOSTNAME}/*",
       "baseUrl": "",
       "surrogateAuthRequired": false,
       "enabled": true,
@@ -5424,11 +5424,11 @@
       "clientAuthenticatorType": "client-secret",
       "redirectUris": [
         "http://localhost:8080/*",
-        "http://pa.csi.it:8080/*"
+        "http://${PA_HOSTNAME}/*"
       ],
       "webOrigins": [
         "http://localhost:8080",
-        "http://pa.csi.it:8080/*"
+        "http://${PA_HOSTNAME}/*"
       ],
       "notBefore": 0,
       "bearerOnly": false,
