@@ -263,7 +263,7 @@ services:
       BOT_NAME: ${BOT_NAME}
     #command: "sh -c 'rm -rf /var/www/html/* && ls -lat /var/www/html/ && cp -ra /var/www/html2/* /var/www/html/ && ls -lat /var/www/html/ && envsubst < /var/www/html/statics/config.tmpl.json > /var/www/html/statics/config.json && trap : TERM INT; (while true; do sleep 1000; done) & wait'"
     #TODO more elegant copy like copy with mv
-    image: micadoproject/migrant_app_site:latest
+    image: ghcr.io/micado-eu/migrant_application:${MIGRANTS_IMAGE_TAG}
     volumes:
       - data_site_migrant:/var/www/html
     depends_on:
@@ -356,6 +356,10 @@ services:
       - type: volume
         source: shared_images
         target: /images
+    depends_on:
+      micado_db:
+        condition: service_healthy
+        restart: true
     #    ports:
     #      - "3001:3000"
     <<: *generic
