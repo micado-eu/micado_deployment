@@ -151,19 +151,19 @@ services:
       - "traefik.http.routers.nginx3.entrypoints=web"
       - "traefik.http.routers.nginx3.service=nginx3"
       - "traefik.http.routers.nginx3.middlewares=redirect@file"
-      #- "traefik.http.middlewares.redirect_pa.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect_pa.redirectscheme.scheme=https"
       - "traefik.http.services.nginx3.loadbalancer.server.port=80"
       - "traefik.http.routers.nginx4.rule=Host(`${PA_HOSTNAME}`)"
       - "traefik.http.routers.nginx4.entrypoints=websecure"
       - "traefik.http.routers.nginx4.tls=true"
-      - "traefik.http.routers.nginx4.tls.certresolver=myresolver"
+      - "traefik.http.routers.nginx4.tls.certresolver=letsencrypt"
       - "traefik.http.routers.nginx4.service=nginx4"
       - "traefik.http.services.nginx4.loadbalancer.server.port=80"
       - "traefik.http.routers.nginx5.rule=Host(`${NGO_HOSTNAME}`)"
       - "traefik.http.routers.nginx5.entrypoints=web"
       - "traefik.http.routers.nginx5.service=nginx5"
       - "traefik.http.routers.nginx5.middlewares=redirect@file"
-      #      - "traefik.http.middlewares.redirect_ngo.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.redirect_ngo.redirectscheme.scheme=https"
       - "traefik.http.services.nginx5.loadbalancer.server.port=80"
       - "traefik.http.routers.nginx6.rule=Host(`${NGO_HOSTNAME}`)"
       - "traefik.http.routers.nginx6.entrypoints=websecure"
@@ -290,10 +290,6 @@ services:
     pull_policy: always
     volumes:
       - data_site_pa:/var/www/html
-    depends_on:
-      nginx:
-        condition: service_healthy
-        restart: true
     <<: *generic
 
   data_ngo:
@@ -313,10 +309,6 @@ services:
     pull_policy: always
     volumes:
       - data_site_ngo:/var/www/html
-    depends_on:
-      nginx:
-        condition: service_healthy
-        restart: true
     <<: *generic
 
 
