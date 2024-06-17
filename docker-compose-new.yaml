@@ -27,9 +27,9 @@ services:
         source: postgres_init
         target: /docker-entrypoint-initdb.d
     labels:
-      - "com.centurylinklabs.watchtower.enable=false"
-      - "docker_compose_diagram.cluster=EC2 Instance"
-      - "docker_compose_diagram.icon=django"
+      com.centurylinklabs.watchtower.enable: "false"
+      docker_compose_diagram.cluster: "Database"
+      docker_compose_diagram.icon: "diagrams.onprem.database.Postgresql"
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
       interval: 10s
@@ -64,6 +64,9 @@ services:
       MIGRANTS_HOSTNAME: ${MIGRANTS_HOSTNAME}
       PA_HOSTNAME: ${PA_HOSTNAME}
       NGO_HOSTNAME: ${NGO_HOSTNAME}
+      NGO_REALM_CLIENT_SECRET: ${NGO_REALM_CLIENT_SECRET}
+      MIGRANT_REALM_CLIENT_SECRET: ${MIGRANT_REALM_CLIENT_SECRET}
+      PA_REALM_CLIENT_SECRET: ${PA_REALM_CLIENT_SECRET}
     healthcheck:
       test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8080' || exit 1
       interval: 10s
@@ -71,16 +74,16 @@ services:
       retries: 3
       start_period: 90s
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.keycloak.rule=Host(`${IDENTITY_HOSTNAME}`)"
-      - "traefik.http.routers.keycloak.service=keycloak"
-      - "traefik.http.routers.keycloak.entrypoints=web,websecure"
-      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
-      - "traefik.http.routers.keycloak.tls=true"
-      - "traefik.http.routers.keycloak.tls.certresolver=letsencrypt"
-      - "traefik.http.services.keycloak.loadbalancer.passhostheader=true"
-      - "docker_compose_diagram.cluster=EC2 Instance"
-      - "docker_compose_diagram.icon=django"
+      traefik.enable: "true"
+      traefik.http.routers.keycloak.rule: "Host(`${IDENTITY_HOSTNAME}`)"
+      traefik.http.routers.keycloak.service: keycloak
+      traefik.http.routers.keycloak.entrypoints: web,websecure
+      traefik.http.services.keycloak.loadbalancer.server.port: "8080"  
+      traefik.http.routers.keycloak.tls: "true"
+      traefik.http.routers.keycloak.tls.certresolver: letsencrypt
+      traefik.http.services.keycloak.loadbalancer.passhostheader: "true"
+      docker_compose_diagram.cluster: "Auth"  
+      docker_compose_diagram.icon: "keycloak.png"
     restart: unless-stopped
     volumes:
       - ./keycloak/realm.json:/opt/keycloak/data/import/realm.json:ro
@@ -93,6 +96,7 @@ services:
         condition: service_healthy
         restart: true
     <<: *generic
+
 
   ## Web components
   nginx:         # WEB SERVER
@@ -137,50 +141,50 @@ services:
         volume:
           nocopy: true
     labels:
-      - "com.centurylinklabs.watchtower.enable=false"
-      - "traefik.enable=true"
-      - "traefik.http.routers.nginx.rule=Host(`${MIGRANTS_HOSTNAME}`)"
-      - "traefik.http.routers.nginx.entrypoints=web"
-      - "traefik.http.routers.nginx.service=nginx"
-      - "traefik.http.routers.nginx.middlewares=redirect@file"
-      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
-      - "traefik.http.services.nginx.loadbalancer.server.port=80"
-      - "traefik.http.routers.nginx2.rule=Host(`${MIGRANTS_HOSTNAME}`)"
-      - "traefik.http.routers.nginx2.entrypoints=websecure"
-      - "traefik.http.routers.nginx2.tls=true"
-      - "traefik.http.routers.nginx2.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.nginx2.service=nginx2"
-      - "traefik.http.services.nginx2.loadbalancer.server.port=80"
-      - "traefik.http.routers.nginx3.rule=Host(`${PA_HOSTNAME}`)"
-      - "traefik.http.routers.nginx3.entrypoints=web"
-      - "traefik.http.routers.nginx3.service=nginx3"
-      - "traefik.http.routers.nginx3.middlewares=redirect@file"
-      - "traefik.http.middlewares.redirect_pa.redirectscheme.scheme=https"
-      - "traefik.http.services.nginx3.loadbalancer.server.port=80"
-      - "traefik.http.routers.nginx4.rule=Host(`${PA_HOSTNAME}`)"
-      - "traefik.http.routers.nginx4.entrypoints=websecure"
-      - "traefik.http.routers.nginx4.tls=true"
-      - "traefik.http.routers.nginx4.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.nginx4.service=nginx4"
-      - "traefik.http.services.nginx4.loadbalancer.server.port=80"
-      - "traefik.http.routers.nginx5.rule=Host(`${NGO_HOSTNAME}`)"
-      - "traefik.http.routers.nginx5.entrypoints=web"
-      - "traefik.http.routers.nginx5.service=nginx5"
-      - "traefik.http.routers.nginx5.middlewares=redirect@file"
-      - "traefik.http.middlewares.redirect_ngo.redirectscheme.scheme=https"
-      - "traefik.http.services.nginx5.loadbalancer.server.port=80"
-      - "traefik.http.routers.nginx6.rule=Host(`${NGO_HOSTNAME}`)"
-      - "traefik.http.routers.nginx6.entrypoints=websecure"
-      - "traefik.http.routers.nginx6.tls=true"
-      - "traefik.http.routers.nginx6.tls.certresolver=myresolver"
-      - "traefik.http.routers.nginx6.service=nginx6"
-      - "traefik.http.services.nginx6.loadbalancer.server.port=80"
-      - "traefik.http.routers.countly.rule=Host(`${ANALYTIC_HOSTNAME}`)"
-      - "traefik.http.routers.countly.entrypoints=websecure"
-      - "traefik.http.routers.countly.service=countly_service"
-      - "traefik.http.routers.countly.tls=true"
-      - "traefik.http.routers.countly.tls.certresolver=myresolver"
-      - "traefik.http.services.countly_service.loadbalancer.server.port=80"
+      com.centurylinklabs.watchtower.enable: "false"
+      traefik.enable: "true"
+      traefik.http.routers.nginx.rule: Host(`${MIGRANTS_HOSTNAME}`)
+      traefik.http.routers.nginx.entrypoints: web
+      traefik.http.routers.nginx.service: nginx
+      traefik.http.routers.nginx.middlewares: redirect@file
+      traefik.http.middlewares.redirect.redirectscheme.scheme: https
+      traefik.http.services.nginx.loadbalancer.server.port: 80
+      traefik.http.routers.nginx2.rule: Host(`${MIGRANTS_HOSTNAME}`)
+      traefik.http.routers.nginx2.entrypoints: websecure
+      traefik.http.routers.nginx2.tls: "true"
+      traefik.http.routers.nginx2.tls.certresolver: letsencrypt
+      traefik.http.routers.nginx2.service: nginx2
+      traefik.http.services.nginx2.loadbalancer.server.port: 80
+      traefik.http.routers.nginx3.rule: Host(`${PA_HOSTNAME}`)
+      traefik.http.routers.nginx3.entrypoints: web
+      traefik.http.routers.nginx3.service: nginx3
+      traefik.http.routers.nginx3.middlewares: redirect@file
+      traefik.http.middlewares.redirect_pa.redirectscheme.scheme: https
+      traefik.http.services.nginx3.loadbalancer.server.port: 80
+      traefik.http.routers.nginx4.rule: Host(`${PA_HOSTNAME}`)
+      traefik.http.routers.nginx4.entrypoints: websecure
+      traefik.http.routers.nginx4.tls: "true"
+      traefik.http.routers.nginx4.tls.certresolver: letsencrypt
+      traefik.http.routers.nginx4.service: nginx4
+      traefik.http.services.nginx4.loadbalancer.server.port: 80
+      traefik.http.routers.nginx5.rule: Host(`${NGO_HOSTNAME}`)
+      traefik.http.routers.nginx5.entrypoints: web
+      traefik.http.routers.nginx5.service: nginx5
+      traefik.http.routers.nginx5.middlewares: redirect@file
+      traefik.http.middlewares.redirect_ngo.redirectscheme.scheme: https
+      traefik.http.services.nginx5.loadbalancer.server.port: 80
+      traefik.http.routers.nginx6.rule: Host(`${NGO_HOSTNAME}`)
+      traefik.http.routers.nginx6.entrypoints: websecure
+      traefik.http.routers.nginx6.tls: true"
+      traefik.http.routers.nginx6.tls.certresolver: myresolver
+      traefik.http.routers.nginx6.service: nginx6
+      traefik.http.services.nginx6.loadbalancer.server.port: 80
+      traefik.http.routers.countly.rule: Host(`${ANALYTIC_HOSTNAME}`)
+      traefik.http.routers.countly.entrypoints: websecure
+      traefik.http.routers.countly.service: countly_service
+      traefik.http.routers.countly.tls: "true"
+      traefik.http.routers.countly.tls.certresolver: myresolver
+      traefik.http.services.countly_service.loadbalancer.server.port: 80
     #      - "traefik.http.routers.countly_api.rule=Host(`${ANALYTIC_HOSTNAME}`) && PathPrefix(`/i`)"
     #      - "traefik.http.routers.countly_api.entrypoints=web"
     #      - "traefik.http.routers.countly_api.service=countly_api_service"
@@ -193,8 +197,8 @@ services:
     #      - "traefik.http.routers.countly_frontend.entrypoints=web"
     #      - "traefik.http.routers.countly_frontend.service=countly_frontend_service"
     #      - "traefik.http.services.countly_frontend_service.loadbalancer.server.port=6001"
-      - "docker_compose_diagram.cluster=EC2 Instance"
-      - "docker_compose_diagram.icon=django"
+      docker_compose_diagram.cluster: MICADO Frontend
+      docker_compose_diagram.icon: "diagrams.onprem.network.Nginx"
     depends_on:
       traefik:
         condition: service_healthy
@@ -239,11 +243,11 @@ services:
       retries: 3
       start_period: 5s
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=Host(`${TRAEFIK_HOSTNAME}`)"
-      - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.routers.dashboard.entrypoints=web,websecure"
-      - "traefik.http.services.dashboard.loadbalancer.server.port=8080"
+      traefik.enable: "true"
+      traefik.http.routers.dashboard.rule: Host(`${TRAEFIK_HOSTNAME}`)
+      traefik.http.routers.dashboard.service: api@internal
+      traefik.http.routers.dashboard.entrypoints: web,websecure
+      traefik.http.services.dashboard.loadbalancer.server.port: 8080
  #     - "traefik.http.routers.dashboard.tls=true"
  #     - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
  #     - "traefik.http.services.dashboard.loadbalancer.passhostheader=true"
@@ -253,8 +257,8 @@ services:
 #      - "traefik.http.routers.http-catchall.entrypoints=web"
  #     - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
  #     - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "docker_compose_diagram.cluster=EC2 Instance"
-      - "docker_compose_diagram.icon=django"
+      docker_compose_diagram.cluster: Load Balancer
+      docker_compose_diagram.icon: "diagrams.onprem.network.Traefik"
     restart: unless-stopped
     <<: *generic
 
@@ -278,8 +282,8 @@ services:
     image: ghcr.io/micado-eu/migrant_application:${MIGRANTS_IMAGE_TAG}
     pull_policy: always
     labels:
-      - "docker_compose_diagram.cluster=EC2 Instance"
-      - "docker_compose_diagram.icon=django"
+      docker_compose_diagram.cluster: MICADO Frontend
+      docker_compose_diagram.icon: "diagrams.programming.framework.Vue"
     volumes:
       - data_site_migrant:/var/www/html
     <<: *generic
@@ -300,8 +304,8 @@ services:
     image: ghcr.io/micado-eu/pa_application:${PA_IMAGE_TAG}
     pull_policy: always
     labels:
-      - "docker_compose_diagram.cluster=EC2 Instance"
-      - "docker_compose_diagram.icon=django"
+      docker_compose_diagram.cluster: MICADO Frontend
+      docker_compose_diagram.icon: "diagrams.programming.framework.Vue"
     volumes:
       - data_site_pa:/var/www/html
     <<: *generic
@@ -322,8 +326,8 @@ services:
     image: micadoproject/ngo_app_site:latest
     pull_policy: always
     labels:
-      - "docker_compose_diagram.cluster=EC2 Instance"
-      - "docker_compose_diagram.icon=django"
+      docker_compose_diagram.cluster: MICADO Frontend
+      docker_compose_diagram.icon: "diagrams.programming.framework.Vue"
     volumes:
       - data_site_ngo:/var/www/html
     <<: *generic
@@ -373,28 +377,28 @@ services:
         source: translations_dir
         target: ${MICADO_TRANSLATIONS_DIR}
     labels:
-      - "com.centurylinklabs.watchtower.enable=false"
-      - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`${API_HOSTNAME}`)"
-      - "traefik.http.routers.backend.entrypoints=web"
-      - "traefik.http.routers.backend.middlewares=redirect@file"
-      - "traefik.http.routers.backend.service=backend_service"
-      - "traefik.http.services.backend_service.loadbalancer.server.port=3000"
-      - "traefik.http.routers.backend_https.rule=Host(`${API_HOSTNAME}`)"
-      - "traefik.http.routers.backend_https.entrypoints=websecure"
-      - "traefik.http.routers.backend_https.tls=true"
-      - "traefik.http.routers.backend_https.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.backend_https.service=backend_service_https"
-      - "traefik.http.services.backend_service_https.loadbalancer.server.port=3000"
-      - "traefik.http.services.backend_service_https.loadbalancer.server.scheme=http"
-      - "traefik.http.routers.backend_https.middlewares=backendcors"
-      - "traefik.http.middlewares.backendcors.headers.accesscontrolallowmethods=GET,OPTIONS,PUT"
-      - "traefik.http.middlewares.backendcors.headers.accesscontrolallowheaders=*"
-      - "traefik.http.middlewares.backendcors.headers.accesscontrolalloworiginlist=*"
-      - "traefik.http.middlewares.backendcors.headers.accesscontrolmaxage=100"
-      - "traefik.http.middlewares.backendcors.headers.addvaryheader=true"      
-      - "docker_compose_diagram.cluster=EC2 Instance"
-      - "docker_compose_diagram.icon=django"
+      com.centurylinklabs.watchtower.enable: "false" 
+      traefik.enable: "true"
+      traefik.http.routers.backend.rule: Host(`${API_HOSTNAME}`)
+      traefik.http.routers.backend.entrypoints: web
+      traefik.http.routers.backend.middlewares: redirect@file
+      traefik.http.routers.backend.service: backend_service
+      traefik.http.services.backend_service.loadbalancer.server.port: 3000
+      traefik.http.routers.backend_https.rule: Host(`${API_HOSTNAME}`)
+      traefik.http.routers.backend_https.entrypoints: websecure
+      traefik.http.routers.backend_https.tls: "true"
+      traefik.http.routers.backend_https.tls.certresolver: letsencrypt
+      traefik.http.routers.backend_https.service: backend_service_https
+      traefik.http.services.backend_service_https.loadbalancer.server.port: 3000
+      traefik.http.services.backend_service_https.loadbalancer.server.scheme: http
+      traefik.http.routers.backend_https.middlewares: backendcors
+      traefik.http.middlewares.backendcors.headers.accesscontrolallowmethods: GET,OPTIONS,PUT
+      traefik.http.middlewares.backendcors.headers.accesscontrolallowheaders: "*"
+      traefik.http.middlewares.backendcors.headers.accesscontrolalloworiginlist: "*"
+      traefik.http.middlewares.backendcors.headers.accesscontrolmaxage: 100
+      traefik.http.middlewares.backendcors.headers.addvaryheader: "true"    
+      docker_compose_diagram.cluster: MICADO Backend
+      docker_compose_diagram.icon: "diagrams.programming.language.Nodejs"
     restart: unless-stopped
     depends_on:
       micado_db:
@@ -420,20 +424,20 @@ services:
       GITEA__sacurity__INSTALL_LOCK: "true"
       GITEA__service__DISABLE_REGISTRATION: "true"
     labels:
-      - "com.centurylinklabs.watchtower.enable=false"
-      - "traefik.enable=true"
-      - "traefik.http.routers.git1.rule=Host(`${GIT_HOSTNAME}`)"
-      - "traefik.http.routers.git1.entrypoints=web"
-      - "traefik.http.routers.git1.service=git1"
-      - "traefik.http.services.git1.loadbalancer.server.port=3000"
-      - "traefik.http.routers.git2.rule=Host(`${GIT_HOSTNAME}`)"
-      - "traefik.http.routers.git2.entrypoints=websecure"
-      - "traefik.http.routers.git2.tls=true"
-      - "traefik.http.routers.git2.tls.certresolver=myresolver"
-      - "traefik.http.routers.git2.service=git2"
-      - "traefik.http.services.git2.loadbalancer.server.port=3000"
-      - "docker_compose_diagram.cluster=EC2 Instance"
-      - "docker_compose_diagram.icon=django"
+      com.centurylinklabs.watchtower.enable: "false" 
+      traefik.enable: "true"
+      traefik.http.routers.git1.rule: Host(`${GIT_HOSTNAME}`)
+      traefik.http.routers.git1.entrypoints: web
+      traefik.http.routers.git1.service: git1
+      traefik.http.services.git1.loadbalancer.server.port: 3000
+      traefik.http.routers.git2.rule: Host(`${GIT_HOSTNAME}`)
+      traefik.http.routers.git2.entrypoints: websecure
+      traefik.http.routers.git2.tls: "true"
+      traefik.http.routers.git2.tls.certresolver: myresolver
+      traefik.http.routers.git2.service: git2
+      traefik.http.services.git2.loadbalancer.server.port: 3000
+      docker_compose_diagram.cluster: Translation Platform
+      docker_compose_diagram.icon: "diagrams.onprem.vcs.Gitea"
     volumes:
       - git_data:/data
  #     - ./config:/etc/gitea
@@ -472,22 +476,22 @@ services:
       WEBLATE_WORKERS: 2
       WEBLATE_TIME_ZONE: ${TZ}
     labels:
-      - "traefik.enable=true"
-      - "com.centurylinklabs.watchtower.enable=false"
-      - "traefik.http.routers.weblate.rule=Host(`${TRANSLATION_HOSTNAME}`)"
-      - "traefik.http.routers.weblate.entrypoints=web"
+      com.centurylinklabs.watchtower.enable: "false" 
+      traefik.enable: "true"
+      traefik.http.routers.weblate.rule: Host(`${TRANSLATION_HOSTNAME}`)
+      traefik.http.routers.weblate.entrypoints: web
       #      - "traefik.http.routers.weblate.service=weblate"
      # - "traefik.http.routers.weblate.middlewares=redirect@file"
       #      - "traefik.http.middlewares.redirect.redirectscheme.scheme=https"
       #      - "traefik.http.services.weblate.loadbalancer.server.port=8080"
-      - "traefik.http.routers.weblate2.rule=Host(`${TRANSLATION_HOSTNAME}`)"
-      - "traefik.http.routers.weblate2.entrypoints=websecure"
-      - "traefik.http.routers.weblate2.tls=true"
-      - "traefik.http.routers.weblate2.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.weblate2.service=weblate2"
-      - "traefik.http.services.weblate2.loadbalancer.server.port=8080"
-      - "docker_compose_diagram.cluster=EC2 Instance"
-      - "docker_compose_diagram.icon=django"
+      traefik.http.routers.weblate2.rule: Host(`${TRANSLATION_HOSTNAME}`)
+      traefik.http.routers.weblate2.entrypoints: websecure
+      traefik.http.routers.weblate2.tls: "true"
+      traefik.http.routers.weblate2.tls.certresolver: letsencrypt
+      traefik.http.routers.weblate2.service: weblate2
+      traefik.http.services.weblate2.loadbalancer.server.port: 8080
+      docker_compose_diagram.cluster: Translation Platform
+      docker_compose_diagram.icon: "weblate.png"
     depends_on:
       micado_db:
         condition: service_healthy
@@ -504,8 +508,8 @@ services:
     volumes:
       - redis_data:/data
     labels:
-      - "docker_compose_diagram.cluster=EC2 Instance"
-      - "docker_compose_diagram.icon=django"
+      docker_compose_diagram.cluster: Translation Platform
+      docker_compose_diagram.icon: "diagrams.onprem.inmemory.Redis"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -515,33 +519,33 @@ services:
     <<: *generic
 
 # ADMIN COMPONENTS
-    portainer:
-      image: portainer/portainer-ce:${PORTAINER_IMAGE_TAG}
-      container_name: portainer
-      security_opt:
-        - no-new-privileges:true
-      volumes:
-        - /etc/localtime:/etc/localtime:ro
-        - /var/run/docker.sock:/var/run/docker.sock:ro
-        - ./portainer-data:/data
-      labels:
-        com.centurylinklabs.watchtower.enable: "false" 
-        traefik.enable: "true"
-        traefik.http.routers.portainer.entrypoints: web
-        traefik.http.routers.portainer.rule: Host(`${PORTAINER_HOSTNAME}`)
-        traefik.http.middlewares.portainer-https-redirect.redirectscheme.scheme: https
-        traefik.http.routers.portainer.middlewares: portainer-https-redirect
-        traefik.http.routers.portainer-secure.entrypoints: websecure
-        traefik.http.routers.portainer-secure.rule: Host(`${PORTAINER_HOSTNAME}`)
-        traefik.http.routers.portainer-secure.tls: "true"
-        traefik.http.routers.portainer-secure.tls.certresolver: myresolver
-        traefik.http.routers.portainer-secure.service: portainer
-        traefik.http.services.portainer.loadbalancer.server.port: "9000"
-        docker_compose_diagram.cluster: EC2 Instance
-        docker_compose_diagram.icon: django
-      ports:
-        - "9443:9443"
-      <<: *generic
+  portainer:
+    image: portainer/portainer-ce:${PORTAINER_IMAGE_TAG}
+    container_name: portainer
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./portainer-data:/data
+    labels:
+      com.centurylinklabs.watchtower.enable: "false" 
+      traefik.enable: "true"
+      traefik.http.routers.portainer.entrypoints: web
+      traefik.http.routers.portainer.rule: Host(`${PORTAINER_HOSTNAME}`)
+      traefik.http.middlewares.portainer-https-redirect.redirectscheme.scheme: https
+      traefik.http.routers.portainer.middlewares: portainer-https-redirect
+      traefik.http.routers.portainer-secure.entrypoints: websecure
+      traefik.http.routers.portainer-secure.rule: Host(`${PORTAINER_HOSTNAME}`)
+      traefik.http.routers.portainer-secure.tls: "true"
+      traefik.http.routers.portainer-secure.tls.certresolver: myresolver
+      traefik.http.routers.portainer-secure.service: portainer
+      traefik.http.services.portainer.loadbalancer.server.port: "9000"
+      docker_compose_diagram.cluster: Admin
+      docker_compose_diagram.icon: "portainer.png"
+    ports:
+      - "9443:9443"
+    <<: *generic
 
 
 
