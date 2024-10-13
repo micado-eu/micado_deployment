@@ -1,2 +1,6 @@
 db_data/*
 mongo_data/*
+git_data/*
+weblate_data/*
+portainer-data/*
+redis_data/*
