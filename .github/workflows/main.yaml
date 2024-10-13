@@ -68,6 +68,6 @@ jobs:
           draft: ${{ env.DRAFT }}
           prerelease: ${{ env.PRERELEASE }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: "./micado_deployment_${TAG_NAME}.tar.gz"
+          artifacts: "micado_deployment_${{ env.TAG_NAME }}.tar.gz"
           tag: ${{ env.TAG_NAME }}
           body: ${{ env.BODY }}
