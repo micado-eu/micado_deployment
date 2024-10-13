@@ -50,7 +50,11 @@ jobs:
             -czvf micado_deployment_${TAG_NAME}.tar.gz \
             docker-compose.yaml \
             README.md \
-            keycloak/realms \
+            backup.sh \
+            restore.sh \
+            keycloak \
+            nginx \
+            weblate \
             traefik
           # Add more files or directories as needed
 
