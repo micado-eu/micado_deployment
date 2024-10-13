@@ -11,6 +11,7 @@ on:
   # Note that some steps may depend on context variables that are only
   # available for release events, so if you add other events, you may need to
   # alter other parts of this workflow.
+  workflow_dispatch:
   release:
     types: [published]
 
