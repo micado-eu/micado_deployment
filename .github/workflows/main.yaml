@@ -1,20 +1,30 @@
 name: Create MICADO deployment
 
-
 on:
-  # Only run this workflow when a release is published.
-  # To modify this workflow when other events occur, see:
-  #   - https://docs.github.com/en/actions/using-workflows/triggering-a-workflow
-  #   - https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
-  #   - https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
-  #
-  # Note that some steps may depend on context variables that are only
-  # available for release events, so if you add other events, you may need to
-  # alter other parts of this workflow.
-  workflow_dispatch:
   release:
     types: [published]
-
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Test scenario tags'
+        required: true
+        default: 'v1.0.0'
+      name:
+        description: 'Release name'
+        required: false
+        default: 'Test Release'
+      draft:
+        description: 'Is this a draft release? (true/false)'
+        required: false
+        default: 'false'
+      prerelease:
+        description: 'Is this a prerelease? (true/false)'
+        required: false
+        default: 'false'
+      body:
+        description: 'Release body'
+        required: false
+        default: 'This is a test release.'
 
 jobs:
   build:
@@ -22,39 +32,37 @@ jobs:
     permissions:
       contents: write
 
+    # Define environment variables based on the event type
+    env:
+      TAG_NAME: ${{ github.event.release.tag_name || github.event.inputs.tags }}
+      RELEASE_NAME: ${{ github.event.release.name || github.event.inputs.name }}
+      DRAFT: ${{ github.event.release.draft || github.event.inputs.draft }}
+      PRERELEASE: ${{ github.event.release.prerelease || github.event.inputs.prerelease }}
+      BODY: ${{ github.event.release.body || github.event.inputs.body }}
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-
-      # Create a "module.zip" archive containing all the module's required files.
-      # If you have other directories or files that will need to be added to
-      # your packaged module, add them here.
       - name: Create Module Archive
         run: |
-          # Note that `zip` will only emit warnings when a file or directory
-          # doesn't exist, it will not fail.
           tar \
-            -czvf micado_deployment_${{github.event.release.tag_name}}.tar.gz \
+            -czvf micado_deployment_${TAG_NAME}.tar.gz \
             docker-compose.yaml \
             README.md \
             keycloak/realms \
             traefik
-          # Don't forget to add a backslash at the end of the line for any
-          # additional files or directories!
+          # Add more files or directories as needed
 
-
-      # Update the GitHub release with the manifest and module archive files.
       - name: Update Release With Files
         id: create_version_release
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          name: ${{ github.event.release.name }}
-          draft: ${{ github.event.release.unpublished }}
-          prerelease: ${{ github.event.release.prerelease }}
+          name: ${{ env.RELEASE_NAME }}
+          draft: ${{ env.DRAFT }}
+          prerelease: ${{ env.PRERELEASE }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifacts: "micado_deployment_${{github.event.release.tag_name}}.tar.gz"
-          tag: ${{ github.event.release.tag_name }}
-          body: ${{ github.event.release.body }}
-
+          artifacts: "micado_deployment_${TAG_NAME}.tar.gz"
+          tag: ${{ env.TAG_NAME }}
+          body: ${{ env.BODY }}
