@@ -69,10 +69,8 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          name: ${{ env.RELEASE_NAME }}
-          draft: ${{ env.DRAFT }}
-          prerelease: ${{ env.PRERELEASE }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: false
+          prerelease: false
           artifacts: "micado_deployment_${{ env.TAG_NAME }}.tar.gz"
           tag: ${{ env.TAG_NAME }}
           body: ${{ env.BODY }}
