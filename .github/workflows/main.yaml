@@ -53,6 +53,7 @@ jobs:
             backup.sh \
             restore.sh \
             keycloak \
+            db_init \
             nginx \
             weblate \
             traefik
