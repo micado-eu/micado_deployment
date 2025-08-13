@@ -501,7 +501,7 @@ services:
       traefik.http.routers.portainer-secure.entrypoints: websecure
       traefik.http.routers.portainer-secure.rule: Host(`${PORTAINER_HOSTNAME}`)
       traefik.http.routers.portainer-secure.tls: "true"
-      traefik.http.routers.portainer-secure.tls.certresolver: myresolver
+      traefik.http.routers.portainer-secure.tls.certresolver: letsencrypt
       traefik.http.routers.portainer-secure.service: portainer
       traefik.http.services.portainer.loadbalancer.server.port: "9000"
       docker_compose_diagram.cluster: Admin
