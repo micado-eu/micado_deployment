@@ -102,7 +102,7 @@ services:
       docker_compose_diagram.icon: "keycloak.png"
     restart: unless-stopped
     volumes:
-      - ./keycloak/realm.json:/opt/keycloak/data/import/realm.json:ro
+      - ./keycloak/realms:/opt/keycloak/data/import:ro
       - ./keycloak/themes:/opt/keycloak/themes:ro
     depends_on:
       micado_db:
