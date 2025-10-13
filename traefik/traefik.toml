@@ -6,12 +6,12 @@
       insecure = true
     [entryPoints.web.proxyProtocol]
       insecure = true
-  [entryPoints.web-secure]
+  [entryPoints.websecure]
     address = ":443"
-    [entryPoints.web-secure.forwardedHeaders]
+    [entryPoints.websecure.forwardedHeaders]
       trustedIPs = ["0.0.0.0/0"]
       insecure = true
-    [entryPoints.web-secure.proxyProtocol]
+    [entryPoints.websecure.proxyProtocol]
       insecure = true
 
 [api]
