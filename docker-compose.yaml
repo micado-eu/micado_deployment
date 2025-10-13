@@ -391,7 +391,10 @@ services:
       GITEA__database__USER: ${GITEA_DB_USER}
       GITEA__database__PASSWD: ${GITEA_DB_PWD}
       GITEA__database__SCHEMA: ${GITEA_DB_SCHEMA}
-      GITEA__sacurity__INSTALL_LOCK: "true"
+      GITEA__security__SECRET_KEY: ${GITEA_SECRET_KEY}
+      GITEA__security__INTERNAL_TOKEN: ${GITEA_INTERNAL_TOKEN}
+      GITEA__server__ROOT_URL: http://${GIT_HOSTNAME}
+      GITEA__security__INSTALL_LOCK: "true"
       GITEA__service__DISABLE_REGISTRATION: "true"
     labels:
       com.centurylinklabs.watchtower.enable: "false" 
@@ -416,6 +419,11 @@ services:
       micado_db:
         condition: service_healthy
         restart: true
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/api/healthz || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
 
   weblate:
     image: weblate/weblate:${WEBLATE_IMAGE_TAG}
