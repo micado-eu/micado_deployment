@@ -346,7 +346,7 @@ services:
       - type: volume
         source: shared_images
         target: /images
-      - type: volume
+      - type: bind
         source: translations_dir
         target: ${MICADO_TRANSLATIONS_DIR}
     labels:
@@ -412,7 +412,9 @@ services:
       docker_compose_diagram.cluster: Translation Platform
       docker_compose_diagram.icon: "diagrams.onprem.vcs.Gitea"
     volumes:
-      - git_data:/data
+      - type: bind
+        source: ./git_data
+        target: /data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     depends_on:
@@ -480,7 +482,10 @@ services:
     image: redis:${REDIS_IMAGE_TAG}
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
-      - redis_data:/data
+#      - redis_data:/data
+      - type: bind
+        source: ./redis_data
+        target: /data
     labels:
       docker_compose_diagram.cluster: Translation Platform
       docker_compose_diagram.icon: "diagrams.onprem.inmemory.Redis"
@@ -528,14 +533,14 @@ volumes:
     driver_opts:
       type: none
       # device is the path in the host that has to be absolute
-      device: $PWD/db_data
+      device: ${PWD}/db_data
       o: bind
   postgres_init:
     driver: local
     driver_opts:
       type: none
       # device is the path in the host that has to be absolute
-      device: $PWD/db_init
+      device: ${PWD}/db_init
       o: bind
   data_site_migrant:
     driver: local
@@ -547,43 +552,43 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: $PWD/weblate_data
+      device: ${PWD}/weblate_data
       o: bind
-  redis_data:
-    driver_opts:
-      type: none
-      device: $PWD/redis_data
-      o: bind
+#  redis_data:
+#    driver_opts:
+#      type: none
+#      device: ${PWD}/redis_data
+#      o: bind
   git_data:
     driver_opts:
       type: none
-      device: $PWD/git_data
+      device: ${PWD}/git_data
       o: bind
   portainer-data:
     driver: local
     driver_opts:
       type: none
       # device is the path in the host that has to be absolute
-      device: $PWD/portainer-data
+      device: ${PWD}/portainer-data
       o: bind
 
   shared_images:
     driver: local
     driver_opts:
       type: none
-      device: $PWD/shared_images
+      device: ${PWD}/shared_images
       o: bind
   traefik-certificates:
     driver: local
     driver_opts:
       type: none
-      device: $PWD/traefik/traefik-acme
+      device: ${PWD}/traefik/traefik-acme
       o: bind
-  translations_dir:
-    driver_opts:
-      type: none
-      device: $PWD/translations_dir
-      o: bind
+#  translations_dir:
+#    driver_opts:
+#      type: none
+#      device: ${PWD}/translations_dir
+#      o: bind
 
 
 networks:
